@@ -1,0 +1,333 @@
+{
+	"Ааракокра": {
+		"speed": "25 футов",
+		"CharsUP": {
+			"Dexterity": 2,
+			"Wisdom": 1
+		}
+	},
+	"Аасимар": {
+		"speed": "30 футов",
+		"CharsUP": {
+			"Charisma": 2
+		}
+	},
+	"Автогном": {
+		"speed": "30 футов",
+		"CharsUP": {
+			"Charisma": 1
+		}
+	},
+	"Астральный эльф": {
+		"speed": "30 футов",
+		"CharsUP": {
+			"Charisma": 1
+		}
+	},
+	"Багбир": {
+		"speed": "30 футов",
+		"CharsUP": {
+			"Strength": 2,
+			"Dexterity": 1
+		}
+	},
+	"Ведалкен": {
+		"speed": "30 футов",
+		"CharsUP": {
+			"Intelligence": 2,
+			"Wisdom": 1
+		}
+	},
+	"Вердан": {
+		"speed": "30 футов",
+		"CharsUP": {
+			"Charisma": 2,
+			"Constitution": 1
+		}
+	},
+	"Гибрид Симиков": {
+		"speed": "30 футов",
+		"CharsUP": {
+			"Constitution": 2,
+			"Charisma": 1
+		}
+	},
+	"Гит": {
+		"speed": "30 футов",
+		"CharsUP": {
+			"Intelligence": 1
+		}
+	},
+	"Гифф": {
+		"speed": "30 футов",
+		"CharsUP": {
+			"Charisma": 1
+		}
+	},
+	"Гном": {
+		"speed": "25 футов",
+		"CharsUP": {
+			"Intelligence": 2
+		}
+	},
+	"Гоблин": {
+		"speed": "30 футов",
+		"CharsUP": {
+			"Dexterity": 2,
+			"Constitution": 1
+		}
+	},
+	"Голиаф": {
+		"speed": "30 футов",
+		"CharsUP": {
+			"Strength": 2,
+			"Constitution": 1
+		}
+	},
+	"Грунг": {
+		"speed": "25 футов",
+		"CharsUP": {
+			"Dexterity": 2
+		}
+	},
+	"Дварф": {
+		"speed": "25 футов",
+		"CharsUP": {
+			"Constitution": 2,
+			"Strength": 2
+		}
+	},
+	"Дженази": {
+		"speed": "30 футов",
+		"CharsUP": {
+			"Constitution": 2
+		}
+	},
+	"Драконорождённый": {
+		"speed": "30 футов",
+		"CharsUP": {
+			"Intelligence": 2,
+			"Charisma": 1
+		}
+	},
+	"Зайцегон": {
+		"speed": "30 футов",
+		"CharsUP": {
+			"Charisma": 1
+		}
+	},
+	"Калаштар": {
+		"speed": "30 футов",
+		"CharsUP": {
+			"Wisdom": 2,
+			"Charisma": 1
+		}
+	},
+	"Кендер": {
+		"speed": "30 футов",
+		"CharsUP": {}
+	},
+	"Кенку": {
+		"speed": "30 футов",
+		"CharsUP": {
+			"Dexterity": 2,
+			"Wisdom": 1
+		}
+	},
+	"Кентавр": {
+		"speed": "40 футов",
+		"CharsUP": {
+			"Strength": 2,
+			"Wisdom": 1
+		}
+	},
+	"Кобольд": {
+		"speed": "30 футов",
+		"CharsUP": {
+			"Dexterity": 2
+		}
+	},
+	"Кованый": {
+		"speed": "30 футов",
+		"CharsUP": {
+			"Constitution": 2,
+			"Charisma": 1
+		}
+	},
+	"Леонин": {
+		"speed": "35 футов",
+		"CharsUP": {
+			"Constitution": 2,
+			"Strength": 1
+		}
+	},
+	"Локата": {
+		"speed": "30 футов",
+		"CharsUP": {
+			"Strength": 2,
+			"Dexterity": 1
+		}
+	},
+	"Локсодон": {
+		"speed": "30 футов",
+		"CharsUP": {
+			"Constitution": 2,
+			"Wisdom": 1
+		}
+	},
+	"Людоящер": {
+		"speed": "30 футов",
+		"CharsUP": {
+			"Constitution": 2,
+			"Wisdom": 1
+		}
+	},
+	"Минотавр": {
+		"speed": "30 футов",
+		"CharsUP": {
+			"Strength": 2,
+			"Constitution": 1
+		}
+	},
+	"Орк": {
+		"speed": "30 футов",
+		"CharsUP": {
+			"Strength": 2,
+			"Constitution": 1
+		}
+	},
+	"Плазмоид": {
+		"speed": "30 футов",
+		"CharsUP": {
+			"Charisma": 1
+		}
+	},
+	"Полуорк": {
+		"speed": "30 футов",
+		"CharsUP": {
+			"Strength": 2,
+			"Constitution": 1
+		}
+	},
+	"Полурослик": {
+		"speed": "25 футов",
+		"CharsUP": {
+			"Dexterity": 2
+		}
+	},
+	"Полуэльф": {
+		"speed": "30 футов",
+		"CharsUP": {
+			"Charisma": 1
+		}
+	},
+	"Сатир": {
+		"speed": "35 футов",
+		"CharsUP": {
+			"Charisma": 2,
+			"Dexterity": 1
+		}
+	},
+	"Совлин": {
+		"speed": "30 футов",
+		"CharsUP": {
+			"Charisma": 1
+		}
+	},
+	"Табакси": {
+		"speed": "30 футов",
+		"CharsUP": {
+			"Dexterity": 2,
+			"Charisma": 1
+		}
+	},
+	"Тифлинг": {
+		"speed": "30 футов",
+		"CharsUP": {
+			"Intelligence": 1,
+			"Charisma": 2
+		}
+	},
+	"Тортл": {
+		"speed": "30 футов",
+		"CharsUP": {
+			"Strength": 2,
+			"Wisdom": 1
+		}
+	},
+	"Три-крин": {
+		"speed": "30 футов",
+		"CharsUP": {
+			"Charisma": 1
+		}
+	},
+	"Тритон": {
+		"speed": "30 футов",
+		"CharsUP": {
+			"Charisma": 1
+		}
+	},
+	"Фирболг": {
+		"speed": "30 футов",
+		"CharsUP": {
+			"Wisdom": 2,
+			"Strength": 1
+		}
+	},
+	"Фэйри": {
+		"speed": "30 футов",
+		"CharsUP": {
+			"Charisma": 1
+		}
+	},
+	"Хадози": {
+		"speed": "30 футов",
+		"CharsUP": {
+			"Charisma": 1
+		}
+	},
+	"Хобгоблин": {
+		"speed": "30 футов",
+		"CharsUP": {
+			"Constitution": 2,
+			"Intelligence": 1
+		}
+	},
+	"Чейнджлинг": {
+		"speed": "30 футов",
+		"CharsUP": {
+			"Charisma": 1
+		}
+	},
+	"Человек": {
+		"speed": "30 футов",
+		"CharsUP": {
+			"Strength": 1,
+			"Dexterity": 1,
+			"Constitution": 1,
+			"Intelligence": 1,
+			"Wisdom": 1,
+			"Charisma": 1
+		}
+	},
+	"Шифтер": {
+		"speed": "30 футов",
+		"CharsUP": {
+			"Constitution": 2,
+			"Strength": 1
+		}
+	},
+	"Эльф": {
+		"speed": "30 футов",
+		"CharsUP": {
+			"Dexterity": 2
+		}
+	},
+	"Юань-ти": {
+		"speed": "30 футов",
+		"CharsUP": {
+			"Charisma": 2,
+			"Intelligence": 1
+		}
+	}
+}
