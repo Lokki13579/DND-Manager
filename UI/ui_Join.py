@@ -25,7 +25,7 @@ class Ui_JoinToServer(QWidget):
         self.setupUi()
     def setupUi(self):
         self.vertLayout = QVBoxLayout(self)
-        self.resize(600,400)
+        self.resize(720,540)
         
         self.Title = QLabel()
         self.Title.setObjectName(u"Title")

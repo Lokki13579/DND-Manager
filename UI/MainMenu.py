@@ -6,8 +6,8 @@ from PyQt6.QtWidgets import QWidget, QPushButton, QVBoxLayout
 class Ui_MainMenu(QWidget):
     def __init__(self):
         super().__init__()
-        self.resize(200,360)
-        self.setGeometry(QRect(0,0,200,360))
+        self.resize(720,540)
+        self.setGeometry(QRect(0,0,720,540))
         self.Buttons = QVBoxLayout(self)
         self.Buttons.setGeometry(QRect(0,0,200,360))
         self.Buttons.setObjectName("AllButtons")

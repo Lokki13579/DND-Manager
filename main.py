@@ -12,7 +12,7 @@ class MainWin(QMainWindow):
         super().__init__()
 
         self.setWindowTitle("DND Manager")
-        self.setGeometry(100,100,640,480)
+        self.setGeometry(100,100,720,540)
 
         self.stackedW = QStackedWidget()
 

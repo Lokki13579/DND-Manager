@@ -17,7 +17,7 @@ from PyQt6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QPalette, QPixmap, QRadialGradient, QTransform)
 from PyQt6.QtWidgets import (QApplication, QFrame, QGroupBox, QSizePolicy,
     QTabWidget, QWidget)
-
+from UI.PlayerCard import Ui_PlayerCard
 
 class Ui_PlayerList(QWidget):
     def __init__(self):
@@ -25,11 +25,11 @@ class Ui_PlayerList(QWidget):
         self.setupUi()
     def setupUi(self):
         
-        self.resize(640, 480)
+        self.resize(720, 540)
         self.tabWidget = QTabWidget(self)
         self.tabWidget.setObjectName(u"tabWidget")
-        self.tabWidget.setGeometry(QRect(10, 30, 620, 420))
-        self.tab = QWidget()
+        self.tabWidget.setGeometry(QRect(10, 30, 650, 500))
+        self.tab = Ui_PlayerCard()
         self.tabWidget.addTab(self.tab,"MainChars")
 
         self.retranslateUi()
@@ -41,6 +41,5 @@ class Ui_PlayerList(QWidget):
 
     def retranslateUi(self):
         self.setWindowTitle(QCoreApplication.translate("Frame", u"Frame", None))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), QCoreApplication.translate("Frame", u"Main Chars", None))
     # retranslateUi
 
