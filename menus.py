@@ -6,9 +6,8 @@ from server_client import *
 from panels import *
 clearstr = "cls"
 IP = gethostbyname(gethostname())
-PORT = 4242
-ServerOBJ = ServerClass(PORT)
-ClientOBJ = Client(IP,PORT)
+ServerOBJ = ServerClass()
+ClientOBJ = Client()
 #translateOBJ = jsonLoad("JSONS/translate.json")
 class diceRandomer:
     def __init__(self):

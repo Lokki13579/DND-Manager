@@ -7,17 +7,17 @@
 
 
 from PyQt6 import QtCore, QtGui, QtWidgets
-from PyQt6.QtWidgets import QWidget
-
+from PyQt6.QtWidgets import QWidget, QFrame
+from UI.SpellCellsObj import Ui_SpellCellObj
+from characterclass import Character
 
 class Ui_PlayerCard(QWidget):
-    def __init__(self):
+    def __init__(self, char = Character()):
         super().__init__()
+        self.character = char
         self.setupUi()
     def setupUi(self):
-        self.setObjectName("PlayerCard")
-        self.resize(640, 480)
-        self.SpellCells = QtWidgets.QGroupBox(parent=self)
+        self.SpellCells = QtWidgets.QGroupBox()
         self.SpellCells.setGeometry(QtCore.QRect(10, 110, 200, 351))
         self.SpellCells.setMaximumSize(QtCore.QSize(200, 3000))
         self.SpellCells.setFlat(False)
@@ -30,6 +30,12 @@ class Ui_PlayerCard(QWidget):
         self.AllCellsLayout = QtWidgets.QVBoxLayout(self.AllCells)
         self.AllCellsLayout.setSpacing(2)
         self.AllCellsLayout.setObjectName("AllCellsLayout")
+        print(self.character.spellCells)
+        for name,count in self.character.spellCells.items():
+            line = Ui_SpellCellObj(str(name),int(count))
+            self.AllCellsLayout.addWidget(line)
+
+
         self.StatusData = QtWidgets.QGroupBox(parent=self)
         self.StatusData.setGeometry(QtCore.QRect(220, 110, 300, 351))
         self.StatusData.setObjectName("StatusData")

@@ -108,7 +108,7 @@ class Ui_CreateLobby(QWidget):
         CreateLobby.setWindowTitle(QCoreApplication.translate("CreateLobby", u"CreateLobby", None))
         self.Title.setText(QCoreApplication.translate("CreateLobby", u"\u0421\u043e\u0437\u0434\u0430\u043d\u0438\u0435 \u0441\u0435\u0440\u0432\u0435\u0440\u0430", None))
         self.portName.setText(QCoreApplication.translate("CreateLobby", u">--- \u041f\u043e\u0440\u0442 \u0421\u0435\u0440\u0432\u0435\u0440\u0430 ===>", None))
-        self.PortEnter.setText(QCoreApplication.translate("CreateLobby", u"4242", None))
+        self.PortEnter.setText(QCoreApplication.translate("CreateLobby", "4242", None))
         self.PortEnter.setPlaceholderText(QCoreApplication.translate("CreateLobby", u"server port", None))
         self.Alert.setText(QCoreApplication.translate("CreateLobby", u"\u041f\u0440\u043e\u0434\u043e\u043b\u0436\u0438\u0442\u044c \u043c\u043e\u0436\u0435\u0442 \u0442\u043e\u043b\u044c\u043a\u043e \u0413\u0435\u0439\u043c \u041c\u0430\u0441\u0442\u0435\u0440, \u0435\u0441\u043b\u0438 \u0442\u044b \u043a \u043d\u0438\u043c \u043e\u0442\u043d\u043e\u0441\u0438\u0448\u044c\u0441\u044f, \u0442\u043e \u0441\u043e\u0437\u0434\u0430\u0432\u0430\u0439 \u0441\u0435\u0440\u0432\u0435\u0440", None))
         self.BackButton.setText(QCoreApplication.translate("CreateLobby", u"\u041d\u0430\u0437\u0430\u0434", None))

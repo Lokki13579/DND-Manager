@@ -3,15 +3,20 @@ from blinker import signal
 import threading
 from panels import *
 from playerClass import *
+from random import randint
+from art import tprint
 class ServerClass:
-    def __init__(self,port=4242):
-        self._ip = gethostbyname(gethostname())
-        self._port = port
+    def __init__(self):
+        self._ip = None
+        self._port = None
         self.connectedClients = {}
         self.sbmConnected = signal("sbmC")
-    def _startServer(self):
+    def _startServer(self,port=randint(4000,5000), ip = gethostbyname(gethostname())):
         self.S = socket(AF_INET,SOCK_STREAM)
-        self.S.bind((self._ip,self._port))
+        self.S.bind((ip,port))
+        print(tprint(str(port)))
+        self._ip = ip
+        self._port = port
         self.S.listen(5)
         waitToConnect = threading.Thread(target=self._waitConnecting)
         waitToConnect.start()
@@ -31,6 +36,7 @@ class ServerClass:
             out += str(i) + "&"
         connection.send(out.encode('utf-8'))
     def _clientMessageGet(self,player):
+        self.sbmConnected.send()
         print("\nЧто-то изменилось, введите  -2, чтобы обновить")
         while True:
             data = player.conn.recv(2048).decode('utf-8').split("&")
@@ -48,13 +54,11 @@ class ServerClass:
                     return
             print("\nЧто-то изменилось, введите  -2, чтобы обновить")
 class Client:
-    def __init__(self,ip = gethostbyname(gethostname()),port = 4242):
-        self._ip = ip
-        self._port = port
+    def __init__(self):
         self.character = Character()
-    def _connectToServer(self):
+    def _connectToServer(self,ip = gethostbyname(gethostname()),port = 4242):
         self.S = socket()
-        address = (self._ip,self._port)
+        address = (ip,port)
         self.S.connect(address)
         self.whenConnected()
     def listenCommands(self):

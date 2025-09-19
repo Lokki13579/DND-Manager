@@ -30,7 +30,15 @@ class Character:
         self.name = name
         self.Stats = {}
         self.status = dict(zip(jsonLoad("JSONS/dnd_statuses.json"),[False for i in range(15)]))
-        self.spellCells = {}
+        self.spellCells = {"1": 4,
+                           "2":4,
+                           "3":3,
+                           "4":3,
+                           "5":3,
+                           "6":2,
+                           "7":2,
+                           "8":1,
+                           "9":1}
     def setName(self,newName):
         self.name = newName
     def setLevel(self,value):

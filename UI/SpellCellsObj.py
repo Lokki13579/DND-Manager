@@ -7,61 +7,48 @@
 
 
 from PyQt6 import QtCore, QtGui, QtWidgets
+from PyQt6.QtCore import QRect, QSize, QCoreApplication, Qt
+from PyQt6.QtWidgets import QWidget, QFrame, QHBoxLayout, QLabel, QCheckBox, QApplication
 
 
-class Ui_SpellCellObj(object):
-    def setupUi(self, SpellCellObj):
-        SpellCellObj.setObjectName("SpellCellObj")
-        SpellCellObj.resize(150, 30)
-        self.Layout = QtWidgets.QFrame(parent=SpellCellObj)
-        self.Layout.setGeometry(QtCore.QRect(0, 0, 150, 30))
+
+class Ui_SpellCellObj(QWidget):
+    def __init__(self,spLev, count):
+        super().__init__()
+        self.cellLevel = spLev
+        self.cellCount = count
+        self.cells = []
+        self.setupUi()
+    def setupUi(self):
+        self.setObjectName("SpellCellObj")
+        self.resize(150, 30)
+        self.Layout = QFrame(parent=self)
+        self.Layout.setGeometry(QRect(0, 0, 150, 30))
         self.Layout.setObjectName("Layout")
-        self.horizontalLayout = QtWidgets.QHBoxLayout(self.Layout)
+        self.horizontalLayout = QHBoxLayout(self.Layout)
         self.horizontalLayout.setObjectName("horizontalLayout")
-        self.CellName = QtWidgets.QLabel(parent=self.Layout)
-        self.CellName.setMinimumSize(QtCore.QSize(30, 30))
-        self.CellName.setMaximumSize(QtCore.QSize(30, 30))
-        self.CellName.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        self.CellName = QLabel(str(self.cellLevel))
+        self.CellName.setMinimumSize(QSize(30, 30))
+        self.CellName.setMaximumSize(QSize(30, 30))
+        self.CellName.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.CellName.setObjectName("CellName")
         self.horizontalLayout.addWidget(self.CellName)
-        self.radioButton = QtWidgets.QRadioButton(parent=self.Layout)
-        self.radioButton.setMinimumSize(QtCore.QSize(20, 0))
-        self.radioButton.setMaximumSize(QtCore.QSize(16, 16))
-        self.radioButton.setText("")
-        self.radioButton.setObjectName("radioButton")
-        self.horizontalLayout.addWidget(self.radioButton)
-        self.radioButton_3 = QtWidgets.QRadioButton(parent=self.Layout)
-        self.radioButton_3.setMinimumSize(QtCore.QSize(20, 0))
-        self.radioButton_3.setMaximumSize(QtCore.QSize(16, 16))
-        self.radioButton_3.setText("")
-        self.radioButton_3.setObjectName("radioButton_3")
-        self.horizontalLayout.addWidget(self.radioButton_3)
-        self.radioButton_2 = QtWidgets.QRadioButton(parent=self.Layout)
-        self.radioButton_2.setMinimumSize(QtCore.QSize(20, 0))
-        self.radioButton_2.setMaximumSize(QtCore.QSize(16, 16))
-        self.radioButton_2.setText("")
-        self.radioButton_2.setObjectName("radioButton_2")
-        self.horizontalLayout.addWidget(self.radioButton_2)
-        self.radioButton_4 = QtWidgets.QRadioButton(parent=self.Layout)
-        self.radioButton_4.setMinimumSize(QtCore.QSize(20, 0))
-        self.radioButton_4.setMaximumSize(QtCore.QSize(16, 16))
-        self.radioButton_4.setText("")
-        self.radioButton_4.setObjectName("radioButton_4")
-        self.horizontalLayout.addWidget(self.radioButton_4)
+        for i in range(self.cellCount):
+            cell = QCheckBox(parent=self.Layout)
+            cell.setStyleSheet("background-color: rgb(92,92,92);")
+            cell.setMinimumSize(QtCore.QSize(0, 0))
+            cell.setMaximumSize(QtCore.QSize(14, 15))
+            cell.setText("")
+            cell.setObjectName(f"cell{i}")
+            self.cells.append(cell)
+            self.horizontalLayout.addWidget(cell)
 
-        self.retranslateUi(SpellCellObj)
-        QtCore.QMetaObject.connectSlotsByName(SpellCellObj)
-
-    def retranslateUi(self, SpellCellObj):
-        _translate = QtCore.QCoreApplication.translate
-        SpellCellObj.setWindowTitle(_translate("SpellCellObj", "SpellCellObj"))
-        self.CellName.setText(_translate("SpellCellObj", "1"))
 
 
 if __name__ == "__main__":
     import sys
-    app = QtWidgets.QApplication(sys.argv)
-    SpellCellObj = QtWidgets.QWidget()
+    app = QApplication(sys.argv)
+    SpellCellObj = QWidget()
     ui = Ui_SpellCellObj()
     ui.setupUi(SpellCellObj)
     SpellCellObj.show()

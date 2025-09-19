@@ -128,7 +128,7 @@ class Ui_JoinToServer(QWidget):
         JoinToServer.setWindowTitle(QCoreApplication.translate("JoinToServer", u"Form", None))
         self.Title.setText(QCoreApplication.translate("JoinToServer", u"\u041f\u043e\u0434\u043a\u043b\u044e\u0447\u0435\u043d\u0438\u0435 \u043a \u0441\u0435\u0440\u0432\u0435\u0440\u0443", None))
         self.AddressName.setText(QCoreApplication.translate("JoinToServer", u">--- \u0410\u0434\u0440\u0435\u0441 \u0421\u0435\u0440\u0432\u0435\u0440\u0430 ===>", None))
-        self.AddressEnter.setText(QCoreApplication.translate("JoinToServer", u"127.0.0.1", None))
+        self.AddressEnter.setText(QCoreApplication.translate("JoinToServer", u"127.0.1.1", None))
         self.AddressEnter.setPlaceholderText(QCoreApplication.translate("JoinToServer", u"server port", None))
         self.PortName.setText(QCoreApplication.translate("JoinToServer", u">--- \u041f\u043e\u0440\u0442 \u0421\u0435\u0440\u0432\u0435\u0440\u0430 ===>", None))
         self.PortEnter.setText(QCoreApplication.translate("JoinToServer", u"4242", None))
