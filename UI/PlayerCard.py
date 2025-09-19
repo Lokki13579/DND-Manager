@@ -11,17 +11,37 @@ from PyQt6.QtWidgets import QWidget, QFrame
 from UI.SpellCellsObj import Ui_SpellCellObj
 from characterclass import Character
 
-class Ui_PlayerCard(QWidget):
-    def __init__(self, char = Character()):
+#class Ui_PlayerCard(QWidget):
+class Ui_PlayerCard(QtWidgets.QFrame):
+    def __init__(self, char=Character()):
         super().__init__()
         self.character = char
         self.setupUi()
-    def updateData(self, char):
-        self.character = char
         self.showUpdates()
+    
+    def updateData(self, character):
+        """Обновляет данные персонажа и перерисовывает интерфейс"""
+        self.character = character
+        self.showUpdates()
+    
     def showUpdates(self):
-        self.NameText.setText(self.character.name)
-        self.LevelText.setText(self.character.Stats["level"])
+        """Обновляет отображаемые данные"""
+        if hasattr(self, 'NameText'):
+            self.NameText.setText(self.character.name)
+        if hasattr(self, 'LevelText'):
+            self.LevelText.setText(str(self.character.Stats.get('level', '')))
+        if hasattr(self, 'ExpText'):
+            exp = self.character.Stats.get('experience', '')
+            self.ExpText.setText(f"{exp} / {exp}")
+        if hasattr(self, 'ClassText'):
+            self.ClassText.setText(self.character.Stats.get('class', ''))
+        if hasattr(self, 'RaceText'):
+            self.RaceText.setText(self.character.Stats.get('race', ''))
+        if hasattr(self, 'WVText'):
+            self.WVText.setText(self.character.Stats.get('worldview', ''))
+        if hasattr(self, 'BGText'):
+            self.BGText.setText(self.character.Stats.get('background', ''))
+
     def setupUi(self):
         self.SpellCells = QtWidgets.QGroupBox()
         self.SpellCells.setGeometry(QtCore.QRect(10, 110, 200, 351))

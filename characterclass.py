@@ -29,6 +29,7 @@ class Character:
     def __init__(self,name = "Выбирается"):
         self.name = name
         self.Stats = {}
+        self.maxExp = jsonLoad("JSONS/dnd_levels.json")[str(self.Stats.get("level",0)+1)].get("experience",300)
         self.status = dict(zip(jsonLoad("JSONS/dnd_statuses.json"),[False for i in range(15)]))
         self.spellCells = {"1": 4,
                            "2":4,
