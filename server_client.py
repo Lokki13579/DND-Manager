@@ -5,8 +5,12 @@ from panels import *
 from playerClass import *
 from random import randint
 from art import tprint
-class ServerClass:
+from PyQt6.QtCore import QObject, pyqtSignal 
+class ServerClass(QObject):
+    player_connected = pyqtSignal(object)
+    player_updated = pyqtSignal(object)
     def __init__(self):
+        super().__init__()
         self._ip = None
         self._port = None
         self.connectedClients = {}
@@ -19,12 +23,17 @@ class ServerClass:
         self._port = port
         self.S.listen(5)
         waitToConnect = threading.Thread(target=self._waitConnecting)
+        waitToConnect.daemon = True
         waitToConnect.start()
     def _waitConnecting(self):
         while True:
             conn, addr = self.S.accept()
-            self.connectedClients[addr] = Player(conn,addr,len(self.connectedClients.keys())+1)
+            player = Player(conn,addr,len(self.connectedClients.keys())+1)
+            self.connectedClients[addr] = player
+
+            self.player_connected.emit(player)
             messageInput = threading.Thread(target=self._clientMessageGet,args=(self.connectedClients[addr], ))
+            messageInput.daemon = True
             messageInput.start()
 
     def _closeServer(self):
@@ -35,6 +44,8 @@ class ServerClass:
         for i in data:
             out += str(i) + "&"
         connection.send(out.encode('utf-8'))
+
+
     def _clientMessageGet(self,player):
         self.sbmConnected.send()
         print("\nЧто-то изменилось, введите  -2, чтобы обновить")
@@ -47,14 +58,18 @@ class ServerClass:
                     player.character.Stats = eval(data[1])
                     player.character.spellCells = eval(data[2])
                     player.character.status = eval(data[3])
+                    self.player_updated.emit(player)
                 case "characterNameChanged":
                     player.character.setName(data[1])
                     self.sbmConnected.send()
+                    self.player_updated.emit(player)
                 case _:
                     return
             print("\nЧто-то изменилось, введите  -2, чтобы обновить")
-class Client:
+class Client(QObject):
+    data_updated = pyqtSignal()
     def __init__(self):
+        super().__init__()
         self.character = Character()
     def _connectToServer(self,ip = gethostbyname(gethostname()),port = 4242):
         self.S = socket()
@@ -72,9 +87,12 @@ class Client:
                     self.character.Stats = eval(comm[1])
                     self.character.spellCells = eval(comm[2])
                     self.character.status = eval(comm[3])
+                    self.data_updated.emit()
             print("\nЧто-то изменилось, введите  <Enter>, чтобы обновить")
     def whenConnected(self):
-        threading.Thread(target=self.listenCommands).start()
+        listen = threading.Thread(target=self.listenCommands)
+        listen.daemon = True
+        listen.start()
     def sendToServer(self,*data):
         out = ""
         for i in data:

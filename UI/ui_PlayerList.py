@@ -23,23 +23,21 @@ from UI.PlayerCard import Ui_PlayerCard
 class Ui_PlayerList(QWidget):
     def __init__(self, servobj):
         super().__init__()
-        self.ServerObj = servobj
+        self.ServerObj : ServerClass = servobj
         self.playersTab = {}
-        self.ServerObj.sbmConnected.connect(self.playerListUpdate)
+        ServerClass().player_connected.connect(self.playerConnected)
+        ServerClass().player_updated.connect(self.playerDataUpdated)
         
         self.setupUi()
-        self.playerListUpdate(None)
     
-    def playerListUpdate(self, _):
-        # Очищаем все вкладки
-        while self.tabWidget.count() > 0:
-            self.tabWidget.removeTab(0)
-        
-        # Добавляем вкладки для всех подключенных игроков
-        for pl in self.ServerObj.connectedClients.values():
-            player_card = Ui_PlayerCard(pl.character)
-            self.tabWidget.addTab(player_card, pl.character.name)
-            self.playersTab[pl] = player_card
+    def playerDataUpdated(self,player):
+        for pl in self.playersTab.values():
+            pl.updateData(player.character)
+
+    def playerConnected(self, player):
+        player_card = Ui_PlayerCard(player.character)
+        self.tabWidget.addTab(player_card, player.character.name)
+        self.playersTab[player] = player_card
 
     def setupUi(self):
         self.resize(720, 540)

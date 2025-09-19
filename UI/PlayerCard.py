@@ -16,6 +16,12 @@ class Ui_PlayerCard(QWidget):
         super().__init__()
         self.character = char
         self.setupUi()
+    def updateData(self, char):
+        self.character = char
+        self.showUpdates()
+    def showUpdates(self):
+        self.NameText.setText(self.character.name)
+        self.LevelText.setText(self.character.Stats["level"])
     def setupUi(self):
         self.SpellCells = QtWidgets.QGroupBox()
         self.SpellCells.setGeometry(QtCore.QRect(10, 110, 200, 351))
@@ -116,16 +122,6 @@ class Ui_PlayerCard(QWidget):
 
     def retranslateUi(self):
         _translate = QtCore.QCoreApplication.translate
-        self.setWindowTitle(_translate("PlayerCard", "Card"))
-        self.SpellCells.setTitle(_translate("PlayerCard", "Ячейки заклинаний"))
-        self.StatusData.setTitle(_translate("PlayerCard", "Статусы"))
-        self.NameText.setText(_translate("PlayerCard", "Абыбачир Трахов"))
-        self.LevelText.setText(_translate("PlayerCard", "20"))
-        self.ExpText.setText(_translate("PlayerCard", "355000 / 355000"))
-        self.BGText.setText(_translate("PlayerCard", "Гильдийский ремесленник"))
-        self.RaceText.setText(_translate("PlayerCard", "Драконорожденный"))
-        self.ClassText.setText(_translate("PlayerCard", "Изобретатель"))
-        self.WVText.setText(_translate("PlayerCard", "Нейтрально-положительный"))
         self.pushButton.setText(_translate("PlayerCard", "Здоровье"))
         self.pushButton_2.setText(_translate("PlayerCard", "Дайсы"))
         self.pushButton_3.setText(_translate("PlayerCard", "Инвентарь"))
