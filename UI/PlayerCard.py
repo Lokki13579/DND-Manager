@@ -25,22 +25,16 @@ class Ui_PlayerCard(QtWidgets.QFrame):
         self.showUpdates()
     
     def showUpdates(self):
-        """Обновляет отображаемые данные"""
-        if hasattr(self, 'NameText'):
-            self.NameText.setText(self.character.name)
-        if hasattr(self, 'LevelText'):
-            self.LevelText.setText(str(self.character.Stats.get('level', '')))
-        if hasattr(self, 'ExpText'):
-            exp = self.character.Stats.get('experience', '')
-            self.ExpText.setText(f"{exp} / {exp}")
-        if hasattr(self, 'ClassText'):
-            self.ClassText.setText(self.character.Stats.get('class', ''))
-        if hasattr(self, 'RaceText'):
-            self.RaceText.setText(self.character.Stats.get('race', ''))
-        if hasattr(self, 'WVText'):
-            self.WVText.setText(self.character.Stats.get('worldview', ''))
-        if hasattr(self, 'BGText'):
-            self.BGText.setText(self.character.Stats.get('background', ''))
+        self.NameText.setText(self.character.name)
+        if self.character.name == "Выбирается":
+            return
+        self.LevelText.setText(str(self.character.Stats.get('level', '')))
+        exp = self.character.Stats.get('experience', '')
+        self.ExpText.setText(f"{exp} / {self.character.maxExp}")
+        self.ClassText.setText(self.character.Stats.get('class', ''))
+        self.RaceText.setText(self.character.Stats.get('race', ''))
+        self.WVText.setText(self.character.Stats.get('worldview', ''))
+        self.BGText.setText(self.character.Stats.get('background', ''))
 
     def setupUi(self):
         self.SpellCells = QtWidgets.QGroupBox()

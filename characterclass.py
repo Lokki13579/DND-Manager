@@ -26,9 +26,9 @@ Stats = {
     }
 characterPath = "AllCharacterData.json"  
 class Character:
-    def __init__(self,name = "Выбирается"):
+    def __init__(self,name = "Выбирается",stats = {}):
         self.name = name
-        self.Stats = {}
+        self.Stats = stats
         self.maxExp = jsonLoad("JSONS/dnd_levels.json")[str(self.Stats.get("level",0)+1)].get("experience",300)
         self.status = dict(zip(jsonLoad("JSONS/dnd_statuses.json"),[False for i in range(15)]))
         self.spellCells = {"1": 4,
@@ -69,9 +69,12 @@ class Character:
         self.Stats["masterBonus"] = jsonLoad("JSONS/dnd_levels.json")[str(newLevel)]["BM"]
     def expReset(self,newLevel):
         lev = jsonLoad("JSONS/dnd_levels.json")[str(newLevel+1)]
-        if self.Stats["experience"] > lev["experience"]:
-            self.Stats["experience"] = 0
+        while self.Stats["experience"] > lev["experience"]:
+            self.Stats["experience"] -= lev["experience"]
             self.Stats["level"] += 1
+            lev = jsonLoad("JSONS/dnd_levels.json")[str(self.Stats.get("level")+1)]
+        self.maxExp = jsonLoad("JSONS/dnd_levels.json")[str(self.Stats.get("level",0)+1)].get("experience",300)
+        
     def getStats(self):
         out = ""
         for k,v in self.Stats.items():
@@ -153,10 +156,9 @@ class CharLoader:
     def __init__(self):
         self.allCharacters = {}
     def CharClassDispencer(self):
-        for charData in jsonLoad():
-            i = 1
-            char = Character(charData)
-            self.allCharacters["-" + str(i)] = char
+        for charName, charData in jsonLoad().items():
+            char = Character(charName,charData)
+            self.allCharacters[charName] = char
         return self.allCharacters
 
 def jsonLoad(path=characterPath):

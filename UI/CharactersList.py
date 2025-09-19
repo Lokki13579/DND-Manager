@@ -7,13 +7,18 @@
 
 
 from PyQt6 import QtCore, QtGui, QtWidgets
-
-from PyQt6.QtWidgets import QWidget
+from PyQt6.QtCore import pyqtSignal
+from PyQt6.QtWidgets import QWidget, QPushButton
+from characterclass import Character, CharLoader
 
 
 class Ui_CharsList(QWidget):
-    def __init__(self):
+    def __init__(self,client):
         super().__init__()
+        self.ClientOBJ = client
+        self.currCharacter = Character()
+        self.allChars = CharLoader().CharClassDispencer()
+        self.characterSelected = pyqtSignal(object)
         self.setupUi()
     def setupUi(self):
         self.setObjectName("Main")
@@ -43,6 +48,7 @@ class Ui_CharsList(QWidget):
         self.CreateNewButton.setObjectName("CreateNewButton")
         self.verticalLayout_2.addWidget(self.CreateNewButton)
         self.MainLayout.addWidget(self.verticalFrame_2)
+        self.initCharacters()
         self.Characteristics = QtWidgets.QGroupBox(parent=self.horizontalLayoutWidget)
         self.Characteristics.setMinimumSize(QtCore.QSize(420, 0))
         self.Characteristics.setMaximumSize(QtCore.QSize(16777215, 510))
@@ -86,8 +92,23 @@ class Ui_CharsList(QWidget):
         self.Backgroud.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.Backgroud.setObjectName("Backgroud")
         self.verticalLayout.addWidget(self.Backgroud)
+        self.SelectButton = QPushButton(parent=self.CharsLayout)
+        self.SelectButton.setText("Выбрать его")
+        self.SelectButton.clicked.connect(self.select)
         self.MainLayout.addWidget(self.Characteristics)
-
-        
+    def select(self):
+        self.ClientOBJ.character = self.currCharacter
+    def initCharacters(self):
+        self.CharsList.clear()
+        for ch in self.allChars:
+            self.CharsList.addItem(ch)
+        self.CharsList.currentItemChanged.connect(self.updateData)
+    def updateData(self,char):
+        self.currCharacter = self.allChars[char.text()]
+        self.updatesShow()
+    def updatesShow(self):
+        _char = self.currCharacter
+        self.Name.setText(_char.name)
+        self.Level.setText(str(_char.Stats.get("level")))
 
 

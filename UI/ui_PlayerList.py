@@ -14,11 +14,7 @@ class Ui_PlayerList(QWidget):
         self.setupUi()
     
     def add_player_tab(self, player):
-        """Добавляет вкладку для нового игрока (вызывается через сигнал)"""
-        # Проверяем, нет ли уже вкладки для этого игрока
-        for i in range(self.tabWidget.count()):
-            if self.tabWidget.tabText(i) == player.character.name:
-                return  # Вкладка уже существует
+        
         
         player_card = Ui_PlayerCard(player.character)
         self.tabWidget.addTab(player_card, player.character.name)
@@ -28,7 +24,7 @@ class Ui_PlayerList(QWidget):
         """Обновляет вкладку игрока при изменении данных (вызывается через сигнал)"""
         if player in self.playersTab:
             # Обновляем данные в карточке игрока
-            self.playersTab[player].update_character_data(player.character)
+            self.playersTab[player].updateData(player.character)
             
             # Обновляем название вкладки если изменилось имя
             for i in range(self.tabWidget.count()):

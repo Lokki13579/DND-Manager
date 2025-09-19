@@ -64,7 +64,6 @@ class ServerClass(QObject):
             pass
             
     def _clientMessageGet(self, player):
-        print("\nЧто-то изменилось, введите -2, чтобы обновить")
         while True:
             try:
                 data = player.conn.recv(2048).decode('utf-8').split("&")
@@ -75,6 +74,7 @@ class ServerClass(QObject):
                         player.character.Stats = eval(data[1])
                         player.character.spellCells = eval(data[2])
                         player.character.status = eval(data[3])
+                        player.character.expReset(player.character.Stats.get("level",1))
                         # Отправляем сигнал об обновлении данных
                         self.player_data_updated.emit(player)
                     case "characterNameChanged":
