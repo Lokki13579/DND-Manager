@@ -1,3 +1,4 @@
+from PyQt6.QtCore import QObject, pyqtSignal 
 from socket import *
 from blinker import signal
 import threading
@@ -5,7 +6,6 @@ from panels import *
 from playerClass import *
 from random import randint
 from art import tprint
-from PyQt6.QtCore import QObject, pyqtSignal 
 class ServerClass(QObject):
     player_connected = pyqtSignal(object)
     player_updated = pyqtSignal(object)
@@ -27,14 +27,17 @@ class ServerClass(QObject):
         waitToConnect.start()
     def _waitConnecting(self):
         while True:
-            conn, addr = self.S.accept()
-            player = Player(conn,addr,len(self.connectedClients.keys())+1)
-            self.connectedClients[addr] = player
+            try:
+                conn, addr = self.S.accept()
+                player = Player(conn,addr,len(self.connectedClients.keys())+1)
+                self.connectedClients[addr] = player
 
-            self.player_connected.emit(player)
-            messageInput = threading.Thread(target=self._clientMessageGet,args=(self.connectedClients[addr], ))
-            messageInput.daemon = True
-            messageInput.start()
+                self.player_connected.emit(player)
+                messageInput = threading.Thread(target=self._clientMessageGet,args=(self.connectedClients[addr], ))
+                messageInput.daemon = True
+                messageInput.start()
+            except:
+                pass
 
     def _closeServer(self):
         self.S.close()
@@ -43,29 +46,35 @@ class ServerClass(QObject):
         out = ""
         for i in data:
             out += str(i) + "&"
-        connection.send(out.encode('utf-8'))
+        try:
+            connection.send(out.encode('utf-8'))
+        except:
+            pass
 
 
     def _clientMessageGet(self,player):
         self.sbmConnected.send()
         print("\nЧто-то изменилось, введите  -2, чтобы обновить")
         while True:
-            data = player.conn.recv(2048).decode('utf-8').split("&")
-            if not data:
-                continue
-            match data[0]:
-                case "newData":
-                    player.character.Stats = eval(data[1])
-                    player.character.spellCells = eval(data[2])
-                    player.character.status = eval(data[3])
-                    self.player_updated.emit(player)
-                case "characterNameChanged":
-                    player.character.setName(data[1])
-                    self.sbmConnected.send()
-                    self.player_updated.emit(player)
-                case _:
-                    return
-            print("\nЧто-то изменилось, введите  -2, чтобы обновить")
+            try:
+                data = player.conn.recv(2048).decode('utf-8').split("&")
+                if not data:
+                    continue
+                match data[0]:
+                    case "newData":
+                        player.character.Stats = eval(data[1])
+                        player.character.spellCells = eval(data[2])
+                        player.character.status = eval(data[3])
+                        self.player_updated.emit(player)
+                    case "characterNameChanged":
+                        player.character.setName(data[1])
+                        self.sbmConnected.send()
+                        self.player_updated.emit(player)
+                    case _:
+                        return
+                print("\nЧто-то изменилось, введите  -2, чтобы обновить")
+            except:
+                pass
 class Client(QObject):
     data_updated = pyqtSignal()
     def __init__(self):
@@ -74,21 +83,27 @@ class Client(QObject):
     def _connectToServer(self,ip = gethostbyname(gethostname()),port = 4242):
         self.S = socket()
         address = (ip,port)
-        self.S.connect(address)
-        self.whenConnected()
+        try:
+            self.S.connect(address)
+            self.whenConnected()
+        except:
+            pass
     def listenCommands(self):
         while True:
-            data = self.S.recv(2048).decode('utf-8')[:-1]
-            if not data:
-                continue
-            comm = data.split("&")
-            match comm[0]:
-                case "newData":
-                    self.character.Stats = eval(comm[1])
-                    self.character.spellCells = eval(comm[2])
-                    self.character.status = eval(comm[3])
-                    self.data_updated.emit()
-            print("\nЧто-то изменилось, введите  <Enter>, чтобы обновить")
+            try:
+                data = self.S.recv(2048).decode('utf-8')[:-1]
+                if not data:
+                    continue
+                comm = data.split("&")
+                match comm[0]:
+                    case "newData":
+                        self.character.Stats = eval(comm[1])
+                        self.character.spellCells = eval(comm[2])
+                        self.character.status = eval(comm[3])
+                        self.data_updated.emit()
+                print("\nЧто-то изменилось, введите  <Enter>, чтобы обновить")
+            except:
+                pass
     def whenConnected(self):
         listen = threading.Thread(target=self.listenCommands)
         listen.daemon = True
@@ -97,9 +112,15 @@ class Client(QObject):
         out = ""
         for i in data:
             out += str(i) + "&"
-        self.S.send(str(out).encode('utf-8'))
+        try:
+            self.S.send(str(out).encode('utf-8'))
+        except:
+            pass
     def _disconnect(self):
-        self.S.close()
+        try:
+            self.S.close()
+        except:
+            pass
 
         
 if __name__ == "__main__":
