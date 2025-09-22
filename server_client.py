@@ -39,6 +39,7 @@ class ServerClass(QObject):
                 
                 # Отправляем сигнал о новом игроке
                 self.player_connected.emit(player)
+
                 
                 messageInput = threading.Thread(target=self._clientMessageGet, args=(player,))
                 messageInput.daemon = True
@@ -71,7 +72,7 @@ class ServerClass(QObject):
                     continue
                 match data[0]:
                     case "newData":
-                        player.character.Stats = eval(data[1])
+                        player.character.setStats(eval(data[1]))
                         player.character.spellCells = eval(data[2])
                         player.character.status = eval(data[3])
                         player.character.expReset(player.character.Stats.get("level",1))
@@ -116,7 +117,7 @@ class Client(QObject):
                 comm = data.split("&")
                 match comm[0]:
                     case "newData":
-                        self.character.Stats = eval(comm[1])
+                        self.character.setStats(eval(comm[1]))
                         self.character.spellCells = eval(comm[2])
                         self.character.status = eval(comm[3])
                         # Сигнализируем об обновлении данных

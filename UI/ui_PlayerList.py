@@ -12,14 +12,19 @@ class Ui_PlayerList(QWidget):
         self.ServerObj.player_data_updated.connect(self.update_player_tab)
         
         self.setupUi()
-    
+    def send(self):
+        widget = self.tabWidget.currentWidget()
+        for pl,plc in self.playersTab.items():
+            if widget == plc:
+                print("sendingData")
+                self.ServerObj.sendToClient(pl.conn,"newData",pl.character.Stats,pl.character.spellCells,pl.character.status) 
     def add_player_tab(self, player):
         
         
         player_card = Ui_PlayerCard(player.character)
         self.tabWidget.addTab(player_card, player.character.name)
+        player_card.needToSend.connect(self.send)
         self.playersTab[player] = player_card
-    
     def update_player_tab(self, player):
         """Обновляет вкладку игрока при изменении данных (вызывается через сигнал)"""
         if player in self.playersTab:

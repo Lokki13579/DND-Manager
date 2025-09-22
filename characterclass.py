@@ -1,5 +1,6 @@
 import json
 import os
+import math
 from translate import *
 Stats = {
 	"class" : "",
@@ -28,18 +29,11 @@ characterPath = "AllCharacterData.json"
 class Character:
     def __init__(self,name = "Выбирается",stats = {}):
         self.name = name
-        self.Stats = stats
+        self.spellCells = {}
+        self.setStats(stats)
         self.maxExp = jsonLoad("JSONS/dnd_levels.json")[str(self.Stats.get("level",0)+1)].get("experience",300)
         self.status = dict(zip(jsonLoad("JSONS/dnd_statuses.json"),[False for i in range(15)]))
-        self.spellCells = {"1": 4,
-                           "2":4,
-                           "3":3,
-                           "4":3,
-                           "5":3,
-                           "6":2,
-                           "7":2,
-                           "8":1,
-                           "9":1}
+        
     def setName(self,newName):
         self.name = newName
     def setLevel(self,value):
@@ -128,13 +122,23 @@ class Character:
             for key,val in self.Stats["otherStats"]["MaxspellCells"].items():
                 self.spellCells[str(key)] = int(val)
         except KeyError:
-            self.spellCells = {}
+            try:
+                self.spellCells[self.Stats.get("otherStats").get('Уровень ячеек')] = self.Stats.get("otherStats").get("Ячейки заклинаний")
+
+            except:
+                self.spellCells = {}
     def spellCellsCh(self,key,value):
-        self.spellCells[key] += int(value)
-        if int(self.Stats["otherStats"]["MaxspellCells"][key]) < int(value):
+        if str(value)[0] != "+-":
+            self.spellCells[key] = int(value)
+        else: self.spellCells[key] += int(value)
+        
+        if int(self.Stats["otherStats"].get("MaxspellCells",\
+                                            dict(zip(self.Stats.get("otherStats").get("Уровень ячеек"),self.Stats.get("otherStats").get("Ячейки заклинаний")))).get(key)\
+                                            ) < self.spellCells[key]:
             self.spellCells[key] = int(self.Stats["otherStats"]["MaxspellCells"][key])
         elif int(self.spellCells[key]) < 0:
             self.spellCells[key] = 0
+        print("FromCharacterClass: ",self.spellCells)
     def charSave(self,path=characterPath): 
         try:
             data = jsonLoad(path)

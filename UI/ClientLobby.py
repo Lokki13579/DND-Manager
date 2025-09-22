@@ -25,15 +25,16 @@ class Ui_Lobby(QWidget):
         self.CharSelect = Ui_CharsList(self.ClientOBJ)
         
         self.stackedWidget.addWidget(self.CharSelect)
-        
-        print(self.ClientOBJ.character)
-        self.Card = Ui_PlayerCard()
+        self.Card = Ui_PlayerCard(char=self.ClientOBJ.character,client=self.ClientOBJ)
+        self.Card.needToSend.connect(self.send)
         self.stackedWidget.addWidget(self.Card)
         if self.ClientOBJ.character.name == "Выбирается":
             self.stackedWidget.setCurrentIndex(0)
-            self.CharSelect.SelectButton.clicked.connect(self.showCard)
+            self.CharSelect.CharsList.doubleClicked.connect(self.showCard)
         else: self.showCard()
-
+    def send(self):
+        print("sendingData")
+        self.ClientOBJ.sendToServer("newData",self.ClientOBJ.character.Stats,self.ClientOBJ.character.spellCells,self.ClientOBJ.character.status)
     def showCard(self):
         self.stackedWidget.setCurrentIndex(1)
         self.Card.updateData(self.ClientOBJ.character)

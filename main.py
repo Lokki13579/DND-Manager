@@ -9,13 +9,13 @@ from UI.CharactersList import Ui_CharsList
 from UI.ui_PlayerList import Ui_PlayerList
 from UI.ClientLobby import Ui_Lobby
 
-
 class MainWin(QMainWindow):
     def __init__(self):
         super().__init__()
 
         self.setWindowTitle("DND Manager")
         self.setGeometry(100,100,720,540)
+        self.setStyleSheet("font-family: '3270 Nerd Font'; font-size: 24px;")
 
         self.stackedW = QStackedWidget()
 
@@ -28,7 +28,6 @@ class MainWin(QMainWindow):
         self.MainMenu.QuitButton.clicked.connect(lambda: quit())
 
         self.CreateMenu = Ui_CreateLobby()
-        print(self.CreateMenu.PortEnter.text())
         self.CreateMenu.HostButton.clicked.connect(lambda host: self.startServer(int(self.CreateMenu.PortEnter.text())))
         self.CreateMenu.BackButton.clicked.connect(self.showMainMenu)
 
@@ -80,4 +79,6 @@ if __name__ == "__main__":
     app = applicationset(sys.argv)
     mainwin = MainWin()
     mainwin.show()
-    sys.exit(app.exec())
+    ex = app.exec()
+    if ex == 0: ServerOBJ._closeServer()
+    sys.exit(ex)

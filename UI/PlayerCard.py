@@ -13,16 +13,23 @@ from characterclass import Character
 
 #class Ui_PlayerCard(QWidget):
 class Ui_PlayerCard(QtWidgets.QFrame):
-    def __init__(self, char=Character()):
+    needToSend = QtCore.pyqtSignal()
+    def __init__(self, char=Character(),client = None):
         super().__init__()
         self.character = char
+        self.spellLines = []
         self.setupUi()
         self.showUpdates()
     
     def updateData(self, character):
         """Обновляет данные персонажа и перерисовывает интерфейс"""
         self.character = character
+        print("PlayerCard - ", character.Stats)
+        print("PlayerCard(Spells) - ", character.spellCells)
         self.showUpdates()
+        self.spellsUpdate()
+        self.statusUpdate()
+        self.retranslateUi()
     
     def showUpdates(self):
         self.NameText.setText(self.character.name)
@@ -36,12 +43,36 @@ class Ui_PlayerCard(QtWidgets.QFrame):
         self.WVText.setText(self.character.Stats.get('worldview', ''))
         self.BGText.setText(self.character.Stats.get('background', ''))
 
-    def setupUi(self):
+    def spellsUpdate(self):
+        self.character.initSpellCell()
+        for i in range(self.AllCellsLayout.count()):
+            self.AllCellsLayout.itemAt(i).widget().deleteLater() 
+        for name,count in self.character.spellCells.items():
+            try:
+                maxCellsCount:str = self.character.Stats.get("otherStats").get("MaxspellCells",self.character.Stats.get("otherStats").get("Ячейки заклинаний")).get(str(name))
+            except AttributeError:
+                maxCellsCount:str = self.character.Stats.get("otherStats").get("MaxspellCells",self.character.Stats.get("otherStats").get("Ячейки заклинаний"))
+            maxCellsCount = int(maxCellsCount)
+            line = Ui_SpellCellObj(str(name),int(count),maxCellsCount)
+            line.changedSignal.connect(self.spellCellsChange)
+            self.AllCellsLayout.addWidget(line)
+            self.spellLines.append(line)
+    def spellCellsChange(self, data:str):
+        data = data.split("$")
+        self.character.spellCellsCh(data[0],data[1])
+        print("signalEmited")
+        self.needToSend.emit()
+    def statusUpdate(self):
+        pass
+
+    def setupSecondary(self):
+        self.secondaryWidget = QtWidgets.QWidget(self)
+        self.secondaryWidget.setGeometry(QtCore.QRect(10,110,700,351))
+        self.secondaryInfo = QtWidgets.QHBoxLayout(self.secondaryWidget)
         self.SpellCells = QtWidgets.QGroupBox()
         self.SpellCells.setGeometry(QtCore.QRect(10, 110, 200, 351))
-        self.SpellCells.setMaximumSize(QtCore.QSize(200, 3000))
-        self.SpellCells.setFlat(False)
         self.SpellCells.setObjectName("SpellCells")
+        self.secondaryInfo.addWidget(self.SpellCells)
         self.AllCells = QtWidgets.QFrame(parent=self.SpellCells)
         self.AllCells.setGeometry(QtCore.QRect(15, 35, 170, 301))
         self.AllCells.setMinimumSize(QtCore.QSize(0, 0))
@@ -50,22 +81,47 @@ class Ui_PlayerCard(QtWidgets.QFrame):
         self.AllCellsLayout = QtWidgets.QVBoxLayout(self.AllCells)
         self.AllCellsLayout.setSpacing(2)
         self.AllCellsLayout.setObjectName("AllCellsLayout")
-        print(self.character.spellCells)
-        for name,count in self.character.spellCells.items():
-            line = Ui_SpellCellObj(str(name),int(count))
-            self.AllCellsLayout.addWidget(line)
 
 
-        self.StatusData = QtWidgets.QGroupBox(parent=self)
+        self.StatusData = QtWidgets.QGroupBox()
         self.StatusData.setGeometry(QtCore.QRect(220, 110, 300, 351))
         self.StatusData.setObjectName("StatusData")
+        self.secondaryInfo.addWidget(self.StatusData)
+        
+        self.buttonsWidget = QtWidgets.QWidget()
+        self.buttonsLayout = QtWidgets.QVBoxLayout(self.buttonsWidget)
+        self.healthButton = QtWidgets.QPushButton(parent=self)
+        self.healthButton.setGeometry(QtCore.QRect(529, 110, 101, 81))
+        self.healthButton.setObjectName("healthButton")
+        self.buttonsLayout.addWidget(self.healthButton)
+        self.dicesButton = QtWidgets.QPushButton(parent=self)
+        self.dicesButton.setGeometry(QtCore.QRect(530, 200, 101, 81))
+        self.dicesButton.setObjectName("dicesButton")
+        self.buttonsLayout.addWidget(self.dicesButton)
+        self.invButton = QtWidgets.QPushButton(parent=self)
+        self.invButton.setGeometry(QtCore.QRect(530, 290, 101, 81))
+        self.invButton.setObjectName("invButton")
+        self.buttonsLayout.addWidget(self.invButton)
+        self.spellsButton = QtWidgets.QPushButton(parent=self)
+        self.spellsButton.setGeometry(QtCore.QRect(530, 380, 101, 81))
+        self.spellsButton.setObjectName("spellsButton")
+        self.buttonsLayout.addWidget(self.spellsButton)
+
+        
+
+        self.secondaryInfo.addWidget(self.buttonsWidget)
+
+    def setupUi(self):
+        self.setGeometry(QtCore.QRect(0,0,720,540))
         self.layoutWidget = QtWidgets.QWidget(parent=self)
-        self.layoutWidget.setGeometry(QtCore.QRect(11, 11, 621, 87))
+        self.layoutWidget.setGeometry(QtCore.QRect(10, 10, 700, 100))
         self.layoutWidget.setObjectName("layoutWidget")
         self.PrimaryInfo = QtWidgets.QHBoxLayout(self.layoutWidget)
         self.PrimaryInfo.setContentsMargins(0, 0, 0, 0)
+        self.PrimaryInfo.setSpacing(5)
         self.PrimaryInfo.setObjectName("PrimaryInfo")
         self.NameArea = QtWidgets.QFrame(parent=self.layoutWidget)
+        self.NameArea.setMinimumSize(QtCore.QSize(340,85))
         self.NameArea.setMaximumSize(QtCore.QSize(16777215, 85))
         self.NameArea.setStyleSheet("background-color: rgb(42, 42, 42);")
         self.NameArea.setObjectName("NameArea")
@@ -93,7 +149,9 @@ class Ui_PlayerCard(QtWidgets.QFrame):
         self.horizontalLayout.addLayout(self.LevelData)
         self.PrimaryInfo.addWidget(self.NameArea)
         self.MainChars = QtWidgets.QFrame(parent=self.layoutWidget)
-        self.MainChars.setStyleSheet("background-color: rgb(85, 85, 85);")
+        self.MainChars.setStyleSheet("background-color: rgb(85, 85, 85); font-size: 18px;")
+        self.MainChars.setMinimumSize(355,100)
+        self.MainChars.setMaximumSize(355,100)
         self.MainChars.setObjectName("MainChars")
         self.layoutChars = QtWidgets.QGridLayout(self.MainChars)
         self.layoutChars.setObjectName("layoutChars")
@@ -119,26 +177,16 @@ class Ui_PlayerCard(QtWidgets.QFrame):
         self.WVText.setObjectName("WVText")
         self.layoutChars.addWidget(self.WVText, 1, 0, 1, 1)
         self.PrimaryInfo.addWidget(self.MainChars)
-        self.pushButton = QtWidgets.QPushButton(parent=self)
-        self.pushButton.setGeometry(QtCore.QRect(529, 110, 101, 81))
-        self.pushButton.setObjectName("pushButton")
-        self.pushButton_2 = QtWidgets.QPushButton(parent=self)
-        self.pushButton_2.setGeometry(QtCore.QRect(530, 200, 101, 81))
-        self.pushButton_2.setObjectName("pushButton_2")
-        self.pushButton_3 = QtWidgets.QPushButton(parent=self)
-        self.pushButton_3.setGeometry(QtCore.QRect(530, 290, 101, 81))
-        self.pushButton_3.setObjectName("pushButton_3")
-        self.pushButton_4 = QtWidgets.QPushButton(parent=self)
-        self.pushButton_4.setGeometry(QtCore.QRect(530, 380, 101, 81))
-        self.pushButton_4.setObjectName("pushButton_4")
-
-        self.retranslateUi()
+        self.setupSecondary()
+        self.updateData(self.character)
 
     def retranslateUi(self):
         _translate = QtCore.QCoreApplication.translate
-        self.pushButton.setText(_translate("PlayerCard", "Здоровье"))
-        self.pushButton_2.setText(_translate("PlayerCard", "Дайсы"))
-        self.pushButton_3.setText(_translate("PlayerCard", "Инвентарь"))
-        self.pushButton_4.setText(_translate("PlayerCard", "Заклинания"))
+        self.SpellCells.setTitle("Ячейки заклинаний")
+        self.StatusData.setTitle("Статус")
+        self.healthButton.setText(_translate("PlayerCard", "Здоровье"))
+        self.dicesButton.setText(_translate("PlayerCard", "Дайсы"))
+        self.invButton.setText(_translate("PlayerCard", "Инвентарь"))
+        self.spellsButton.setText(_translate("PlayerCard", "Заклинания"))
 
 

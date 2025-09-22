@@ -92,9 +92,9 @@ class Ui_CharsList(QWidget):
         self.Backgroud.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.Backgroud.setObjectName("Backgroud")
         self.verticalLayout.addWidget(self.Backgroud)
-        self.SelectButton = QPushButton(parent=self.CharsLayout)
-        self.SelectButton.setText("Выбрать его")
-        self.SelectButton.clicked.connect(self.select)
+        #self.SelectButton = QPushButton(parent=self.CharsLayout)
+        #self.SelectButton.setText("Выбрать его")
+        #self.SelectButton.clicked.connect(self.select)
         self.MainLayout.addWidget(self.Characteristics)
     def select(self):
         self.ClientOBJ.character = self.currCharacter
@@ -108,6 +108,8 @@ class Ui_CharsList(QWidget):
         self.updatesShow()
     def updatesShow(self):
         _char = self.currCharacter
+        self.ClientOBJ.character = _char
+        print("CharacterList(Client) - ", self.ClientOBJ.character.Stats)
         self.Name.setText(_char.name)
         self.Level.setText(str(_char.Stats.get("level")))
 

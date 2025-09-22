@@ -7,16 +7,18 @@
 
 
 from PyQt6 import QtCore, QtGui, QtWidgets
-from PyQt6.QtCore import QRect, QSize, QCoreApplication, Qt
+from PyQt6.QtCore import QRect, QSize, QCoreApplication, Qt, pyqtSignal
 from PyQt6.QtWidgets import QWidget, QFrame, QHBoxLayout, QLabel, QCheckBox, QApplication
 
 
 
 class Ui_SpellCellObj(QWidget):
-    def __init__(self,spLev, count):
+    changedSignal = pyqtSignal(str)
+    def __init__(self,spLev, count,maxCells):
         super().__init__()
         self.cellLevel = spLev
         self.cellCount = count
+        self.maxCount = maxCells
         self.cells = []
         self.setupUi()
     def setupUi(self):
@@ -33,15 +35,26 @@ class Ui_SpellCellObj(QWidget):
         self.CellName.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.CellName.setObjectName("CellName")
         self.horizontalLayout.addWidget(self.CellName)
-        for i in range(self.cellCount):
+        for i in range(self.maxCount):
             cell = QCheckBox(parent=self.Layout)
             cell.setStyleSheet("background-color: rgb(92,92,92);")
             cell.setMinimumSize(QtCore.QSize(0, 0))
             cell.setMaximumSize(QtCore.QSize(14, 15))
             cell.setText("")
             cell.setObjectName(f"cell{i}")
+            cell.checkStateChanged.connect(self.reCounting)
+            if i <= self.cellCount:
+                cell.setChecked(True)
+            else:cell.setChecked(False)
             self.cells.append(cell)
             self.horizontalLayout.addWidget(cell)
+    def reCounting(self):
+        output = str(self.cellLevel) + "$0" #name(3)$cells
+        for cell in self.cells:
+            if cell.isChecked():
+                output = output[:-1] + str(int(output[-1]) + 1)
+        self.changedSignal.emit(output)
+
 
 
 
