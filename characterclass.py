@@ -131,14 +131,13 @@ class Character:
         if str(value)[0] != "+-":
             self.spellCells[key] = int(value)
         else: self.spellCells[key] += int(value)
-        
-        if int(self.Stats["otherStats"].get("MaxspellCells",\
-                                            dict(zip(self.Stats.get("otherStats").get("Уровень ячеек"),self.Stats.get("otherStats").get("Ячейки заклинаний")))).get(key)\
-                                            ) < self.spellCells[key]:
-            self.spellCells[key] = int(self.Stats["otherStats"]["MaxspellCells"][key])
+        #if int(self.Stats["otherStats"].get('MaxspellCells',dict(zip(self.Stats.get("otherStats").get("Уровень ячеек"),self.Stats.get("otherStats").get("Ячейки заклинаний")))).get(key)) < self.spellCells[key]:
+        try: maxCells = int(self.Stats["otherStats"].get('MaxspellCells').get(key))
+        except: maxCells = int(self.Stats.get("otherStats").get("Ячейки заклинаний"))
+        if maxCells < self.spellCells[key]:
+            self.spellCells[key] = maxCells
         elif int(self.spellCells[key]) < 0:
             self.spellCells[key] = 0
-        print("FromCharacterClass: ",self.spellCells)
     def charSave(self,path=characterPath): 
         try:
             data = jsonLoad(path)

@@ -76,6 +76,7 @@ class ServerClass(QObject):
                         player.character.spellCells = eval(data[2])
                         player.character.status = eval(data[3])
                         player.character.expReset(player.character.Stats.get("level",1))
+                        print("Data Uptained and signal emitted")
                         # Отправляем сигнал об обновлении данных
                         self.player_data_updated.emit(player)
                     case "characterNameChanged":
@@ -91,7 +92,7 @@ class ServerClass(QObject):
 
 class Client(QObject):
     # Сигналы для клиента
-    data_updated = pyqtSignal()
+    data_updated = pyqtSignal(object)
     
     def __init__(self):
         super().__init__()
@@ -121,7 +122,7 @@ class Client(QObject):
                         self.character.spellCells = eval(comm[2])
                         self.character.status = eval(comm[3])
                         # Сигнализируем об обновлении данных
-                        self.data_updated.emit()
+                        self.data_updated.emit(self.character)
                 print("\nЧто-то изменилось, введите <Enter>, чтобы обновить")
             except Exception as e:
                 print(f"Ошибка получения данных: {e}")

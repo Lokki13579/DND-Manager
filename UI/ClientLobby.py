@@ -26,6 +26,7 @@ class Ui_Lobby(QWidget):
         
         self.stackedWidget.addWidget(self.CharSelect)
         self.Card = Ui_PlayerCard(char=self.ClientOBJ.character,client=self.ClientOBJ)
+        self.ClientOBJ.data_updated.connect(self.Card.updateData)
         self.Card.needToSend.connect(self.send)
         self.stackedWidget.addWidget(self.Card)
         if self.ClientOBJ.character.name == "Выбирается":

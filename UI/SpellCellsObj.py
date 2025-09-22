@@ -43,7 +43,7 @@ class Ui_SpellCellObj(QWidget):
             cell.setText("")
             cell.setObjectName(f"cell{i}")
             cell.checkStateChanged.connect(self.reCounting)
-            if i <= self.cellCount:
+            if i < self.cellCount:
                 cell.setChecked(True)
             else:cell.setChecked(False)
             self.cells.append(cell)

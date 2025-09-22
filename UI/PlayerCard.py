@@ -22,10 +22,7 @@ class Ui_PlayerCard(QtWidgets.QFrame):
         self.showUpdates()
     
     def updateData(self, character):
-        """Обновляет данные персонажа и перерисовывает интерфейс"""
         self.character = character
-        print("PlayerCard - ", character.Stats)
-        print("PlayerCard(Spells) - ", character.spellCells)
         self.showUpdates()
         self.spellsUpdate()
         self.statusUpdate()
@@ -44,7 +41,6 @@ class Ui_PlayerCard(QtWidgets.QFrame):
         self.BGText.setText(self.character.Stats.get('background', ''))
 
     def spellsUpdate(self):
-        self.character.initSpellCell()
         for i in range(self.AllCellsLayout.count()):
             self.AllCellsLayout.itemAt(i).widget().deleteLater() 
         for name,count in self.character.spellCells.items():
@@ -60,7 +56,6 @@ class Ui_PlayerCard(QtWidgets.QFrame):
     def spellCellsChange(self, data:str):
         data = data.split("$")
         self.character.spellCellsCh(data[0],data[1])
-        print("signalEmited")
         self.needToSend.emit()
     def statusUpdate(self):
         pass
