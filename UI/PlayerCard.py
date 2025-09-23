@@ -42,17 +42,23 @@ class Ui_PlayerCard(QtWidgets.QFrame):
 
     def spellsUpdate(self):
         for i in range(self.AllCellsLayout.count()):
-            self.AllCellsLayout.itemAt(i).widget().deleteLater() 
-        for name,count in self.character.spellCells.items():
-            try:
-                maxCellsCount:str = self.character.Stats.get("otherStats").get("MaxspellCells",self.character.Stats.get("otherStats").get("Ячейки заклинаний")).get(str(name))
-            except AttributeError:
-                maxCellsCount:str = self.character.Stats.get("otherStats").get("MaxspellCells",self.character.Stats.get("otherStats").get("Ячейки заклинаний"))
-            maxCellsCount = int(maxCellsCount)
-            line = Ui_SpellCellObj(str(name),int(count),maxCellsCount)
-            line.changedSignal.connect(self.spellCellsChange)
-            self.AllCellsLayout.addWidget(line)
-            self.spellLines.append(line)
+            self.AllCellsLayout.itemAt(i).widget().deleteLater()
+        try:
+            for name,count in self.character.spellCells.items():
+                print(self.character.Stats)
+                try:
+                    maxCellsCount:str = self.character.Stats.get("otherStats").get("MaxspellCells",self.character.Stats.get("otherStats").get("Ячейки заклинаний")).get(str(name))
+                except AttributeError:
+                    try: maxCellsCount:str = self.character.Stats.get("otherStats").get("MaxspellCells",self.character.Stats.get("otherStats").get("Ячейки заклинаний"))
+                    except:
+                        maxCellsCount = 0
+                maxCellsCount = int(maxCellsCount)
+                line = Ui_SpellCellObj(str(name),int(count),maxCellsCount)
+                line.changedSignal.connect(self.spellCellsChange)
+                self.AllCellsLayout.addWidget(line)
+                self.spellLines.append(line)
+        except RuntimeError:
+            pass
     def spellCellsChange(self, data:str):
         data = data.split("$")
         self.character.spellCellsCh(data[0],data[1])

@@ -1,3 +1,5 @@
+#! /bin/python3
+
 import sys
 from menus import *
 from PyQt6.QtWidgets import (QApplication, QMainWindow, QStackedWidget,QWidget)
