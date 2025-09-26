@@ -45,7 +45,7 @@ class Ui_JoinToServer(QWidget):
 
         self.AddressEnter = QLineEdit()
         self.AddressEnter.setObjectName(u"AddressEnter")
-        self.AddressEnter.setMinimumSize(QSize(350, 30))
+        self.AddressEnter.setMinimumSize(QSize(0, 30))
         self.AddressEnter.setMaximumSize(QSize(350, 30))
         self.AddressEnter.setFrame(True)
         self.AddressEnter.setAlignment(Qt.AlignmentFlag.AlignCenter)
@@ -65,7 +65,7 @@ class Ui_JoinToServer(QWidget):
 
         self.PortEnter = QLineEdit()
         self.PortEnter.setObjectName(u"PortEnter")
-        self.PortEnter.setMinimumSize(QSize(350, 30))
+        self.PortEnter.setMinimumSize(QSize(0, 30))
         self.PortEnter.setMaximumSize(QSize(350, 30))
         self.PortEnter.setReadOnly(False)
         self.PortEnter.textChanged.connect(self.portControl)
@@ -77,23 +77,17 @@ class Ui_JoinToServer(QWidget):
 
         self.vertLayout.addLayout(self.PortLayout)
 
-        self.AlertLayout = QWidget()
-        self.AlertLayout.setObjectName(u"AlertLayout")
-        self.AlertLayout.setMaximumSize(QSize(600, 70))
-        self.horizontalLayout_3 = QHBoxLayout(self.AlertLayout)
-        self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
-        self.Alert = QLabel(self.AlertLayout)
+        
+        self.Alert = QLabel(self)
         self.Alert.setObjectName(u"Alert")
-        self.Alert.setMaximumSize(QSize(500, 16777215))
+        self.Alert.setMaximumSize(QSize(16777215, 16777215))
         self.Alert.setStyleSheet(u"color: rgb(255, 39, 97);")
         self.Alert.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.Alert.setWordWrap(True)
         self.Alert.setMargin(0)
 
-        self.horizontalLayout_3.addWidget(self.Alert)
 
-
-        self.vertLayout.addWidget(self.AlertLayout)
+        self.vertLayout.addWidget(self.Alert)
 
         self.ButtonsLayout = QHBoxLayout()
         self.ButtonsLayout.setObjectName(u"ButtonsLayout")
@@ -133,7 +127,7 @@ class Ui_JoinToServer(QWidget):
         self.PortName.setText(QCoreApplication.translate("JoinToServer", u">--- \u041f\u043e\u0440\u0442 \u0421\u0435\u0440\u0432\u0435\u0440\u0430 ===>", None))
         self.PortEnter.setText(QCoreApplication.translate("JoinToServer", u"4242", None))
         self.PortEnter.setPlaceholderText(QCoreApplication.translate("JoinToServer", u"server port", None))
-        self.Alert.setText(QCoreApplication.translate("JoinToServer", u"\u041f\u043e\u0434\u043a\u043b\u044e\u0447\u0430\u0435\u0448\u044c \u043a \u0441\u0435\u0440\u0432\u0435\u0440\u0443? \u0417\u0430\u0447\u0438\u0442 \u0442\u044b \u043f\u0440\u0438\u043a\u043b\u044e\u0447\u0435\u043d\u0435\u0446. \u0423\u0434\u0430\u0447\u043d\u043e\u0433\u043e \u043f\u0443\u0442\u0438", None))
+        self.Alert.setText(QCoreApplication.translate("JoinToServer", u"\u041f\u043e\u0434\u043a\u043b\u044e\u0447\u0430\u0435\u0448\u044c \u043a \u0441\u0435\u0440\u0432\u0435\u0440\u0443? \n \u0417\u0430\u0447\u0438\u0442 \u0442\u044b \u043f\u0440\u0438\u043a\u043b\u044e\u0447\u0435\u043d\u0435\u0446. \n \u0423\u0434\u0430\u0447\u043d\u043e\u0433\u043e \u043f\u0443\u0442\u0438", None))
         self.BackButton.setText(QCoreApplication.translate("JoinToServer", u"\u041d\u0430\u0437\u0430\u0434", None))
         self.ConnectButton.setText(QCoreApplication.translate("JoinToServer", u"\u0417\u0430\u0439\u0442\u0438", None))
     # retranslateUi

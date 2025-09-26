@@ -44,7 +44,7 @@ class Ui_CreateLobby(QWidget):
 
         self.PortEnter = QLineEdit()
         self.PortEnter.setObjectName(u"PortEnter")
-        self.PortEnter.setMinimumSize(QSize(350, 30))
+        self.PortEnter.setMinimumSize(QSize(0, 30))
         self.PortEnter.setMaximumSize(QSize(350, 30))
         self.PortEnter.setReadOnly(False)
         self.PortEnter.textChanged.connect(self.portControl)
@@ -56,23 +56,22 @@ class Ui_CreateLobby(QWidget):
 
         self.vertLayout.addLayout(self.PortLayout)
 
-        self.AlertLayout = QWidget(self)
-        self.AlertLayout.setObjectName(u"AlertLayout")
-        self.AlertLayout.setMaximumSize(QSize(600, 70))
-        self.horizontalLayout_3 = QHBoxLayout(self.AlertLayout)
-        self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
-        self.Alert = QLabel(self.AlertLayout)
+        # self.AlertLayout = QWidget(self)
+        # self.AlertLayout.setObjectName(u"AlertLayout")
+        # self.AlertLayout.setMaximumSize(QSize(600, 70))
+        # self.horizontalLayout_3 = QHBoxLayout(self.AlertLayout)
+        # self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
+        self.Alert = QLabel(self)
         self.Alert.setObjectName(u"Alert")
-        self.Alert.setMaximumSize(QSize(500, 16777215))
+        self.Alert.setMaximumSize(QSize(16777215, 16777215))
         self.Alert.setStyleSheet(u"color: rgb(255, 39, 97);")
         self.Alert.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.Alert.setWordWrap(True)
         self.Alert.setMargin(0)
 
-        self.horizontalLayout_3.addWidget(self.Alert)
 
 
-        self.vertLayout.addWidget(self.AlertLayout)
+        self.vertLayout.addWidget(self.Alert)
 
         self.ButtonsLayout = QHBoxLayout()
         self.ButtonsLayout.setObjectName(u"ButtonsLayout")
@@ -110,7 +109,7 @@ class Ui_CreateLobby(QWidget):
         self.portName.setText(QCoreApplication.translate("CreateLobby", u">--- \u041f\u043e\u0440\u0442 \u0421\u0435\u0440\u0432\u0435\u0440\u0430 ===>", None))
         self.PortEnter.setText(QCoreApplication.translate("CreateLobby", "4242", None))
         self.PortEnter.setPlaceholderText(QCoreApplication.translate("CreateLobby", u"server port", None))
-        self.Alert.setText(QCoreApplication.translate("CreateLobby", u"\u041f\u0440\u043e\u0434\u043e\u043b\u0436\u0438\u0442\u044c \u043c\u043e\u0436\u0435\u0442 \u0442\u043e\u043b\u044c\u043a\u043e \u0413\u0435\u0439\u043c \u041c\u0430\u0441\u0442\u0435\u0440, \u0435\u0441\u043b\u0438 \u0442\u044b \u043a \u043d\u0438\u043c \u043e\u0442\u043d\u043e\u0441\u0438\u0448\u044c\u0441\u044f, \u0442\u043e \u0441\u043e\u0437\u0434\u0430\u0432\u0430\u0439 \u0441\u0435\u0440\u0432\u0435\u0440", None))
+        self.Alert.setText(QCoreApplication.translate("CreateLobby", u"\u041f\u0440\u043e\u0434\u043e\u043b\u0436\u0438\u0442\u044c \u043c\u043e\u0436\u0435\u0442 \u0442\u043e\u043b\u044c\u043a\u043e \u0413\u0435\u0439\u043c \u041c\u0430\u0441\u0442\u0435\u0440, \n \u0435\u0441\u043b\u0438 \u0442\u044b \u043a \u043d\u0438\u043c \u043e\u0442\u043d\u043e\u0441\u0438\u0448\u044c\u0441\u044f, \n \u0442\u043e \u0441\u043e\u0437\u0434\u0430\u0432\u0430\u0439 \u0441\u0435\u0440\u0432\u0435\u0440", None))
         self.BackButton.setText(QCoreApplication.translate("CreateLobby", u"\u041d\u0430\u0437\u0430\u0434", None))
         self.HostButton.setText(QCoreApplication.translate("CreateLobby", u"\u0421\u043e\u0437\u0434\u0430\u0442\u044c", None))
     # retranslateUi
