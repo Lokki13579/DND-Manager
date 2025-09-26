@@ -69,7 +69,6 @@ class Ui_PlayerCard(QtWidgets.QFrame):
         ex = self.LevelDialog.exp
         self.character.setLevel(lev)
         self.character.setXp(ex)
-        print(self.character.Stats.get("level")," - ",self.character.Stats.get("experience"), " - ", self.character.maxExp)
         self.updateData(self.character)
         self.needToSend.emit()
     def statusUpdate(self):
