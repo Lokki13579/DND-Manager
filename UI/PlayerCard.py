@@ -7,8 +7,9 @@
 
 
 from PyQt6 import QtCore, QtGui, QtWidgets
-from PyQt6.QtWidgets import QWidget, QFrame
+from PyQt6.QtWidgets import QWidget, QFrame, QDialog
 from UI.SpellCellsObj import Ui_SpellCellObj
+from UI.LevelChanger import Ui_Dialog
 from characterclass import Character
 
 #class Ui_PlayerCard(QWidget):
@@ -45,7 +46,6 @@ class Ui_PlayerCard(QtWidgets.QFrame):
             self.AllCellsLayout.itemAt(i).widget().deleteLater()
         try:
             for name,count in self.character.spellCells.items():
-                print(self.character.Stats)
                 try:
                     maxCellsCount:str = self.character.Stats.get("otherStats").get("MaxspellCells",self.character.Stats.get("otherStats").get("Ячейки заклинаний")).get(str(name))
                 except AttributeError:
@@ -62,6 +62,15 @@ class Ui_PlayerCard(QtWidgets.QFrame):
     def spellCellsChange(self, data:str):
         data = data.split("$")
         self.character.spellCellsCh(data[0],data[1])
+        self.updateData(self.character)
+        self.needToSend.emit()
+    def levelChange(self):
+        lev = self.LevelDialog.level
+        ex = self.LevelDialog.exp
+        self.character.setLevel(lev)
+        self.character.setXp(ex)
+        print(self.character.Stats.get("level")," - ",self.character.Stats.get("experience"), " - ", self.character.maxExp)
+        self.updateData(self.character)
         self.needToSend.emit()
     def statusUpdate(self):
         pass
@@ -113,7 +122,10 @@ class Ui_PlayerCard(QtWidgets.QFrame):
         
 
         self.secondaryInfo.addWidget(self.buttonsWidget)
-
+    def levelChangeOpen(self):
+        self.LevelDialog.dataUpdate(self.character.Stats.get("level"),self.character.Stats.get("experience"),self.character.maxExp)
+        self.LevelDialogMenu.show()
+        self.LevelDialogMenu.accepted.connect(self.levelChange)
     def setupUi(self):
         self.setGeometry(QtCore.QRect(0,0,720,540))
         self.layoutWidget = QtWidgets.QWidget(parent=self)
@@ -143,6 +155,10 @@ class Ui_PlayerCard(QtWidgets.QFrame):
         self.LevelText.setMinimumSize(QtCore.QSize(0, 42))
         self.LevelText.setMaximumSize(QtCore.QSize(85, 16777215))
         self.LevelText.setObjectName("LevelText")
+        self.LevelDialogMenu = QDialog()
+        self.LevelDialog = Ui_Dialog()
+        self.LevelDialog.setupUi(self.LevelDialogMenu)
+        self.LevelText.clicked.connect(self.levelChangeOpen)
         self.LevelData.addWidget(self.LevelText)
         self.ExpText = QtWidgets.QLabel(parent=self.NameArea)
         self.ExpText.setStyleSheet("font-size: 13pt;")

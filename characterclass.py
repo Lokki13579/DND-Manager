@@ -137,12 +137,14 @@ class Character:
             levels_data = jsonLoad("JSONS/dnd_levels.json")
             current_level = self.Stats.get("level", 0)
             current_exp = self.Stats.get("experience", 0)
-            
+            print(levels_data)
+            print(current_level)
+            print(current_exp)
             while True:
                 next_level_data = levels_data.get(str(current_level + 1), {})
                 next_level_exp = next_level_data.get("experience", float('inf'))
-                
-                if current_exp > next_level_exp and next_level_exp > 0:
+                print("next - ", next_level_data)
+                if current_exp >= next_level_exp and next_level_exp > 0:
                     current_exp -= next_level_exp
                     current_level += 1
                 else:

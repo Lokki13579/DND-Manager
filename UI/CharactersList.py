@@ -109,7 +109,6 @@ class Ui_CharsList(QWidget):
     def updatesShow(self):
         _char = self.currCharacter
         self.ClientOBJ.character = _char
-        print("CharacterList(Client) - ", self.ClientOBJ.character.Stats)
         self.Name.setText(_char.name)
         self.Level.setText(str(_char.Stats.get("level")))
 
