@@ -1,7 +1,6 @@
 from socket import *
 import threading
 from random import randint
-from art import tprint
 from PyQt6.QtCore import QObject, pyqtSignal
 
 # Импорты из вашего кода
@@ -22,7 +21,6 @@ class ServerClass(QObject):
     def _startServer(self, port=randint(4000, 5000), ip=gethostbyname(gethostname())):
         self.S = socket(AF_INET, SOCK_STREAM)
         self.S.bind((ip, port))
-        print(tprint(str(port)))
         self._ip = ip
         self._port = port
         self.S.listen(5)

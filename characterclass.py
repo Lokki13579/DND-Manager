@@ -11,7 +11,7 @@ def get_resource_path(relative_path):
     else:
         return os.path.join(os.path.abspath("."), relative_path)
 
-def jsonLoad(path="AllCharacterData.json"):
+def jsonLoad(path="/home/artem/.config/DNDManager/AllCharacterData.json"):
     """Безопасная загрузка JSON файлов с обработкой ошибок"""
     try:
         full_path = get_resource_path(path)

@@ -1,8 +1,9 @@
-#! /bin/python3
+#!/home/artem/python/bin/python
 
 import sys
-from menus import *
+from server_client import *
 from PyQt6.QtWidgets import (QApplication, QMainWindow, QStackedWidget,QWidget)
+
 
 from UI.MainMenu import Ui_MainMenu
 from UI.ui_Create import Ui_CreateLobby
@@ -11,6 +12,8 @@ from UI.CharactersList import Ui_CharsList
 from UI.ui_PlayerList import Ui_PlayerList
 from UI.ClientLobby import Ui_Lobby
 
+ServerOBJ = ServerClass()
+ClientOBJ = Client()
 class MainWin(QMainWindow):
     def __init__(self):
         super().__init__()

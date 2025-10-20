@@ -1,13 +1,9 @@
 from pprint import pp
 import random
-from art import tprint
 import math
-from server_client import *
 from panels import *
 clearstr = "cls"
 IP = gethostbyname(gethostname())
-ServerOBJ = ServerClass()
-ClientOBJ = Client()
 #translateOBJ = jsonLoad("JSONS/translate.json")
 class diceRandomer:
     def __init__(self):

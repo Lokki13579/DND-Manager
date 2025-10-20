@@ -19,7 +19,7 @@ class Ui_Lobby(QWidget):
 
     def setupUi(self):
         self.stackedWidget = QtWidgets.QStackedWidget(self)
-        self.stackedWidget.setGeometry(QtCore.QRect(0, 0, 680, 520))
+        self.stackedWidget.setGeometry(QtCore.QRect(0, 0, 720, 540))
         self.stackedWidget.setObjectName("stackedWidget")
 
         self.CharSelect = Ui_CharsList(self.ClientOBJ)
