@@ -107,7 +107,9 @@ class Character:
             self.Stats["experience"] = int(value)
         self.expReset(self.Stats.get("level", 0))
         self.initSpellCell()
-        
+    def setClass(self,_class):
+        self.Stats["class"] = _class
+        self.skillReset(_class,self.Stats.get("level",1))
     def skillReset(self, cl, newLevel):
         self.Stats["skills"] = []
         if not cl:

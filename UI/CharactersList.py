@@ -7,9 +7,9 @@
 
 
 from PyQt6 import QtCore, QtGui, QtWidgets
-from PyQt6.QtCore import pyqtSignal
+from PyQt6.QtCore import pyqtSignal, Qt
 from PyQt6.QtWidgets import QWidget, QPushButton
-from characterclass import Character, CharLoader
+from characterclass import Character, CharLoader, jsonLoad
 
 
 class Ui_CharsList(QWidget):
@@ -17,99 +17,62 @@ class Ui_CharsList(QWidget):
         super().__init__()
         self.ClientOBJ = client
         self.currCharacter = Character()
+        self.Opts = {}
         self.allChars = CharLoader().CharClassDispencer()
         self.characterSelected = pyqtSignal(object)
         self.setupUi()
+    
     def setupUi(self):
         self.setObjectName("Main")
         self.resize(720, 540)
-        self.horizontalLayoutWidget = QtWidgets.QWidget(parent=self)
-        self.horizontalLayoutWidget.setGeometry(QtCore.QRect(10, 10, 701, 521))
-        self.horizontalLayoutWidget.setObjectName("horizontalLayoutWidget")
-        self.MainLayout = QtWidgets.QHBoxLayout(self.horizontalLayoutWidget)
-        self.MainLayout.setContentsMargins(0, 0, 0, 0)
-        self.MainLayout.setObjectName("MainLayout")
-        self.verticalFrame_2 = QtWidgets.QFrame(parent=self.horizontalLayoutWidget)
-        self.verticalFrame_2.setMaximumSize(QtCore.QSize(16777215, 510))
-        self.verticalFrame_2.setObjectName("verticalFrame_2")
-        self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.verticalFrame_2)
-        self.verticalLayout_2.setObjectName("verticalLayout_2")
-        self.BackButton = QtWidgets.QPushButton("Назад")
-        self.BackButton.setObjectName("BackButton")
-        self.verticalLayout_2.addWidget(self.BackButton)
-        self.charsTitle = QtWidgets.QLabel("Все персонажи")
-        self.charsTitle.setObjectName("AllCharsTitle")
-        self.charsTitle.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
-        self.verticalLayout_2.addWidget(self.charsTitle)
-        self.CharsList = QtWidgets.QListWidget(parent=self.verticalFrame_2)
-        self.CharsList.setObjectName("CharsList")
-        self.verticalLayout_2.addWidget(self.CharsList)
-        self.CreateNewButton = QtWidgets.QPushButton("Создать нового")
-        self.CreateNewButton.setObjectName("CreateNewButton")
-        self.verticalLayout_2.addWidget(self.CreateNewButton)
-        self.MainLayout.addWidget(self.verticalFrame_2)
-        self.initCharacters()
-        self.Characteristics = QtWidgets.QGroupBox(parent=self.horizontalLayoutWidget)
-        self.Characteristics.setMinimumSize(QtCore.QSize(420, 0))
-        self.Characteristics.setMaximumSize(QtCore.QSize(16777215, 510))
-        self.Characteristics.setObjectName("Characteristics")
-        self.CharsLayout = QtWidgets.QFrame(parent=self.Characteristics)
-        self.CharsLayout.setGeometry(QtCore.QRect(10, 30, 400, 470))
-        self.CharsLayout.setMinimumSize(QtCore.QSize(400, 470))
-        self.CharsLayout.setMaximumSize(QtCore.QSize(16777215, 470))
-        self.CharsLayout.setObjectName("CharsLayout")
-        self.verticalLayout = QtWidgets.QVBoxLayout(self.CharsLayout)
-        self.verticalLayout.setObjectName("verticalLayout")
-        self.Name = QtWidgets.QLabel(parent=self.CharsLayout)
-        self.Name.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
-        self.Name.setObjectName("Name")
-        self.verticalLayout.addWidget(self.Name)
-        self.Level = QtWidgets.QLabel(parent=self.CharsLayout)
-        self.Level.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
-        self.Level.setObjectName("Level")
-        self.verticalLayout.addWidget(self.Level)
-        self.Experience = QtWidgets.QLabel(parent=self.CharsLayout)
-        self.Experience.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
-        self.Experience.setObjectName("Experience")
-        self.verticalLayout.addWidget(self.Experience)
-        self.Class = QtWidgets.QLabel(parent=self.CharsLayout)
-        self.Class.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
-        self.Class.setObjectName("Class")
-        self.verticalLayout.addWidget(self.Class)
-        self.Race = QtWidgets.QLabel(parent=self.CharsLayout)
-        self.Race.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
-        self.Race.setObjectName("Race")
-        self.verticalLayout.addWidget(self.Race)
-        self.Dices = QtWidgets.QLabel(parent=self.CharsLayout)
-        self.Dices.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
-        self.Dices.setObjectName("Dices")
-        self.verticalLayout.addWidget(self.Dices)
-        self.WorldView = QtWidgets.QLabel(parent=self.CharsLayout)
-        self.WorldView.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
-        self.WorldView.setObjectName("WorldView")
-        self.verticalLayout.addWidget(self.WorldView)
-        self.Backgroud = QtWidgets.QLabel(parent=self.CharsLayout)
-        self.Backgroud.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
-        self.Backgroud.setObjectName("Backgroud")
-        self.verticalLayout.addWidget(self.Backgroud)
-        #self.SelectButton = QPushButton(parent=self.CharsLayout)
-        #self.SelectButton.setText("Выбрать его")
-        #self.SelectButton.clicked.connect(self.select)
-        self.MainLayout.addWidget(self.Characteristics)
-    def select(self):
-        self.ClientOBJ.character = self.currCharacter
-    def initCharacters(self):
-        self.CharsList.clear()
-        for ch in self.allChars:
-            self.CharsList.addItem(ch)
-        self.CharsList.currentItemChanged.connect(self.updateData)
-    def updateData(self,char):
-        self.currCharacter = self.allChars[char.text()]
+        self.setGeometry(QtCore.QRect(0,0,720,540))
+        
+        self.Panels = QtWidgets.QGridLayout(self)
+
+        self.BackButton = QtWidgets.QPushButton(text="Назад")
+        self.Panels.addWidget(self.BackButton,0,0,Qt.AlignmentFlag.AlignHCenter)
+
+        self.CharactersList = QtWidgets.QListWidget()
+        self.CharactersList.currentItemChanged.connect(self.characterChange)
+        self.Panels.addWidget(self.CharactersList,1,0)
+
+        self.CreateNewCharButton = QtWidgets.QPushButton(text="Создать нового")
+        self.Panels.addWidget(self.CreateNewCharButton,2,0,Qt.AlignmentFlag.AlignHCenter)
+
+        self.CharacterOpts = QtWidgets.QWidget()
+        self.CharacterOptsLayout = QtWidgets.QVBoxLayout(self.CharacterOpts)
+        OptsSizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Expanding,QtWidgets.QSizePolicy.Policy.Expanding)
+        OptsSizePolicy.setHorizontalStretch(2)
+        self.CharacterOpts.setSizePolicy(OptsSizePolicy)
+        self.characterOptsInit(self.CharacterOptsLayout)
+        self.Panels.addWidget(self.CharacterOpts,1,1)
+
+
+        self.characterFind(self.CharactersList)
+    def characterChange(self,index:QtWidgets.QListWidgetItem):
+        index = index.text()
+        self.currCharacter = self.allChars.get(index)
         self.updatesShow()
+        self.select(self.currCharacter)
+
+    def characterFind(self,listObject : QtWidgets.QListWidget):
+        listObject.clear()
+        for character in self.allChars:
+            listObject.addItem(character)
+    def characterOptsInit(self,listObject: QtWidgets.QVBoxLayout):
+        opts = ["name","level","experience","class","race","worldview","background","skills","diceStats"]
+        for opt in opts:
+            self.Opts[opt] = QtWidgets.QLabel()
+            self.Opts[opt].setWordWrap(True)
+            listObject.addWidget(self.Opts[opt])
+
     def updatesShow(self):
         _char = self.currCharacter
-        self.ClientOBJ.character = _char
-        self.Name.setText(_char.name)
-        self.Level.setText(str(_char.Stats.get("level")))
+        self.Opts.get("name").setText(_char.name)
+        for _title,_text in _char.Stats.items():
+            self.Opts.get(_title,QtWidgets.QLabel()).setText(str(_text))
+    
 
+    def select(self,char):
+        self.ClientOBJ.character = char
 

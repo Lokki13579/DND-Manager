@@ -31,7 +31,7 @@ class Ui_Lobby(QWidget):
         self.stackedWidget.addWidget(self.Card)
         if self.ClientOBJ.character.name == "Выбирается":
             self.stackedWidget.setCurrentIndex(0)
-            self.CharSelect.CharsList.doubleClicked.connect(self.showCard)
+            self.CharSelect.CharactersList.doubleClicked.connect(self.showCard)
         else: self.showCard()
     def send(self):
         print("sendingData")
