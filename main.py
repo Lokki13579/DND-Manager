@@ -10,7 +10,7 @@ from UI.ui_Join import Ui_JoinToServer
 from UI.CharactersList import Ui_CharsList
 from UI.ui_PlayerList import Ui_PlayerList
 from UI.ClientLobby import Ui_Lobby
-from UI.CreateChar import Ui_MainList as Ui_CreateChar
+from UI.CreateChar.CreateChar import Ui_MainList as Ui_CreateChar
 ServerOBJ = ServerClass()
 ClientOBJ = Client()
 class MainWin(QMainWindow):

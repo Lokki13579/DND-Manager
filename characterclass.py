@@ -27,14 +27,17 @@ def jsonLoad(path="/home/artem/.config/DNDManager/AllCharacterData.json"):
         print(f"Ошибка загрузки {path}: {e}")
         return {}
 
+classData = jsonLoad("JSONS/dnd_classes.json")
+racesData = jsonLoad("JSONS/dnd_races.json")
 Stats = {
-    "class": "",
-    "race": "",
-    "level": 0,
+    "class": "Ааракокра",
+    "race": "Бард",
+    "level": 1,
     "experience": 0,
-    "alingment": "",
-    "background": "",
-    "masterBonus": "",
+    "speed":"30",
+    "worldview": "Нейтральный",
+    "background": "Артист",
+    "masterBonus": "+2",
     "skills": "",
     "diceStats": "",
     "inventory": "",
@@ -60,7 +63,12 @@ class Character:
         self.name = name
         self.spellCells = {}
         self.setStats(stats)
-        
+        self.setClass("Бард")
+        self.setRace("Ааракокра")
+        self.setLevel(1)
+        self.setXp(0)
+        self.Stats["inventory"] = []
+
         # Безопасная загрузка maxExp
         try:
             levels_data = jsonLoad("JSONS/dnd_levels.json")
@@ -110,6 +118,16 @@ class Character:
     def setClass(self,_class):
         self.Stats["class"] = _class
         self.skillReset(_class,self.Stats.get("level",1))
+    def setRace(self,race):
+        self.Stats["race"] = race
+        self.Stats["speed"] = racesData.get(race).get("speed",30)
+        self.Stats["diceStats"] = {}
+        self.Stats["diceStats"]["main"] = {}
+        self.Stats["diceStats"]["addiction"] = racesData.get(race).get("CharsUP")
+    def setDice(self,name,value):
+        self.Stats["diceStats"]["main"][name] = value
+        
+    
     def skillReset(self, cl, newLevel):
         self.Stats["skills"] = []
         if not cl:
