@@ -120,10 +120,15 @@ class Character:
         self.skillReset(_class,self.Stats.get("level",1))
     def setRace(self,race):
         self.Stats["race"] = race
-        self.Stats["speed"] = racesData.get(race).get("speed",30)
+        self.Stats["speed"] = racesData.get(race).get("скорость",30)
+        self.diceInit()
+        self.Stats["diceStats"]["addiction"] = racesData.get(race).get("УвеличениеХарактеристик")
+    def diceInit(self):
+        if self.Stats.get("diceStats",{}) != {}:
+            return
         self.Stats["diceStats"] = {}
         self.Stats["diceStats"]["main"] = {}
-        self.Stats["diceStats"]["addiction"] = racesData.get(race).get("CharsUP")
+        self.Stats["diceStats"]["addiction"] = {}
     def setDice(self,name,value):
         self.Stats["diceStats"]["main"][name] = value
         
