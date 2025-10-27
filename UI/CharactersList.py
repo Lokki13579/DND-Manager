@@ -8,7 +8,7 @@
 
 from PyQt6 import QtCore, QtGui, QtWidgets
 from PyQt6.QtCore import pyqtSignal, Qt
-from PyQt6.QtWidgets import QWidget, QPushButton
+from PyQt6.QtWidgets import *
 from characterclass import Character, CharLoader, jsonLoad
 
 
@@ -39,12 +39,14 @@ class Ui_CharsList(QWidget):
         self.CreateNewCharButton = QtWidgets.QPushButton(text="Создать нового")
         self.Panels.addWidget(self.CreateNewCharButton,2,0,Qt.AlignmentFlag.AlignHCenter)
 
-        self.CharacterOpts = QtWidgets.QWidget()
-        self.CharacterOptsLayout = QtWidgets.QVBoxLayout(self.CharacterOpts)
-        OptsSizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Expanding,QtWidgets.QSizePolicy.Policy.Expanding)
-        OptsSizePolicy.setHorizontalStretch(2)
-        self.CharacterOpts.setSizePolicy(OptsSizePolicy)
-        self.characterOptsInit(self.CharacterOptsLayout)
+        self.CharacterOpts = QScrollArea()
+        self.CharacterOptsLayout = QVBoxLayout(self.CharacterOpts)
+        self.CharacterOptsTree = TreeWidget()
+        self.CharacterOptsTree.setHeaderLabel("Персонаж")
+        self.CharacterOptsLayout.addWidget(self.CharacterOptsTree)
+
+        #self.CharacterOptsTitle = QTreeWidgetItem(self.CharacterOptsTree,[self.currCharacter.name])
+        self.CharacterOptsTree.recursiveAddTreeItems(self.CharacterOptsTree,self.currCharacter.Stats)
         self.Panels.addWidget(self.CharacterOpts,1,1)
 
 
@@ -59,20 +61,39 @@ class Ui_CharsList(QWidget):
         listObject.clear()
         for character in self.allChars:
             listObject.addItem(character)
-    def characterOptsInit(self,listObject: QtWidgets.QVBoxLayout):
-        opts = ["name","level","experience","class","race","worldview","background","skills","diceStats"]
-        for opt in opts:
-            self.Opts[opt] = QtWidgets.QLabel()
-            self.Opts[opt].setWordWrap(True)
-            listObject.addWidget(self.Opts[opt])
-
     def updatesShow(self):
-        _char = self.currCharacter
-        self.Opts.get("name").setText(_char.name)
-        for _title,_text in _char.Stats.items():
-            self.Opts.get(_title,QtWidgets.QLabel()).setText(str(_text))
+
+        self.CharacterOptsTree.clear()
+        self.CharacterOptsTree.setHeaderLabel(self.currCharacter.name)
+        #self.CharacterOptsTitle = QTreeWidgetItem(self.CharacterOptsTree,[self.currCharacter.name])
+        self.CharacterOptsTree.recursiveAddTreeItems(self.CharacterOptsTree,self.currCharacter.Stats)
+        self.CharacterOptsTree.expandAll()
+
     
 
     def select(self,char):
         self.ClientOBJ.character = char
+
+class TreeWidget(QTreeWidget):
+
+    def recursiveAddTreeItems(self,parent:QTreeWidgetItem,value:str|int|dict|list,_dict = {}):
+        if type(value) == type(1):
+            value = str(value)
+        if type(value) == type(list()):
+            for _val in value:
+                _dict[_val] = QTreeWidgetItem(parent,[_val])
+        if type(value) == type(dict()):
+            for _key,_val in value.items():
+                _dict[_key] = QTreeWidgetItem(parent,[_key])
+                _dict[_key].setHidden(False)
+                _dict[_key+"_"] = self.recursiveAddTreeItems(_dict[_key],_val,_dict)
+        if type(value) == type(str()):
+                _dict[value] = QTreeWidgetItem(parent,[value])
+        return _dict
+
+
+        
+
+
+            
 

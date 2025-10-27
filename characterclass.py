@@ -3,6 +3,8 @@ import os
 import math
 import sys
 from translate import *
+from math import floor
+from PyQt6.QtCore import pyqtSignal
 
 def get_resource_path(relative_path):
     """Получаем правильный путь к ресурсам в exe"""
@@ -57,6 +59,7 @@ Stats = {
 characterPath = "AllCharacterData.json"
 
 class Character:
+    sthgChanged = pyqtSignal(str)
     def __init__(self, name="Выбирается", stats=None):
         if stats is None:
             stats = {}
@@ -67,6 +70,11 @@ class Character:
         self.setRace("Ааракокра")
         self.setLevel(1)
         self.setXp(0)
+        self.healthInit()
+        self.setMaxHealth(max([\
+                                1,\
+                                self.getFirstLevMaxHp()
+                            ]))
         self.Stats["inventory"] = []
 
         # Безопасная загрузка maxExp
@@ -97,11 +105,16 @@ class Character:
     def setName(self, newName):
         self.name = newName
         
+        
     def setLevel(self, value):
         if isinstance(value, str) and value[0] in "+-":
             self.Stats["level"] += int(value)
         else:
             self.Stats["level"] = int(value)
+
+        if int(value) == 1:
+            try: self.setMaxHealth(self.getFirstLevMaxHp())
+            except: pass
 
         self.expReset(self.Stats["level"])
         self.BMReset(self.Stats["level"])
@@ -113,14 +126,47 @@ class Character:
             self.Stats["experience"] += int(value)
         else:
             self.Stats["experience"] = int(value)
+        
         self.expReset(self.Stats.get("level", 0))
         self.initSpellCell()
     def setClass(self,_class):
         self.Stats["class"] = _class
+        self.Stats["hpDice"] = classData.get(_class).get("hpDice")
+        
+        try: self.setMaxHealth(self.getFirstLevMaxHp())
+        except: pass
+        
         self.skillReset(_class,self.Stats.get("level",1))
+    def healthInit(self):
+        self.Stats["health"] = {}
+        self.Stats["health"]["main"] = {"max": 0, "val": 0}
+        self.Stats["health"]["temp"] = 0
+    def getFirstLevMaxHp(self):
+        diceSt = self.Stats.get("diceStats",{})
+        return int(self.Stats.get("hpDice")[1:])+floor((diceSt.get("main",{}).get("Телосложение",int(self.Stats.get("hpDice")[1:])) + diceSt.get("addiction",{}).get("Телосложение",0) -10)/2)
+    def setMaxHealth(self,maxHealth):
+        if maxHealth == "":
+            maxHealth = self.getFirstLevMaxHp()
+        maxHealth = int(maxHealth)
+        self.Stats["health"]["main"]["max"] = maxHealth
+
+    def maxHealthUp(self,newMaxHealth : int):
+        self.Stats["health"]["main"]["max"] += newMaxHealth
+        
+
+    def setHealth(self,hp):
+        self.Stats["health"]["main"]["val"] = hp
+        
+
+    def setTempHp(self,tempHp):
+        self.Stats["health"]["temp"] = tempHp
+        
+
+
     def setRace(self,race):
         self.Stats["race"] = race
         self.Stats["speed"] = racesData.get(race).get("скорость",30)
+        
         self.diceInit()
         self.Stats["diceStats"]["addiction"] = racesData.get(race).get("УвеличениеХарактеристик")
     def diceInit(self):
@@ -131,6 +177,7 @@ class Character:
         self.Stats["diceStats"]["addiction"] = {}
     def setDice(self,name,value):
         self.Stats["diceStats"]["main"][name] = value
+        
         
     
     def skillReset(self, cl, newLevel):
@@ -177,13 +224,18 @@ class Character:
             self.maxExp = next_level_data.get("experience", 300)
         except:
             self.maxExp = 300
-            
+    def getLevel(self):
+        return self.Stats.get("level")
     def getStats(self):
         out = ""
         for k, v in self.Stats.items():
             out += "&" + k.center(15, "-") + "\n" + str(v).center(15) + "\n"
         return out
-        
+    def getMaxHp(self):
+        return self.Stats.get("health",{}).get("main",{}).get("max",0)
+    def getHp(self):
+        return self.Stats.get("health",{}).get("main",{}).get("val",0)
+
     def invMan(self, action, item=None):
         # Упрощенная версия для избежания ошибок
         print(f"Управление инвентарем: {action} {item}")

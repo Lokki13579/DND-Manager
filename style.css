@@ -1618,10 +1618,11 @@ https://doc.qt.io/qt-5/stylesheet-examples.html#customizing-qlistview
 https://doc.qt.io/qt-5/stylesheet-examples.html#customizing-qtableview
 
 --------------------------------------------------------------------------- */
-QTreeView:branch:selected, QTreeView:branch:hover {
+
+/*QTreeView:branch:selected, QTreeView:branch:hover {
   background: url(":/qss_icons/dark/rc/transparent.png");
 }
-
+*/
 QTreeView:branch:has-siblings:!adjoins-item {
   border-image: url(":/qss_icons/dark/rc/branch_line.png") 0;
 }
@@ -1806,7 +1807,7 @@ QHeaderView::section {
   color: #E0E1E3;
   border-radius: 0;
   text-align: left;
-  font-size: 13px;
+  font-size: 28px;
 }
 
 QHeaderView::section::horizontal {

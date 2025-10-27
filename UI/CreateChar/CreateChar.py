@@ -15,6 +15,7 @@ from characterclass import *
 from UI.CreateChar.FirstCharacteristics import FirstCharacteristics as FirstChar
 from UI.CreateChar.SecondCharacteristics import SecondCharacteristics as SecondChar
 from UI.CreateChar.ThirdCharacteristics import ThirdCharacteristics as ThirdChar
+from UI.CreateChar.HealthCharacteristics import HealthCharacteristics as HealthChar
 
 class Ui_MainList(QWidget):
     def __init__(self):
@@ -28,7 +29,7 @@ class Ui_MainList(QWidget):
         self.ScreenManager = QVBoxLayout(self)
 
         self.BackButton = QPushButton(text="Назад")
-        self.ScreenManager.addWidget(self.BackButton)
+        self.ScreenManager.addWidget(self.BackButton,1,Qt.AlignmentFlag.AlignHCenter)
 
         self.Characteristics = QtWidgets.QTabWidget()
         self.setStyleSheet('''
@@ -40,21 +41,37 @@ class Ui_MainList(QWidget):
         self.firstCharacteristicsInit()
         self.secondCharacteristicsInit()
         self.thirdCharacteristicsInit()
+        self.healthCharacteristicsInit()
 
         self.Characteristics.setCurrentIndex(0)
-
+    def class_changed(self):
+        print("classCh")
+        self.HealthChar.classUpd(self.character,self.ThirdChar.diceObjects.get("Телосложение"))
+    def level_changed(self,level):
+        print(level)
+        print(self.Characteristics.indexOf(self.HealthChar))
+        if level > 1:
+            self.Characteristics.addTab(self.HealthChar,"Здоровье")
+            self.HealthChar.varUpd(self.character,self.ThirdChar.diceObjects.get("Телосложение"))
+        else:
+            try: self.Characteristics.removeTab(self.Characteristics.indexOf(self.HealthChar)); self.healthCharacteristicsInit()
+            except: pass
     def firstCharacteristicsInit(self):
         self.FirstChar = FirstChar(self.character)
+        self.FirstChar.LevelSelectBox.valueChanged.connect(self.level_changed)
         self.Characteristics.addTab(self.FirstChar, "Имя")
 
     def secondCharacteristicsInit(self):
         self.SecondChar = SecondChar(self.character)
+        self.SecondChar.classChoose.currentTextChanged.connect(self.class_changed)
         self.Characteristics.addTab(self.SecondChar,"Раса и Класс")
-
-        
 
     def thirdCharacteristicsInit(self):
         self.ThirdChar = ThirdChar(self.character)
         self.Characteristics.addTab(self.ThirdChar,"Параметры")
+    
+    def healthCharacteristicsInit(self):
+        self.HealthChar = HealthChar(self.character,self.ThirdChar.diceObjects.get("Телосложение"))
+
 
 
