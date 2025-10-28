@@ -10,7 +10,7 @@ class invItem(QFrame):
         super().__init__()
         self.index = index
         self.name = name
-        self.count
+        self.count = count
     def setupUi(self):
         self.setMaximumHeight(48)
 
@@ -23,13 +23,23 @@ class invItem(QFrame):
         self.mainLayout.addWidget()
         
 
-        add_icon = QIcon(QIcon.fromTheme(QIcon.ThemeIcon.ListAdd))
+        add_icon = QIcon("resources/add_icon.32.png")
         self.addButton = QPushButton(icon=add_icon)
         self.mainLayout.addWidget(self.addButton)
 
 
-        reduce_icon = QIcon("")
+        reduce_icon = QIcon("resources/remove_icon.32.png")
         self.reduceButton = QPushButton(icon=reduce_icon)
         self.mainLayout.addWidget(self.reduceButton)
 
+        delete_icon = QIcon("resources/close_icon.32.png")
+        self.deleteButton = QPushButton(icon=delete_icon)
+        self.mainLayout.addWidget(self.deleteButton)
+
+    def setTexts(self):
+        self.indexArea.setText(f"{self.index}")
+        self.nameArea.setText(f"{self.name} - ({self.count})")
+        self.addButton.setText("")
+        self.reduceButton.setText("")
+        self.deleteButton.setText("")
 

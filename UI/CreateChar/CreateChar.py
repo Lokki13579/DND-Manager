@@ -16,6 +16,7 @@ from UI.CreateChar.FirstCharacteristics import FirstCharacteristics as FirstChar
 from UI.CreateChar.SecondCharacteristics import SecondCharacteristics as SecondChar
 from UI.CreateChar.ThirdCharacteristics import ThirdCharacteristics as ThirdChar
 from UI.CreateChar.HealthCharacteristics import HealthCharacteristics as HealthChar
+from UI.CreateChar.InventoryCharacteristics import InventoryCharacteristics as InvChar
 
 class Ui_MainList(QWidget):
     def __init__(self):
@@ -51,7 +52,7 @@ class Ui_MainList(QWidget):
         print(level)
         print(self.Characteristics.indexOf(self.HealthChar))
         if level > 1:
-            self.Characteristics.addTab(self.HealthChar,"Здоровье")
+            self.Characteristics.insertTab(3,self.HealthChar,"Здоровье")
             self.HealthChar.varUpd(self.character,self.ThirdChar.diceObjects.get("Телосложение"))
         else:
             try: self.Characteristics.removeTab(self.Characteristics.indexOf(self.HealthChar)); self.healthCharacteristicsInit()
@@ -73,5 +74,6 @@ class Ui_MainList(QWidget):
     def healthCharacteristicsInit(self):
         self.HealthChar = HealthChar(self.character,self.ThirdChar.diceObjects.get("Телосложение"))
 
-
+    def inventoryCharacteriticsInit(self):
+        self.InvChar = InvChar()
 

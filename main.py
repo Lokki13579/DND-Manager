@@ -12,6 +12,7 @@ from UI.ui_PlayerList import Ui_PlayerList
 from UI.ClientLobby import Ui_Lobby
 from UI.CreateChar.CreateChar import Ui_MainList as Ui_CreateChar
 
+
 ServerOBJ = ServerClass()
 ClientOBJ = Client()
 
