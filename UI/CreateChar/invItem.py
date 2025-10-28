@@ -2,12 +2,33 @@ from PyQt6.QtGui import QIcon
 from PyQt6.QtWidgets import QFrame, QLabel, QHBoxLayout, QPushButton
 
 
-class invItem(QFrame):
-    def __init__(self, index, name, count=1):
-        super().__init__()
-        self.index = index
+class Item:
+    def __init__(self, name, count=1, index=0):
         self.name = name
         self.count = count
+        self.index = index
+
+    def add(self, count=1):
+        if count <= 0:
+            return "количество должно быть больше нуля"
+        self.count += count
+
+    def reduce(self, count=1):
+        if count <= 0:
+            return "количество должно быть больше нуля"
+        self.count -= count
+
+    def delete(self):
+        self.count = 0
+
+
+class InventoryItem(QFrame):
+    def __init__(self, item=Item("Абракадабрус")):
+        super().__init__()
+        self.item = item
+        self.index = item.index
+        self.name = item.name
+        self.count = item.count
 
     def setupUi(self):
         self.setMaximumHeight(48)
@@ -18,7 +39,7 @@ class invItem(QFrame):
         self.mainLayout.addWidget(self.indexArea)
 
         self.nameArea = QLabel()
-        self.mainLayout.addWidget()
+        self.mainLayout.addWidget(self.nameArea)
 
         add_icon = QIcon("resources/add_icon.32.png")
         self.addButton = QPushButton(icon=add_icon)

@@ -4,6 +4,7 @@ import math
 import sys
 from math import floor
 from PyQt6.QtCore import pyqtSignal
+from UI.CreateChar.invItem import InventoryItem, Item
 
 
 def get_resource_path(relative_path):
@@ -72,7 +73,7 @@ class Character:
         self.setXp(0)
         self.healthInit()
         self.setMaxHealth(max([1, self.getFirstLevMaxHp()]))
-        self.Stats["inventory"] = []
+        self.Stats["inventory"] = {}
 
         # Безопасная загрузка maxExp
         try:
@@ -122,6 +123,23 @@ class Character:
             self.status = dict(
                 zip(default_statuses, [False for _ in range(len(default_statuses))])
             )
+
+    def addItem(
+        self,
+        item: str = "Абракадабрус",
+        count=1,
+        obj=InventoryItem(),
+    ):
+        self.Stats["inventory"][item] = obj.item
+
+    def removeItem(self, item: str):
+        self.Stats["inventory"].remove(item)
+
+    def reduceItem(self, item: str, count=1):
+        self.Stats["inventory"][item].reduce(count)
+
+    def increaseItem(self, item: str, count=1):
+        self.Stats["inventory"][item].add(count)
 
     def setName(self, newName):
         self.name = newName

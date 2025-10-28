@@ -1,6 +1,5 @@
-from PyQt6.QtCore import Qt, pyqtSignal
+from PyQt6.QtGui import QIcon
 from PyQt6.QtWidgets import (
-    QTreeView,
     QWidget,
     QLabel,
     QLineEdit,
@@ -9,11 +8,13 @@ from PyQt6.QtWidgets import (
     QTreeWidgetItem,
     QVBoxLayout,
     QHBoxLayout,
+    QPushButton,
 )
 import re
 
 
 from OtherPyFiles.characterclass import Character, jsonLoad
+from UI.CreateChar.invItem import InventoryItem
 
 files = ["drugs", "giant_bag", "magic_items", "poisons", "trinkets"]
 itemsData = {}
@@ -48,11 +49,20 @@ class InventoryCharacteristics(QWidget):
         self.inventoryItems = QListWidget()
         self.LeftSide.addWidget(self.inventoryItems)
 
+        self.searchLayout = QHBoxLayout()
         self.searchBar = QLineEdit()
         self.searchBar.setPlaceholderText("Введите название предмета")
         self.searchBar.textChanged.connect(self.searchItems)
+        self.searchLayout.addWidget(self.searchBar)
 
-        self.LeftSide.addWidget(self.searchBar)
+        icon = QIcon("resources/icons/add.png")
+        self.searchAddButton = QPushButton("Добавить", icon=icon)
+        self.searchAddButton.clicked.connect(self.addItem)
+        self.searchLayout.addWidget(self.searchAddButton)
+
+        self.searchLayout.addLayout(self.searchLayout)
+
+        self.LeftSide.addLayout(self.searchLayout)
 
         self.mainLayout.addLayout(self.LeftSide)
 
@@ -60,8 +70,8 @@ class InventoryCharacteristics(QWidget):
 
         self.searchResult = QTreeWidget()
         self.searchResult.setWordWrap(True)
-        self.searchResult.setHeaderLabels(["Предметы"])
-        self.searchResult.doubleClicked.connect(self.itemSelected)
+        self.searchResult.setHeaderLabel("Предметы")
+        self.searchResult.itemDoubleClicked.connect(self.itemSelected)
 
         self.searchItems("", {})
         self.RightSide.addWidget(self.searchResult)
@@ -70,9 +80,10 @@ class InventoryCharacteristics(QWidget):
 
     def searchItems(self, text, _dict={}):
         self.searchResult.clear()
-        pattern = r"(\(.*\))?([^\(]?.*[^\)])?"
+        pattern = r"(\(.*\))?([^(#\[][^#\[]*)?(\[\d*\])?"
         res = re.findall(pattern, text) + [("None", "None")]
-        searchGroup, searchItem = res[0]
+        print(res[0])
+        searchGroup, searchItem, trash = res[0]
         searchGroup = searchGroup.strip("()")
         searchItem = searchItem.strip()
 
@@ -123,5 +134,25 @@ class InventoryCharacteristics(QWidget):
                         child2 = QTreeWidgetItem(child, [subitem])
                         _dict[subitem] = child2
 
-    def itemSelected(self, index):
-        print(index)
+    def addItem(self):
+        pattern = r"(\(.*\))?([^(#\[][^#\[]*)?(\[\d*\])?"
+        res = re.findall(pattern, self.searchBar.text())
+        itemName = res[0][1]
+        itemNumber = res[0][2]
+        if itemNumber:
+            itemNumber = int(itemNumber[1:-1])
+        else:
+            itemNumber = 1
+        self.items.append(self.createObject(itemName, itemNumber))
+        self.inventoryItems.addItem(self.items[-1].name)
+        self.character.addItem(itemName, itemNumber, self.items[-1])
+
+    def createObj(self, itemName, itemNumber):
+        item = InventoryItem(itemName, itemNumber)
+        return item
+
+    def itemSelected(self, index: QTreeWidgetItem):
+        self.searchBar.setText(
+            index.text(0)
+            + "[1] #введите количество в кв скобках по умолчанию 1. Например: [10]"
+        )
