@@ -28,7 +28,7 @@ class FirstCharacteristics(QWidget):
         self.Trash.setWordWrap(True)
         self.verticalLayout.addWidget(self.Trash, 2)
 
-        self.PlayerNameTitle = QLabel(text="Имя вашего персонажа\n|\n\/")
+        self.PlayerNameTitle = QLabel(text="󱞡 Имя вашего персонажа󱞣")
         self.PlayerNameTitle.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.verticalLayout.addWidget(self.PlayerNameTitle)
 

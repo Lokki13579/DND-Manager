@@ -1,8 +1,3 @@
-import re
-
-pattern = r"([12]\d)"
-
-string = "192"
-
-print(re.findall(pattern,string))
-print(int())
+a = ["apple", "banana", "cherry", "date"]
+b = "ban"
+print(any([b.lower() in i.lower() for i in a]))
