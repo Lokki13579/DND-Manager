@@ -44,6 +44,7 @@ class Ui_MainList(QWidget):
         self.secondCharacteristicsInit()
         self.thirdCharacteristicsInit()
         self.healthCharacteristicsInit()
+        self.inventoryCharacteristicsInit()
 
         self.Characteristics.setCurrentIndex(0)
 
@@ -89,5 +90,6 @@ class Ui_MainList(QWidget):
             self.character, self.ThirdChar.diceObjects.get("Телосложение")
         )
 
-    def inventoryCharacteriticsInit(self):
+    def inventoryCharacteristicsInit(self):
         self.InvChar = InvChar()
+        self.Characteristics.addTab(self.InvChar, "Инвентарь")
