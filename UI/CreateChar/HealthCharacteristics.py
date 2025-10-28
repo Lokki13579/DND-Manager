@@ -1,19 +1,24 @@
 import re
 
-from PyQt6 import QtCore, QtWidgets, QtGui
+from PyQt6 import QtGui
+from PyQt6.QtCore import Qt
+from PyQt6.QtWidgets import (
+    QGroupBox,
+    QHBoxLayout,
+    QLabel,
+    QLineEdit,
+    QVBoxLayout,
+    QWidget,
 
-from PyQt6.QtCore import Qt, pyqtSignal  # pyright: ignore[reportUnusedImport]
-from PyQt6.QtWidgets import *
 
-
-from characterclass import *
-from UI.CreateChar.DiceCharModule import *
+from OtherPyFiles.characterclass import Character
+from UI.CreateChar.DiceCharModule import DiceChar
 
 
 class HealthCharacteristics(QWidget):
-    def __init__(self, _character, stat: DiceChar):
+    def __init__(self, initCharacter: Character, stat: DiceChar):
         super().__init__()
-        self.varUpd(_character, stat)
+        self.varUpd(initCharacter, stat)
         print(self.dice, self.mid)
         self.setupUi()
 
@@ -138,3 +143,7 @@ class CheckDice(QtGui.QValidator):
             return QtGui.QValidator.State.Acceptable, a0, a1
         else:
             return QtGui.QValidator.State.Invalid, a0, a1
+
+
+if __name__ == "__main__":
+    hch = HealthCharacteristics(Character(), DiceChar())

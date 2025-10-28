@@ -1,8 +1,8 @@
 #!/home/artem/python/bin/python
 
 import sys
-from server_client import ServerClass, Client
-from PyQt6.QtWidgets import QApplication, QMainWindow, QStackedWidget, QWidget
+from OtherPyFiles.server_client import ServerClass, Client
+from PyQt6.QtWidgets import QApplication, QMainWindow, QStackedWidget
 
 from UI.MainMenu import Ui_MainMenu
 from UI.ui_Create import Ui_CreateLobby
@@ -27,7 +27,7 @@ class MainWin(QMainWindow):
         self.setStyleSheet("""
                            font-family: '3270 Nerd Font';
                            font-size: 24px;
-                           
+
                            """)
 
         self.stackedW = QStackedWidget()
