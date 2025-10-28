@@ -1,4 +1,5 @@
 import re
+from random import randint
 
 from PyQt6 import QtGui
 from PyQt6.QtCore import Qt
@@ -21,7 +22,6 @@ class HealthCharacteristics(QWidget):
     def __init__(self, initCharacter: Character, stat: DiceChar):
         super().__init__()
         self.varUpd(initCharacter, stat)
-        print(self.dice, self.mid)
         self.setupUi()
 
     def classUpd(self, ch, st):
@@ -110,14 +110,12 @@ class HealthCharacteristics(QWidget):
         self.mainLayout.addLayout(self.selectingHealth)
 
     def randomHp(self):
-        print(self.levels)
         if self.levels >= 1:
             randomizedHp = max(
                 [1, randint(1, int(self.dice[1:])) + int(self.stat.modif)]
             )
             self.RandomText.setText(str(randomizedHp))
             self.character.maxHealthUp(randomizedHp)
-            print(self.character.Stats)
             self.updateData()
             self.levels -= 1
             if self.levels == 0:

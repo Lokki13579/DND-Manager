@@ -19,7 +19,6 @@ files = ["drugs", "giant_bag", "magic_items", "poisons", "trinkets"]
 itemsData = {}
 for file in files:
     itemsData[file] = jsonLoad(f"JSONS/dnd_{file}.json")
-print("itemsData:", itemsData["drugs"])
 
 
 class InventoryCharacteristics(QWidget):
@@ -76,7 +75,7 @@ class InventoryCharacteristics(QWidget):
         searchGroup, searchItem = res[0]
         searchGroup = searchGroup.strip("()")
         searchItem = searchItem.strip()
-        print(searchGroup, searchItem)
+
         if searchGroup == "None" or searchGroup == "":
             for group, item in itemsData.items():
                 header = QTreeWidgetItem(self.searchResult, [group])
@@ -125,5 +124,4 @@ class InventoryCharacteristics(QWidget):
                         _dict[subitem] = child2
 
     def itemSelected(self, index):
-        item = self.searchResult.topLevelItem(index.row())
-        self.character.addItem(item.text(0), int(item.text(1)), int(item.text(2)))
+        print(index)

@@ -55,8 +55,6 @@ class ThirdCharacteristics(QWidget):
         self.PointLayout.addWidget(self.PointText, 1, Qt.AlignmentFlag.AlignCenter)
 
         for i, st in enumerate(_statsList):
-            print(self.character.Stats)
-            print(st)
             self.diceObjects[st] = DiceChar(
                 st,
                 8,
@@ -85,6 +83,5 @@ class ThirdCharacteristics(QWidget):
         self.points = newPoints
         self.pointsDispencer(self.points)
         self.PointText.setText(str(self.points))
-        print(name, value)
+
         self.character.setDice(name, value)
-        print(self.character.name, self.character.Stats)

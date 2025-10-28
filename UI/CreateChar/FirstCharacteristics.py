@@ -74,16 +74,13 @@ class FirstCharacteristics(QWidget):
         width = self.NameInput.fontMetrics().horizontalAdvance(text) + 20
         self.NameInput.setMinimumWidth(width)
         self.character.setName(text)
-        print(self.character.name, self.character.Stats)
 
     def on_level_changed(self, level):
         self.expMan(level)
         self.character.setLevel(level)
-        print(self.character.name, self.character.Stats)
 
     def on_exp_changed(self, exp):
         self.character.setXp(exp)
-        print(self.character.name, self.character.Stats)
 
     def expMan(self, _level):
         _maxXp = (

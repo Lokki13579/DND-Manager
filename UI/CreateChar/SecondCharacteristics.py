@@ -78,11 +78,9 @@ class SecondCharacteristics(QWidget):
         self.classSkillTreeGroup = QTreeWidgetItem(self.classSkillTree, ["Умения"])
         self.skillAdder(self.classSkillTreeGroup, classData, self.skills)
         self.classSkillTree.expandAll()
-        print(self.character.name, self.character.Stats)
 
     def on_wv_changed(self, wv):
         self.character.Stats["worldview"] = wv
-        print(self.character.name, self.character.Stats)
 
     def on_race_changed(self, race):
         self.character.setRace(race)
@@ -92,11 +90,9 @@ class SecondCharacteristics(QWidget):
         )
         self.raceDataAdder(self.raceParamsTreeGroup, racesData, self.raceData)
         self.raceParamsTree.expandAll()
-        print(self.character.name, self.character.Stats)
 
     def on_bg_changed(self, bg):
         self.character.Stats["background"] = bg
-        print(self.character.name, self.character.Stats)
 
     def comboAdder(self, obj: QComboBox, path: str | dict):
         if type(path) == type(""):
