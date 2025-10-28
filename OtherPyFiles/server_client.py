@@ -1,23 +1,24 @@
-from socket import *
 import threading
 from random import randint
+from socket import gethostbyname, gethostname, socket, AF_INET, SOCK_STREAM
+
 from PyQt6.QtCore import QObject, pyqtSignal
 
 # Импорты из вашего кода
-from panels import *
-from playerClass import *
+from OtherPyFiles.playerClass import Player, Character
+
 
 class ServerClass(QObject):
     # Сигналы для обновления UI
     player_connected = pyqtSignal(object)  # Передаем объект Player
     player_data_updated = pyqtSignal(object)  # Сигнал об обновлении данных игрока
-    
+
     def __init__(self):
         super().__init__()
         self._ip = None
         self._port = None
         self.connectedClients = {}
-        
+
     def _startServer(self, port=randint(4000, 5000), ip=gethostbyname(gethostname())):
         self.S = socket(AF_INET, SOCK_STREAM)
         self.S.bind((ip, port))
@@ -27,19 +28,20 @@ class ServerClass(QObject):
         waitToConnect = threading.Thread(target=self._waitConnecting)
         waitToConnect.daemon = True
         waitToConnect.start()
-        
+
     def _waitConnecting(self):
         while True:
             try:
                 conn, addr = self.S.accept()
                 player = Player(conn, addr, len(self.connectedClients.keys()) + 1)
                 self.connectedClients[addr] = player
-                
+
                 # Отправляем сигнал о новом игроке
                 self.player_connected.emit(player)
 
-                
-                messageInput = threading.Thread(target=self._clientMessageGet, args=(player,))
+                messageInput = threading.Thread(
+                    target=self._clientMessageGet, args=(player,)
+                )
                 messageInput.daemon = True
                 messageInput.start()
             except Exception as e:
@@ -52,20 +54,20 @@ class ServerClass(QObject):
         except:
             pass
         self.connectedClients = {}
-        
+
     def sendToClient(self, connection, *data):
         out = ""
         for i in data:
             out += str(i) + "&"
         try:
-            connection.send(out.encode('utf-8'))
+            connection.send(out.encode("utf-8"))
         except:
             pass
-            
+
     def _clientMessageGet(self, player):
         while True:
             try:
-                data = player.conn.recv(2048).decode('utf-8').split("&")
+                data = player.conn.recv(2048).decode("utf-8").split("&")
                 if not data or not data[0]:
                     continue
                 match data[0]:
@@ -73,7 +75,9 @@ class ServerClass(QObject):
                         player.character.setStats(eval(data[1]))
                         player.character.spellCells = eval(data[2])
                         player.character.status = eval(data[3])
-                        player.character.expReset(player.character.Stats.get("level",1))
+                        player.character.expReset(
+                            player.character.Stats.get("level", 1)
+                        )
                         print("Data Uptained and signal emitted")
                         # Отправляем сигнал об обновлении данных
                         self.player_data_updated.emit(player)
@@ -88,14 +92,15 @@ class ServerClass(QObject):
                 print(f"Ошибка получения данных: {e}")
                 break
 
+
 class Client(QObject):
     # Сигналы для клиента
     data_updated = pyqtSignal(object)
-    
+
     def __init__(self):
         super().__init__()
         self.character = Character()
-        
+
     def _connectToServer(self, ip=gethostbyname(gethostname()), port=4242):
         self.S = socket()
         address = (ip, port)
@@ -106,11 +111,11 @@ class Client(QObject):
         except Exception as e:
             print(f"Ошибка подключения: {e}")
             return False
-            
+
     def listenCommands(self):
         while True:
             try:
-                data = self.S.recv(2048).decode('utf-8')[:-1]
+                data = self.S.recv(2048).decode("utf-8")[:-1]
                 if not data:
                     continue
                 comm = data.split("&")
@@ -125,21 +130,21 @@ class Client(QObject):
             except Exception as e:
                 print(f"Ошибка получения данных: {e}")
                 break
-                
+
     def whenConnected(self):
         listen_thread = threading.Thread(target=self.listenCommands)
         listen_thread.daemon = True
         listen_thread.start()
-        
+
     def sendToServer(self, *data):
         out = ""
         for i in data:
             out += str(i) + "&"
         try:
-            self.S.send(str(out).encode('utf-8'))
+            self.S.send(str(out).encode("utf-8"))
         except Exception as e:
             print(f"Ошибка отправки данных: {e}")
-            
+
     def _disconnect(self):
         try:
             self.S.close()

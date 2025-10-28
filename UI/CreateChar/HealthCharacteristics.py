@@ -9,6 +9,8 @@ from PyQt6.QtWidgets import (
     QLineEdit,
     QVBoxLayout,
     QWidget,
+    QPushButton,
+)
 
 
 from OtherPyFiles.characterclass import Character
