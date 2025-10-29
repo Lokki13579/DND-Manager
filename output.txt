@@ -1,0 +1,649 @@
+<!DOCTYPE html><!-- by Unbat / Igor Nedosekov / unbat / 2017 - 2025 -->
+<html lang="ru">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Онлайн-справочник D&D 5</title>
+	
+    <meta name="description" content="Dnd.su - сайт, посвященный DnD 5-й редакции. Заклинания, магические предметы и бестиарий, статьи и руководства - все в одном месте в удобном формате." />
+    <meta name="keywords" content="dnd бестиарий, dnd магические предметы, dnd заклинания, dnd статьи, dnd руководства, dnd классы, dnd расы, dnd предметы, dnd генератор добычи, днд бестиарий, днд магические предметы, днд заклинания, днд статьи, днд руководства, днд классы, днд расы, днд предметы, днд генератор добычи, d&d бестиарий, d&d магические предметы, d&d заклинания, d&d статьи, d&d руководства, d&d классы, d&d расы, d&d предметы, d&d генератор добычи, dnd 5 бестиарий, dnd 5 магические предметы, dnd 5 заклинания, dnd 5 статьи, dnd 5 руководства, dnd 5 классы, dnd 5 расы, dnd 5 предметы, dnd 5 генератор добычи, днд 5 бестиарий, днд 5 магические предметы, днд 5 заклинания, днд 5 статьи, днд 5 руководства, днд 5 классы, днд 5 расы, днд 5 предметы, днд 5 генератор добычи, d&d 5 бестиарий, d&d 5 магические предметы, d&d 5 заклинания, d&d 5 статьи, d&d 5 руководства, d&d 5 классы, d&d 5 расы, d&d 5 предметы, d&d 5 генератор добычи, подземелья и драконы бестиарий, подземелья и драконы магические предметы, подземелья и драконы заклинания, подземелья и драконы статьи, подземелья и драконы руководства, подземелья и драконы классы, подземелья и драконы расы, подземелья и драконы предметы, подземелья и драконы генератор добычи, dungeons and dragons бестиарий, dungeons and dragons магические предметы, dungeons and dragons заклинания, dungeons and dragons статьи, dungeons and dragons руководства, dungeons and dragons классы, dungeons and dragons расы, dungeons and dragons предметы, dungeons and dragons генератор добычи" />
+    <meta property="og:title" content="Онлайн-справочник D&D 5" />
+    <meta property="og:description" content="Dnd.su - сайт, посвященный DnD 5-й редакции. Заклинания, магические предметы и бестиарий, статьи и руководства - все в одном месте в удобном формате." />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="https://dnd.su/" />
+    <meta property="og:image" content="https://dnd.su/img/thumbnail.jpg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+	        <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests" />
+	
+    <link rel="apple-touch-icon" href="/img/favicon/apple-touch-icon.png" />
+    <link rel="apple-touch-icon" sizes="57x57" href="/img/favicon/apple-touch-icon-57x57.png" />
+    <link rel="apple-touch-icon" sizes="72x72" href="/img/favicon/apple-touch-icon-72x72.png" />
+    <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon/apple-touch-icon-76x76.png" />
+    <link rel="apple-touch-icon" sizes="114x114" href="/img/favicon/apple-touch-icon-114x114.png" />
+    <link rel="apple-touch-icon" sizes="120x120" href="/img/favicon/apple-touch-icon-120x120.png" />
+    <link rel="apple-touch-icon" sizes="144x144" href="/img/favicon/apple-touch-icon-144x144.png" />
+    <link rel="apple-touch-icon" sizes="152x152" href="/img/favicon/apple-touch-icon-152x152.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/img/favicon/apple-touch-icon-180x180.png" />
+    <link rel="apple-touch-icon" sizes="60x60" href="/img/favicon/apple-icon-60x60.png" />
+    <link rel="apple-touch-icon" sizes="72x72" href="/img/favicon/apple-icon-72x72.png" />
+    <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon/apple-icon-76x76.png" />
+    <link rel="apple-touch-icon" sizes="114x114" href="/img/favicon/apple-icon-114x114.png" />
+    <link rel="apple-touch-icon" sizes="120x120" href="/img/favicon/apple-icon-120x120.png" />
+    <link rel="apple-touch-icon" sizes="144x144" href="/img/favicon/apple-icon-144x144.png" />
+    <link rel="apple-touch-icon" sizes="152x152" href="/img/favicon/apple-icon-152x152.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/img/favicon/apple-icon-180x180.png" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/img/favicon/android-icon-192x192.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/img/favicon/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="96x96" href="/img/favicon/favicon-96x96.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/img/favicon/favicon-16x16.png" />
+    <meta name="msapplication-TileImage" content="/img/favicon/ms-icon-144x144.png" />
+    <link rel="manifest" href="/img/favicon/manifest.json" />
+    <meta name="msapplication-TileColor" content="#000000" />
+    <meta name="theme-color" content="#000000" />
+
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,500,500i,600,600i,700,700i&amp;subset=cyrillic-ext" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Neucha&display=swap" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="/beta/css/common.min.css?v=3.0.128">
+<link rel="stylesheet" type="text/css" href="/beta/css/print.min.css?v=3.0.128">
+<link rel="stylesheet" type="text/css" href="/ennin/rolltable.css?v=3.0.128">
+
+    <meta name="yandex-verification" content="ad850fa96eef28f1" />
+
+	    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-P6QSMG73H5"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-P6QSMG73H5');
+    </script>
+<!-- Yandex.Metrika counter --> <script type="text/javascript" > (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)}; m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)}) (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym"); ym(42419409, "init", { clickmap:true, trackLinks:true, accurateTrackBounce:true, webvisor:true }); </script> <noscript><div><img src="https://mc.yandex.ru/watch/42419409" style="position:absolute; left:-9999px;" alt="" /></div></noscript> <!-- /Yandex.Metrika counter -->
+</head>
+<body id="body">
+
+<header>
+    <div class="wrapper">
+
+        <div class="header">
+
+            <h2 class="header-logo">
+                <a href="/">DnD.su</a>
+            </h2>
+
+            <h1 class="header-page_title">
+				<a href='/'>Онлайн-справочник</a>            </h1>
+
+			
+            <div id="top__hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+
+        </div>
+    </div>
+</header>
+
+
+<div class="toUp">	<span class="svg svg-24 svg--dropdown "><svg><use xlink:href="/beta/img/sprite.svg#dropdown"></use></svg></span></div>
+    <main>
+        <div class="cont">
+
+			
+<aside id="aside">
+
+    <nav>
+        <ul class="left_menu">
+
+            <li class="item_level_1 item_link_head">
+                <a href="https://boosty.to/dnd.su" target="_blank" class="boosty">	<span class="svg svg-20 svg--boosty "><svg><use xlink:href="/beta/img/sprite.svg#boosty"></use></svg></span><span class="item_text">Boosty</span></a>
+                <a href="https://discord.com/invite/NVj9b4tWmb" target="_blank" class="discord">	<span class="svg svg-20 svg--discord "><svg><use xlink:href="/beta/img/sprite.svg#discord"></use></svg></span><span class="item_text">Discord</span></a>
+            </li>
+
+	                        <li class="item_level_1 item_link_head domain-switch">
+                    <a href="https://next.dnd.su/" class="active">5e24 	<span class="svg svg-16 svg--external_link "><svg><use xlink:href="/beta/img/sprite.svg#external_link"></use></svg></span></a>
+                    <span class="delimiter">/</span> <span class="passive">5e14</span>
+                </li>
+		        
+
+<li class="item_level_1">
+
+    <a href="#" class="item_link_1 dropdown_trigger active" data-menu="menu-1">
+        <span class="item_text">Справочники</span>
+			<span class="svg svg-16 svg--dropdown "><svg><use xlink:href="/beta/img/sprite.svg#dropdown"></use></svg></span>    </a>
+
+    <ul class="dropdown-list">
+
+        <li class="item_level_2">
+            <a href="/class/" class="item_link_2">
+			    	<span class="svg svg-16 svg--helmet "><svg><use xlink:href="/beta/img/sprite.svg#helmet"></use></svg></span>                <span class="item_text">Классы</span>
+            </a>
+        </li>
+
+        <li class="item_level_2">
+            <a href="/race/" class="item_link_2">
+			    	<span class="svg svg-16 svg--race "><svg><use xlink:href="/beta/img/sprite.svg#race"></use></svg></span>                <span class="item_text">Расы и происхождения</span>
+            </a>
+        </li>
+
+        <li class="item_level_2">
+            <a href="/backgrounds/" class="item_link_2">
+			    	<span class="svg svg-16 svg--scroll "><svg><use xlink:href="/beta/img/sprite.svg#scroll"></use></svg></span>                <span class="item_text">Предыстории</span>
+            </a>
+        </li>
+
+        <li class="item_level_2">
+            <a href="/feats/" class="item_link_2">
+			    	<span class="svg svg-16 svg--puzzle "><svg><use xlink:href="/beta/img/sprite.svg#puzzle"></use></svg></span>                <span class="item_text">Черты</span>
+            </a>
+        </li>
+
+        <li class="item_level_2">
+            <a href="/spells/" class="item_link_2">
+			    	<span class="svg svg-16 svg--book "><svg><use xlink:href="/beta/img/sprite.svg#book"></use></svg></span>                <span class="item_text">Заклинания</span>
+            </a>
+        </li>
+
+        <li class="item_level_2">
+            <a href="/bestiary/" class="item_link_2">
+			    	<span class="svg svg-16 svg--monster "><svg><use xlink:href="/beta/img/sprite.svg#monster"></use></svg></span>                <span class="item_text">Бестиарий</span>
+            </a>
+        </li>
+
+        <li class="item_level_2">
+            <a href="/items/" class="item_link_2">
+			    	<span class="svg svg-16 svg--crystalball "><svg><use xlink:href="/beta/img/sprite.svg#crystalball"></use></svg></span>                <span class="item_text">Магические предметы</span>
+            </a>
+        </li>
+
+		
+    </ul>
+</li>
+<li class="item_level_1">
+
+	<a href="#" class="item_link_1 dropdown_trigger active" data-menu="menu-newbie">
+		<span class="item_text" style="color: var(--color-mint);">Новичку</span>
+			<span class="svg svg-16 svg--dropdown "><svg><use xlink:href="/beta/img/sprite.svg#dropdown"></use></svg></span>	</a>
+
+	<ul class="dropdown-list">
+
+            <li class="item_level_2">
+        <a href="/articles/newbie/536-how-to-start-playing-dd/" class="item_link_2">
+            <span class="item_text">Как начать играть в D&D</span>
+        </a>
+    </li>
+    <li class="item_level_2">
+        <a href="/articles/newbie/468-using-ability-scores/" class="item_link_2">
+            <span class="item_text">Использование характеристик</span>
+        </a>
+    </li>
+    <li class="item_level_2">
+        <a href="/articles/newbie/26-main-formulas/" class="item_link_2">
+            <span class="item_text">Основные формулы</span>
+        </a>
+    </li>
+    <li class="item_level_2">
+        <a href="/articles/newbie/722-pregenerated-characters/" class="item_link_2">
+            <span class="item_text">Готовые персонажи</span>
+        </a>
+    </li>
+    <li class="item_level_2">
+        <a href="/articles/newbie/564-faq/" class="item_link_2">
+            <span class="item_text">Часто задаваемые вопросы</span>
+        </a>
+    </li>	</ul>
+</li><li class="item_level_1">
+
+    <a href="#" class="item_link_1 dropdown_trigger active" data-menu="menu-2">
+        <span class="item_text">Статьи</span>
+			<span class="svg svg-16 svg--dropdown "><svg><use xlink:href="/beta/img/sprite.svg#dropdown"></use></svg></span>    </a>
+
+    <ul class="dropdown-list">
+
+        <li class="item_level_2">
+            <a href="/articles/bestiary/" class="item_link_2">
+                <span class="item_text">Бестиарий</span>
+            </a>
+        </li>
+
+        <li class="item_level_2">
+            <a href="/articles/inventory/" class="item_link_2">
+                <span class="item_text">Инвентарь</span>
+            </a>
+        </li>
+
+        <li class="item_level_2">
+            <a href="/articles/mechanics/" class="item_link_2">
+                <span class="item_text">Игровые механики</span>
+            </a>
+        </li>
+
+        <li class="item_level_2">
+            <a href="/articles/lore/" class="item_link_2">
+                <span class="item_text">Lore</span>
+            </a>
+        </li>
+
+	            <li class="item_level_2">
+            <a href="/articles/homebrew/" class="item_link_2">
+                <span class="item_text">Homebrew</span>
+            </a>
+        </li>
+        
+        <li class="item_level_2">
+            <a href="/articles/news/" class="item_link_2">
+                <span class="item_text">Новости сайта</span>
+            </a>
+        </li>
+
+        <li class="item_level_2">
+            <a href="/articles/partners/" class="item_link_2">
+                <span class="item_text">Сообщество</span>
+            </a>
+        </li>
+
+    </ul>
+</li>
+        <li class="ya-search">
+            <div class="ya-search">
+                <div class="ya-site-form ya-site-form_inited_no" onclick="return {'action':'/search/','arrow':false,'bg':'transparent','fontsize':14,'fg':'#000000','language':'ru','logo':'rw','publicname':'Поиск по сайту DnD.su','suggest':true,'target':'_self','tld':'ru','type':2,'usebigdictionary':true,'searchid':2294916,'input_placeholder':'Поиск по сайту'}">
+                    <form action="https://yandex.ru/search/site/" method="get" target="_self" accept-charset="utf-8" class="search">
+                        <input type="hidden" name="searchid" value="2294916"/>
+                        <input type="hidden" name="l10n" value="ru"/>
+                        <input type="hidden" name="reqenc" value="utf-8"/>
+                        <input type="search" name="text" value=""/>
+                        <input type="submit" value="Найти" style="cursor:pointer"/>
+                    </form>
+                </div>
+                <style>.ya-page_js_yes .ya-site-form_inited_no {
+                        display: none
+                    }
+
+                    #ya-site-form0 .ya-site-form__search-input {
+                        padding: 0
+                    }</style>
+                <script type="text/javascript">(function (w, d, c) {
+                        var s = d.createElement('script'), h = d.getElementsByTagName('script')[0],
+                            e = d.documentElement;
+                        if ((' ' + e.className + ' ').indexOf(' ya-page_js_yes ') === -1) {
+                            e.className += ' ya-page_js_yes';
+                        }
+                        s.type = 'text/javascript';
+                        s.async = true;
+                        s.charset = 'utf-8';
+                        s.src = (d.location.protocol === 'https:' ? 'https:' : 'http:') + '//site.yandex.net/v2.0/js/all.js';
+                        h.parentNode.insertBefore(s, h);
+                        (w[c] || (w[c] = [])).push(function () {
+                            Ya.Site.Form.init()
+                        })
+                    })(window, document, 'yandex_site_callbacks');</script>
+            </div>
+        </li>
+
+		
+<li class="item_level_1">
+
+    <a href="#" class="item_link_1 dropdown_trigger active" data-menu="menu-4">
+        <span class="item_text">Инструменты</span>
+			<span class="svg svg-16 svg--dropdown "><svg><use xlink:href="/beta/img/sprite.svg#dropdown"></use></svg></span>    </a>
+
+    <ul class="dropdown-list">
+
+        <li class="item_level_2">
+            <a href="/point_buy/" class="item_link_2">
+			    	<span class="svg svg-16 svg--stats "><svg><use xlink:href="/beta/img/sprite.svg#stats"></use></svg></span>                <span class="item_text">Закуп характеристик</span>
+            </a>
+        </li>
+
+        <li class="item_level_2">
+            <a href="/loot/" class="item_link_2">
+					<span class="svg svg-16 svg--chest "><svg><use xlink:href="/beta/img/sprite.svg#chest"></use></svg></span>                <span class="item_text">Генератор добычи</span>
+            </a>
+        </li>
+
+        <li class="item_level_2">
+            <a href="/encounter_difficulty/" class="item_link_2">
+			    	<span class="svg svg-16 svg--swords "><svg><use xlink:href="/beta/img/sprite.svg#swords"></use></svg></span>                <span class="item_text">Сложность боя</span>
+            </a>
+        </li>
+
+        
+        <li class="item_level_2">
+            <a href="/praise_the_random/" class="item_link_2">
+			    	<span class="svg svg-16 svg--clover "><svg><use xlink:href="/beta/img/sprite.svg#clover"></use></svg></span>                <span class="item_text">Мне повезёт</span>
+            </a>
+        </li>
+
+
+
+    </ul>
+</li>
+<li class="item_level_1">
+
+    <a href="#" class="item_link_1 dropdown_trigger active" data-menu="menu-5">
+        <span class="item_text">Пользователь</span>
+			<span class="svg svg-16 svg--dropdown "><svg><use xlink:href="/beta/img/sprite.svg#dropdown"></use></svg></span>    </a>
+
+    <ul class="dropdown-list">
+
+		
+        <li class="item_level_2">
+            <a href="/settings/" class="item_link_2">
+			    	<span class="svg svg-16 svg--gear "><svg><use xlink:href="/beta/img/sprite.svg#gear"></use></svg></span>                <span class="item_text">Настройки</span>
+            </a>
+        </li>
+
+	    
+	    
+	    
+	    
+	    
+            <li class="item_level_2 form-auth">
+			                    <form method="post" action="/login/native/?from=%2F">
+				                        <div class="grid">
+
+                        <div class="col-24">
+	                        <input type="text" required="true" name="login" value="" placeholder="Логин" class="if if-text">                        </div>
+
+                        <div class="col-24">
+	                        <input type="password" required="true" name="password" value="" placeholder="*****" class="if if-text">                        </div>
+
+                        <div class="col-24">
+                            <input type="checkbox" name="remember_me" placeholder="Запомнить" class="if if-checkbox if-sm if-contrast">                        </div>
+
+                        <div class="col-9">
+                            <input type="submit" class="btn btn-primary" value="Войти">
+                        </div>
+
+                        <div class="col-5">
+                            <a class="btn btn-primary social_auth" href="/login/vkontakte/?from=%2F">
+			                    	<span class="svg svg-20 svg--vkontakte "><svg><use xlink:href="/beta/img/sprite.svg#vkontakte"></use></svg></span>                            </a>
+                        </div>
+
+                        <div class="col-5">
+                            <a class="btn btn-primary social_auth" href="/login/yandex/?from=%2F">
+			                    	<span class="svg svg-20 svg--yandex "><svg><use xlink:href="/beta/img/sprite.svg#yandex"></use></svg></span>                            </a>
+                        </div>
+
+                        <div class="col-5">
+                            <a class="btn btn-primary social_auth" href="/login/google/?from=%2F">
+			                    	<span class="svg svg-20 svg--google "><svg><use xlink:href="/beta/img/sprite.svg#google"></use></svg></span>                            </a>
+                        </div>
+
+                    </div>
+                </form>
+            </li>
+
+            <li class="item_level_2">
+                <a href="/registration/" class="item_link_2">
+                    <span class="item_text">Регистрация</span>
+                </a>
+            </li>
+
+        
+
+    </ul>
+</li>
+<li class="item_level_1">
+
+    <a href="#" class="item_link_1 dropdown_trigger active" data-menu="menu-7">
+        <span class="item_text">Партнёры</span>
+			<span class="svg svg-16 svg--dropdown "><svg><use xlink:href="/beta/img/sprite.svg#dropdown"></use></svg></span>    </a>
+
+    <ul class="dropdown-list">
+		<li class="item_level_2"><a href="/articles/partners/" class="item_link_2"><span class="item_text">Новости сообщества</span></a></li><li class="item_level_2"><a href="https://dm.am?partner=dnd.su" title="Форумные рпг на любой вкус" target="_blank" class="item_link_2 partner"><span class="sprite-partners__dmam partner-icon"></span><span class="item_text">Dungeonmaster.ru</span></a></li><li class="item_level_2"><a href="https://vk.com/myriads_of_truths?partner=dnd.su" target="_blank" title="Мириады Истин" class="item_link_2 partner"><span class="sprite-partners__miriady partner-icon"></span>Мириады Истин</a></li><li class="item_level_2"><a href="https://t.me/DiceOut20?partner=dnd.su" target="_blank" title="Достать Кубы (Давай отправимся в путешествие вместе!)" class="item_link_2 partner"><span class="sprite-partners__diceout partner-icon"></span>Достать Кубы</a></li><li class="item_level_2"><a href="https://www.youtube.com/channel/UCjMH-dz60Uh7VoZSO02PJPg?partner=dnd.su" target="_blank" title="EvilDice" class="item_link_2 partner"><span class="sprite-partners__evildice partner-icon"></span>EvilDice</a></li><li class="item_level_2"><a href="https://vk.com/biblioteka_nri?partner=dnd.su" target="_blank" title="Библиотека на краю мира (Библиотека НРИ)" class="item_link_2 partner"><span class="sprite-partners__library partner-icon"></span>Библиотека на краю мира</a></li><li class="item_level_2"><a href="https://vk.com/coniferdnd?partner=dnd.su" target="_blank" title="МФЦ и Клерки (НРИ, ДнД)" class="item_link_2 partner"><span class="sprite-partners__coniferdnd partner-icon"></span>МФЦ и Клерки</a></li><li class="item_level_2"><a href="https://vk.com/neardeathdungeon?partner=dnd.su" target="_blank" title="Near Death Dungeon" class="item_link_2 partner"><span class="sprite-partners__ndd partner-icon"></span>Near Death Dungeon</a></li><li class="item_level_2"><a href="https://vk.com/morelessvk?partner=dnd.su" target="_blank" title="Море Лес (Стримы D&D)" class="item_link_2 partner"><span class="sprite-partners__more partner-icon"></span>Море Лес</a></li><li class="item_level_2"><a href="https://vk.com/twinsrpg?partner=dnd.su" target="_blank" title="Подземелья и Близняшки (Тащи рулбуки, всяк сюда входящий!)" class="item_link_2 partner"><span class="sprite-partners__twins partner-icon"></span>Подземелья и Близняшки</a></li><li class="item_level_2"><a href="https://vk.com/hesgar?partner=dnd.su" target="_blank" title="Сады гесперид (Советы мастерам даю какие-то. То ли про D&D паблик, то ли нет, хрен его разбери.)" class="item_link_2 partner"><span class="sprite-partners__hesgar partner-icon"></span>Сады гесперид</a></li><li class="item_level_2"><a href="https://vk.com/dicebucket?partner=dnd.su" target="_blank" title="Ведро Кубов (НРИ | D&D)" class="item_link_2 partner"><span class="sprite-partners__dicebucket partner-icon"></span>Ведро Кубов</a></li><li class="item_level_2"><a href="https://dkdice.com?partner=dnd.su" target="_blank" title="Dungeon Keepers's Dice (Уникальные игральные кости ручной работы)" class="item_link_2 partner"><span class="sprite-partners__dkdice partner-icon"></span>Dungeon Keepers's Dice</a></li><li class="item_level_2"><a href="https://vk.com/phantom_st?partner=dnd.su" target="_blank" title="Студия «Phantom» (Cтудия фэнтези «Phantom». Перевод литературы по настольным ролевым играм)" class="item_link_2 partner"><span class="sprite-partners__phantom partner-icon"></span>Студия «Phantom»</a></li><li class="item_level_2"><a href="https://badmimic.com?partner=dnd.su" target="_blank" title="Сокровища Мимика (3D печать миниатюр)" class="item_link_2 partner"><span class="sprite-partners__treasuresmimic partner-icon"></span>Сокровища Мимика</a></li><li class="item_level_2"><a href="https://vk.com/anykeyspb?partner=dnd.su" target="_blank" title="ANY KEY (Настольные игры | D&D | Петербург |Спб)" class="item_link_2 partner"><span class="sprite-partners__anykey partner-icon"></span>ANY KEY</a></li>    </ul>
+</li>
+<li class="item_level_1">
+
+    <a href="#" class="item_link_1 dropdown_trigger active" data-menu="menu-6">
+        <span class="item_text">Разное</span>
+			<span class="svg svg-16 svg--dropdown "><svg><use xlink:href="/beta/img/sprite.svg#dropdown"></use></svg></span>    </a>
+
+    <ul class="dropdown-list">
+
+        <li class="item_level_2">
+            <a href="/contacts/" class="item_link_2">
+					<span class="svg svg-16 svg--letter "><svg><use xlink:href="/beta/img/sprite.svg#letter"></use></svg></span>                <span class="item_text">Контакты</span>
+            </a>
+        </li>
+
+        <li class="item_level_2">
+            <a href="/support/" class="item_link_2">
+					<span class="svg svg-16 svg--coins "><svg><use xlink:href="/beta/img/sprite.svg#coins"></use></svg></span>                <span class="item_text">Помощь сайту</span>
+            </a>
+        </li>
+
+    </ul>
+</li>
+
+        </ul>
+    </nav>
+</aside>
+
+
+            <!-- CENTRAL COLUMN -->
+            <div class="center">
+                <div class="row">
+
+                    <section class="block block-100 block-page_title">
+                        <h1 class="center-page_title">
+							<a href='/'>Онлайн-справочник</a>                        </h1>
+                    </section>
+
+					<section class="block block_100">
+	<h2 class="section-title">Новости сайта</h2>
+	 <div class='paper-1 card typoable'  style="background-position:8% 0" data-id='article:844' data-typo-path='/articles/news/844-daidzest-29/' itemscope itemtype='https://schema.org/Article'><div class='card-wrapper' ><div class="card__header"><h2 class="card-title" itemprop="name"><a href='/articles/news/844-daidzest-29/' itemprop='url' class='item-link'>Дайджест (29)</a></h2></div><div class="card__body new-article" itemprop="articleBody">			<ul class="params card__article-body">
+								
+			</ul>
+			
+			<div class="desc card__article-body" itemprop="articleBody">
+				Всем привет! Продолжаем радовать вас нашими редкими, но меткими дайджестами новостей.
+<p>
+</p><p>Работа над сайтом <a href="https://next.dnd.su/" target="_blank">next.dnd.su</a> движется дальше как в плане контента, так и в плане нового функционала. 
+</p><p>Так, была обновлена <a href="https://next.dnd.su/dmscreen/" target="_blank">Ширма мастера нового сайта</a>, которая дополнена двумя новыми блоками: «Дайсомёт» и «Бросочная». 
+</p><p>Дайсомёт позволяет записывать броски и бросать их сразу в любых количествах, а для бросков к20 можно указывать целевое число и бросать с преимуществом или помехой.
+</p><p>Бросочная позволяет отделить результаты от «панели управления», куда по умолчанию будут приходить результаты броска. Блок можно очистить и скопировать его содержимое. Кроме того, броски карточек монстров на Ширме мастера посылают результаты в блок Бросочной.
+</p><p>Предлагаем вам потестировать работу новых блоков и сообщить в случае возникновения проблем или же при наличии конструктивных предложений по доработке. Также будем признательны, если вы напишете в комментарии или на нашем дискорд-сервере, что вам интереснее: возможность помещения класса с подклассом на Ширму мастера целиком или же возможность помещения туда отдельных элементов классов/подклассов.
+</p><p>Продолжается деятельность по устранению ошибок и багов. Так, устранена одна из давних проблем и ссылки на <a href="https://next.dnd.su/glossary/" target="_blank">Глоссарий</a>, наконец, снова показываются подсказками. Также выявлена причина другой давней проблемы с пропадающими блоками и кусками текста в карточках – теперь баг устранен и не должен больше проявлять себя.
+</p><p>На сайте <a href="https://dnd.su/" target="_blank">dnd.su</a> продолжается штатная деятельность, однако многие могли заметить, что скорость проверки карточек заметно снизилась – дело в том, что, к сожалению, сейчас у нас не хватает рук и времени.
+</p><p>В связи с этим объявляем о наборе помощников – модераторов сайта, перед которыми стоят относительно несложные задачи: проверка ХБ-карточек, их публикация или возврат в приват; проверка изображений в галереях; удаление неприемлемых комментариев на сайте.
+</p><p>Каких-то особых знаний не требуется – требуется только терпение, внимательность, грамотность и наличие достаточного времени и желания на выполнение указанных задач. 
+</p><p>Если заинтересовались – пишите в <a href="https://discord.com/users/291276651227250688" target="_blank">discord</a> или в <a href="tg://resolve?domain=enninB" target="_blank">telegram</a>. Не забывайте, что для того, чтобы авторский контент прошел проверку и оказался в общем доступе, всего лишь нужно строго соблюдать руководства по <a href="https://dnd.su/articles/homebrew/260-manual_of_style/" target="_blank">стилю</a> и <a href="https://dnd.su/articles/homebrew/313-dnd_su_homebrewing_guide/" target="_blank">оформлению</a>.
+</p><p>Не забывайте, что каждый из вас может помочь сайту, а вернее уже двум сайтам существовать и улучшаться, для этого можно просто оформить подписку на <a href="https://boosty.to/dnd.su" target="_blank">Boosty</a>. Там продолжаются целевые сборы:
+</p><p>кампания <a href="https://boosty.to/dnd.su/single-payment/donation/700242/target?share=target_link" target="_blank">«Бестиарий 2024» (ММ)</a> финансирует более быстрый перевод и публикацию полного «Бестиария» 2024 на сайте, а так же обновление функционала этого раздела;
+</p><p>кампания <a href="https://boosty.to/dnd.su/single-payment/donation/700243/target?share=target_link" target="_blank">«На развитие сайта»</a> направлена на всесторонние обновления сайта, включая добавление новых фильтров для общих страниц, доработку новых редакторов для карточек и статей, обновление пользовательских инструментов, а также добавление и перенос статей с игровыми механиками 2024.
+</p><p>Спасибо всем, кто уже помогает – мы ценим каждого из вас! 
+</p><p>Следите за новостями и оставайтесь с нами!</p><p>
+</p><p>
+</p><p>
+</p><p>
+</p><p>
+</p>
+			</div>
+
+			<ul class="params card__article-body">
+				<li><br><a href='/articles/news/844-daidzest-29/#comments' class='read-more-comments'>Комментарии: 9</a></li>
+			</ul>
+</div><div class="card__footer"></div></div></div>  <div class='paper-1 card typoable'  style="background-position:33% 0" data-id='article:833' data-typo-path='/articles/news/833-daidzest-28/' itemscope itemtype='https://schema.org/Article'><div class='card-wrapper' ><div class="card__header"><h2 class="card-title" itemprop="name"><a href='/articles/news/833-daidzest-28/' itemprop='url' class='item-link'>Дайджест (28)</a></h2></div><div class="card__body new-article" itemprop="articleBody">			<ul class="params card__article-body">
+								
+			</ul>
+			
+			<div class="desc card__article-body" itemprop="articleBody">
+				Всем привет!
+<p>
+</p><p>Лето закончилось, а работа над сайтом <a href="https://next.dnd.su/" target="_blank">next.dnd.su</a> продолжается, даже несмотря на то, что в летний период лишь минимальный процент нашего коллектива мог уделять этому свое время.
+</p><p>За последний месяц были добавлены статьи <a href="https://next.dnd.su/inventory/trinkets" target="_blank">«Безделушки»</a> и <a href="https://next.dnd.su/mechanics/ability-checks-and-skills" target="_blank">«Характеристики, проверки и навыки»</a>, таким образом почти всё из списка работ по ПХБ24 готово. 
+</p><p>Что касается контента из ДМГ24, то сейчас выгружены все <a href="https://next.dnd.su/items/" target="_blank">магические предметы</a>, идет работа над переводом их описаний. 
+</p><p>Сама страница магических предметов переработана для большего удобства пользователей, поправлен фильтр по названию, добавлены фильтры по классам, типам оружия и доспехов, также добавлена сортировка по типам и редкости. Кроме того, мы начали разделять вариативные предметы на общий артикул и конкретные вариации: если редкость в фильтре не указана, отображается «общий» предмет, если указана - соответствующие выбранным фильтрам вариации. Будем крайне признательны, если вы напишете в комментарии или на нашем <a href="https://discord.com/invite/NVj9b4tWmb" target="_blank">discord сервере</a> свои предложения, какие еще фильтры были бы полезны.
+</p><p>Помимо этого, поправлены поиск <a href="https://next.dnd.su/spells/" target="_blank">заклинаний</a> по классу и подклассу, а также навыки в <a href="https://next.dnd.su/bestiary/" target="_blank">«Бестиарии»</a>. Также обновлён <a href="https://next.dnd.su/stat-planner/" target="_blank">калькулятор характеристик</a> персонажа, который можно найти в секции Инструменты.
+</p><p>На сайте <a href="https://dnd.su/" target="_blank">dnd.su</a>, тем временем, продолжается штатная деятельность по поиску и исправлению ошибок и модерированию пользовательских карточек. Не забывайте, что для того, чтобы ваш авторский контент прошел проверку и оказался в общем доступе, всего лишь нужно строго соблюдать руководства по <a href="https://dnd.su/articles/homebrew/260-manual_of_style/" target="_blank">стилю</a> и <a href="https://dnd.su/articles/homebrew/313-dnd_su_homebrewing_guide/" target="_blank">оформлению</a>. 
+</p><p>Напомним, что сейчас идут два целевых сбора средств: 
+</p><p>- кампания <a href="https://boosty.to/dnd.su/single-payment/donation/700242/target?share=target_link" target="_blank">«Бестиарий 2024» (ММ)</a> финансирует более быстрый перевод и публикацию полного «Бестиария» 2024 на сайте, а так же обновление функционала этого раздела; 
+</p><p>- кампания <a href="https://boosty.to/dnd.su/single-payment/donation/700243/target?share=target_link" target="_blank">«На развитие сайта»</a> направлена на всесторонние обновления сайта, включая добавление новых фильтров для общих страниц, доработку новых редакторов для карточек и статей, обновление пользовательских инструментов, а также добавление и перенос статей с игровыми механиками 2024. 
+</p><p>Не забывайте, что каждый из вас может помочь сайту, а вернее уже двум сайтам существовать и улучшаться, для этого можно просто оформить подписку на <a href="https://boosty.to/dnd.su" target="_blank">Boosty</a>. Сейчас стоит цель на 500 активных подписчиков. Ее выполнение позволит поднять размер оплаты времени модераторов, что в свою очередь увеличит скорость наполнения нового сайта контентом и уменьшит сроки проверки карточек пользователей. 
+</p><p>Спасибо всем, кто уже помогает – мы ценим каждого из вас! 
+</p><p>Следите за новостями и оставайтесь с нами!</p><p>
+</p><p>
+</p><p>
+</p><p>
+</p><p>
+</p><p>
+</p><p>
+</p><p>
+</p><p>
+</p><p>
+</p>
+			</div>
+
+			<ul class="params card__article-body">
+				<li><br><a href='/articles/news/833-daidzest-28/#comments' class='read-more-comments'>Комментарии: 17</a></li>
+			</ul>
+</div><div class="card__footer"></div></div></div>  <div class='paper-1 card typoable'  style="background-position:51% 0" data-id='article:812' data-typo-path='/articles/news/812-daidzest-27/' itemscope itemtype='https://schema.org/Article'><div class='card-wrapper' ><div class="card__header"><h2 class="card-title" itemprop="name"><a href='/articles/news/812-daidzest-27/' itemprop='url' class='item-link'>Дайджест (27)</a></h2></div><div class="card__body new-article" itemprop="articleBody">			<ul class="params card__article-body">
+								
+			</ul>
+			
+			<div class="desc card__article-body" itemprop="articleBody">
+				<p>Всем привет!</p><p>В последнем месяце было много внимания уделено сайту <a href="https://next.dnd.su/" target="_blank">next.dnd.su</a>, так как сейчас он требует куда больше внимания.
+</p><p>В частности, переделан и запущен включен поиск карточек, и мы будем признательны, если вы будете сообщать о каких-то багах в поисковой выдаче.
+</p><p>Исправлена ошибка со слиянием комментариев всех страниц раздела <a href="https://next.dnd.su/species/" target="_blank">«Виды»</a> в один пул, но, к сожалению, старые комментарии на этих страницах были потеряны. При этом добавлена страница комментариев с тремя вкладками:
+</p><p></p><ul><li>новые комментарии,
+</li><li>последние комментарии пользователя,
+</li><li>последние ответы на комментарии пользователя</li></ul><p></p><p>На страницах раздела <a href="https://next.dnd.su/class/" target="_blank">«Классы»</a> добавили функцию сохранения выбранных подклассов. 
+</p><p>На страницы классов, видов и снаряжения добавлена галерея, так что их можно наполнять изображениями. 
+</p><p>Подключена возможность сообщать об ошибках через форму на страницах видов и снаряжения.
+</p><p>Самая большая работа касалось раздела <a href="https://next.dnd.su/spells/" target="_blank">«Заклинания»</a>, куда теперь добавлены все заклинания из новой «Книги игрока». Всем заклинаниям проставлены метки подклассов. Также добавлены три новых эффекта для фильтрации заклинаний: вызов существа, телепортация и воскрешение. Будем крайне признательны, если вы напишите в комментарии или на нашем сервере в Дискорде свои предложения, какие еще теги были бы полезны, а также в каких заклинаниях не проставлены нужные теги.
+</p><p>Что касается сайта <a href="https://dnd.su/" target="_blank">dnd.su</a>, то там в обычном режиме идет работа по поиску и устранению ошибок, опечаток и различных багов, продолжается активная модерация пользовательского контента. Напомним, что для того, чтобы ваш авторский контент прошел проверку и оказался в общем доступе, всего лишь нужно строго соблюдать руководства по <a href="https://dnd.su/articles/homebrew/260-manual_of_style/" target="_blank">стилю</a> и <a href="https://dnd.su/articles/homebrew/313-dnd_su_homebrewing_guide/" target="_blank">оформлению</a>.
+</p><p>Напомним, что сейчас идут два целевых сбора средств: 
+</p><p>кампания <a href="https://boosty.to/dnd.su/single-payment/donation/700242/target?share=target_link" target="_blank">«Бестиарий 2024» (ММ)</a> финансирует более быстрый перевод и публикацию полного «Бестиария» 2024 на сайте, а так же обновление функционала этого раздела;
+</p><p>кампания <a href="https://boosty.to/dnd.su/single-payment/donation/700243/target?share=target_link" target="_blank">«На развитие сайта»</a> направлена на всесторонние обновления сайта, включая добавление новых фильтров для общих страниц, доработку новых редакторов для карточек и статей, обновление пользовательских инструментов, а также добавление и перенос статей с игровыми механиками 2024.
+</p><p>Не забывайте, что каждый из вас может помочь сайту, а вернее уже двум сайтам существовать и улучшаться, для этого можно просто оформить подписку на <a href="https://boosty.to/dnd.su" target="_blank">Boosty</a>. Сейчас стоит цель на 500 активных подписчиков. Ее выполнение позволит поднять размер оплаты времени модераторов, что в свою очередь увеличит скорость наполнения нового сайта контентом и уменьшит сроки проверки карточек пользователей. 
+</p><p>Спасибо всем, кто уже помогает – мы ценим каждого из вас!
+</p><p>Следите за новостями и оставайтесь с нами!</p><p>
+</p><p>
+</p><p>
+</p><p>
+</p><p>
+</p><p>
+</p><p>
+</p><p>
+</p><p>
+</p><p>
+</p><p>
+</p><p>
+</p>
+			</div>
+
+			<ul class="params card__article-body">
+				<li><br><a href='/articles/news/812-daidzest-27/#comments' class='read-more-comments'>Комментарии: 15</a></li>
+			</ul>
+</div><div class="card__footer"></div></div></div> </section>
+
+<section class="block block_100">
+ <h2 class="section-title section-title-padding">Новости сообщества</h2>
+	 <div class='paper-1 card typoable'  style="background-position:89% 0" data-id='article:843' data-typo-path='/articles/partners/843-mogucaia-deviatka-epizod-260/' itemscope itemtype='https://schema.org/Article'><div class='card-wrapper' ><div class="card__header"><h2 class="card-title" itemprop="name"><a href='/articles/partners/843-mogucaia-deviatka-epizod-260/' itemprop='url' class='item-link'>Могучая Девятка. Эпизод 260</a></h2></div><div class="card__body new-article" itemprop="articleBody">			<ul class="params card__article-body">
+								
+			</ul>
+			
+			<div class="desc card__article-body" itemprop="articleBody">
+				<p>260-й эпизод&nbsp;<strong>Могучей Девятки</strong> уже на Boosty: <a href="https://boosty.to/strannoyemestechko" target="_blank" style="">boosty.to/strannoyemestechko</a><br></p>
+<p><a href="https://boosty.to/strannoyemestechko" target="_blank"><img src="/img/promo/10-10-2025.jpg" class="embed-img"></a></p>
+<p>Прошлые выпуски в общем доступе здесь:&nbsp;<a href="https://www.youtube.com/@strannoednd" target="_blank">youtube.com/@strannoednd</a></p>
+<p><a href="https://vk.com/tmpublick" target="_blank">vk.com/tmpublick</a></p>
+			</div>
+
+			<ul class="params card__article-body">
+				<li><br><a href='/articles/partners/843-mogucaia-deviatka-epizod-260/#comments' class='read-more-comments'>Комментарии: 0</a></li>
+			</ul>
+</div><div class="card__footer"></div></div></div>  <div class='paper-1 card typoable'  style="background-position:6% 0" data-id='article:842' data-typo-path='/articles/partners/842-mogucaia-deviatka-epizod-259/' itemscope itemtype='https://schema.org/Article'><div class='card-wrapper' ><div class="card__header"><h2 class="card-title" itemprop="name"><a href='/articles/partners/842-mogucaia-deviatka-epizod-259/' itemprop='url' class='item-link'>Могучая Девятка. Эпизод 259</a></h2></div><div class="card__body new-article" itemprop="articleBody">			<ul class="params card__article-body">
+								
+			</ul>
+			
+			<div class="desc card__article-body" itemprop="articleBody">
+				<p>259-й эпизод&nbsp;<strong>Могучей Девятки</strong> уже на Boosty: <a href="https://boosty.to/strannoyemestechko" target="_blank" style="">boosty.to/strannoyemestechko</a><br></p>
+<p><a href="https://boosty.to/strannoyemestechko" target="_blank"><img src="/img/promo/05-10-2025.jpg" class="embed-img"></a></p>
+<p>Прошлые выпуски в общем доступе здесь:&nbsp;<a href="https://www.youtube.com/@strannoednd" target="_blank">youtube.com/@strannoednd</a></p>
+<p><a href="https://vk.com/tmpublick" target="_blank">vk.com/tmpublick</a></p>
+			</div>
+
+			<ul class="params card__article-body">
+				<li><br><a href='/articles/partners/842-mogucaia-deviatka-epizod-259/#comments' class='read-more-comments'>Комментарии: 0</a></li>
+			</ul>
+</div><div class="card__footer"></div></div></div>  <div class='paper-1 card typoable'  style="background-position:58% 0" data-id='article:841' data-typo-path='/articles/partners/841-mogucaia-deviatka-epizod-258/' itemscope itemtype='https://schema.org/Article'><div class='card-wrapper' ><div class="card__header"><h2 class="card-title" itemprop="name"><a href='/articles/partners/841-mogucaia-deviatka-epizod-258/' itemprop='url' class='item-link'>Могучая Девятка. Эпизод 258</a></h2></div><div class="card__body new-article" itemprop="articleBody">			<ul class="params card__article-body">
+								
+			</ul>
+			
+			<div class="desc card__article-body" itemprop="articleBody">
+				<p>258-й эпизод&nbsp;<strong>Могучей Девятки</strong> уже на Boosty: <a href="https://boosty.to/strannoyemestechko" target="_blank" style="">boosty.to/strannoyemestechko</a><br></p>
+<p><a href="https://boosty.to/strannoyemestechko" target="_blank"><img src="/img/promo/02-10-2025.jpg" class="embed-img"></a></p>
+<p>Прошлые выпуски в общем доступе здесь:&nbsp;<a href="https://www.youtube.com/@strannoednd" target="_blank">youtube.com/@strannoednd</a></p>
+<p><a href="https://vk.com/tmpublick" target="_blank">vk.com/tmpublick</a></p>
+			</div>
+
+			<ul class="params card__article-body">
+				<li><br><a href='/articles/partners/841-mogucaia-deviatka-epizod-258/#comments' class='read-more-comments'>Комментарии: 0</a></li>
+			</ul>
+</div><div class="card__footer"></div></div></div> </section>
+
+<section class="block block_100">
+	<h2 class="section-title section-title-padding">Новое на сайте</h2>
+  	<div class='paper-1 card card__group- typoable'  style="background-position:50% 0" data-id='article:646' data-typo-path='/articles/mechanics/646-deals-with-devils/' itemscope itemtype='https://schema.org/Article'><div class='card-wrapper' ><div class="card__header"><h2 class="card-title" itemprop="name"><a href='/articles/mechanics/646-deals-with-devils/' itemprop='url' class='item-link'>Сделки с дьяволами [Deals with devils]</a></h2></div><div class="card__body new-article" itemprop="articleBody">			<ul class="params card__article-body">
+								
+			</ul>
+			
+			<div class="desc card__article-body" itemprop="articleBody">
+				<p>Характерная особенность дьяволов — они обожают заключать сделки со смертными. Это не просто соглашения, а связанные космическими силами обязательства, согласно которым дьявол даёт смертному персонажу долю своей мощи за некую цену. Когда соглашение достигнуто, сделка скрепляется обязательным к исполнению контрактом, который подписывают обе стороны.</p>
+			</div>
+
+			<ul class="params card__article-body">
+				<li><a href='/articles/mechanics/646-deals-with-devils/' class='read-more'>Читать далее</a></li>
+			</ul>
+</div><div class="card__footer"></div></div></div>  	<div class='paper-1 card card__group-homebrew typoable'  style="background-position:96% 0" data-id='article:586' data-typo-path='/homebrew/race/586-oozekin/' itemscope itemtype='https://schema.org/Article'><div class='card-wrapper' ><div class="card__header"><h2 class="card-title" itemprop="name"><a href='/homebrew/race/586-oozekin/' itemprop='url' class='item-link'>Слизевик [Oozekin]</a></h2></div><div class="card__body new-article" itemprop="articleBody">			<ul class="params card__article-body">
+								
+			</ul>
+			
+			<div class="desc card__article-body" itemprop="articleBody">
+				<blockquote style="">"Этот кубик только что пытался мне подмигнуть? Я должен следить за тем, что я пью". 
+<br>-Доктор Штайн, журнал данных 0290</blockquote>
+<br>
+<p style="">Любопытные от природы, слизевики не имеют собственной культуры; вместо этого они стремятся ассимилироваться с теми, кто готов принять их слизистую беспозвоночную форму. Слизевики встречаются повсюду, хотя и в небольшом количестве: от телохранителей могущественных и твердолобых дворян до приемных товарищей по играм возбудимых полуросликов. Слизевики, перенимающие ценности окружающих их людей, трудно поддаются определению, их объединяет лишь одно: стремление погрузить свое новообретенное сознание в привычки и обычаи других разумных существ.</p>
+			</div>
+
+			<ul class="params card__article-body">
+				<li><a href='/homebrew/race/586-oozekin/' class='read-more'>Читать далее</a></li>
+			</ul>
+</div><div class="card__footer"></div></div></div>  	<div class='paper-1 card card__group-homebrew typoable'  style="background-position:98% 0" data-id='article:585' data-typo-path='/homebrew/race/585-ombrask/' itemscope itemtype='https://schema.org/Article'><div class='card-wrapper' ><div class="card__header"><h2 class="card-title" itemprop="name"><a href='/homebrew/race/585-ombrask/' itemprop='url' class='item-link'>Омбраск [Ombrask]</a></h2></div><div class="card__body new-article" itemprop="articleBody">			<ul class="params card__article-body">
+								
+			</ul>
+			
+			<div class="desc card__article-body" itemprop="articleBody">
+				<blockquote style="">"Ей-богу... а я думал, что та фигура в капюшоне позади таверны была темной. Нет ничего более мрачного, чем это". 
+<br>-Пленс Донсус, бариста, Волшебники жареного</blockquote>
+<br>
+<p style="">Те, кто блуждает по плану Теней, обречены на извращенные судьбы и погрязшие умы. Эти увядающие, потерянные души начинают принимать чудовищные формы, хотя некоторые особо стойкие личности успевают сойти с этого темного пути до того, как их сущность будет стерта с лица земли. Известные как омбраски, эти полупрозрачные существа принадлежат к самым разным народам: от эльфа до гнома, от драконорожденного до лотола, от ракина до гоблина. Все они с трудом вспоминают даже самые простые воспоминания, например, свое прежнее имя, и все имеют призрачный, бесцветный вид.</p>
+			</div>
+
+			<ul class="params card__article-body">
+				<li><a href='/homebrew/race/585-ombrask/' class='read-more'>Читать далее</a></li>
+			</ul>
+</div><div class="card__footer"></div></div></div> </section>                </div>
+            </div>
+            <!---->
+        </div>
+    </main>
+	<footer>
+    <div class="wrapper">
+        <a href="https://dnd.su">DnD.su</a> © 2017 - 2025. | По&nbsp;вопросам сотрудничества: <a href="javascript:void(0)" class="show-email">показать&nbsp;email</a>
+    </div>
+</footer>
+
+<script type="text/javascript">const COMPENDIUM = {"bestiary":{"alignment":{"lg":"\u0417\u0430\u043a\u043e\u043d\u043d\u043e-\u0434\u043e\u0431\u0440\u044b\u0439","ng":"\u041d\u0435\u0439\u0442\u0440\u0430\u043b\u044c\u043d\u043e-\u0434\u043e\u0431\u0440\u044b\u0439","cg":"\u0425\u0430\u043e\u0442\u0438\u0447\u043d\u043e-\u0434\u043e\u0431\u0440\u044b\u0439","ln":"\u0417\u0430\u043a\u043e\u043d\u043d\u043e-\u043d\u0435\u0439\u0442\u0440\u0430\u043b\u044c\u043d\u044b\u0439","n":"\u041d\u0435\u0439\u0442\u0440\u0430\u043b\u044c\u043d\u044b\u0439","cn":"\u0425\u0430\u043e\u0442\u0438\u0447\u043d\u043e-\u043d\u0435\u0439\u0442\u0440\u0430\u043b\u044c\u043d\u044b\u0439","le":"\u0417\u0430\u043a\u043e\u043d\u043d\u043e-\u0437\u043b\u043e\u0439","ne":"\u041d\u0435\u0439\u0442\u0440\u0430\u043b\u044c\u043d\u043e-\u0437\u043b\u043e\u0439","ce":"\u0425\u0430\u043e\u0442\u0438\u0447\u043d\u043e-\u0437\u043b\u043e\u0439","none":"\u0411\u0435\u0437 \u043c\u0438\u0440\u043e\u0432\u043e\u0437\u0437\u0440\u0435\u043d\u0438\u044f","any":"\u041b\u044e\u0431\u043e\u0435 \u043c\u0438\u0440\u043e\u0432\u043e\u0437\u0437\u0440\u0435\u043d\u0438\u0435"},"alignment_union":{"ce.cg.cn.le.lg.ln.n.ne.ng":"\u041b\u044e\u0431\u043e\u0435 \u043c\u0438\u0440\u043e\u0432\u043e\u0437\u0437\u0440\u0435\u043d\u0438\u0435","ce.le.ne":"\u041b\u044e\u0431\u043e\u0435 \u0437\u043b\u043e\u0435 \u043c\u0438\u0440\u043e\u0432\u043e\u0437\u0437\u0440\u0435\u043d\u0438\u0435","cg.lg.ng":"\u041b\u044e\u0431\u043e\u0435 \u0434\u043e\u0431\u0440\u043e\u0435 \u043c\u0438\u0440\u043e\u0432\u043e\u0437\u0437\u0440\u0435\u043d\u0438\u0435","cn.ln.n.ne.ng":"\u041b\u044e\u0431\u043e\u0435 \u043d\u0435\u0439\u0442\u0440\u0430\u043b\u044c\u043d\u043e\u0435 \u043c\u0438\u0440\u043e\u0432\u043e\u0437\u0437\u0440\u0435\u043d\u0438\u0435","ce.cg.cn":"\u041b\u044e\u0431\u043e\u0435 \u0445\u0430\u043e\u0442\u0438\u0447\u043d\u043e\u0435 \u043c\u0438\u0440\u043e\u0432\u043e\u0437\u0437\u0440\u0435\u043d\u0438\u0435","le.lg.ln":"\u041b\u044e\u0431\u043e\u0435 \u0437\u0430\u043a\u043e\u043d\u043d\u043e\u0435 \u043c\u0438\u0440\u043e\u0432\u043e\u0437\u0437\u0440\u0435\u043d\u0438\u0435","ce.cn.le.ln.n.ne":"\u041b\u044e\u0431\u043e\u0435 \u043c\u0438\u0440\u043e\u0432\u043e\u0437\u0437\u0440\u0435\u043d\u0438\u0435 \u043a\u0440\u043e\u043c\u0435 \u0434\u043e\u0431\u0440\u043e\u0433\u043e","ce.cg.cn.n.ne.ng":"\u041b\u044e\u0431\u043e\u0435 \u043c\u0438\u0440\u043e\u0432\u043e\u0437\u0437\u0440\u0435\u043d\u0438\u0435 \u043a\u0440\u043e\u043c\u0435 \u0437\u0430\u043a\u043e\u043d\u043d\u043e\u0433\u043e","cg.cn.lg.ln.n.ng":"\u041b\u044e\u0431\u043e\u0435 \u043c\u0438\u0440\u043e\u0432\u043e\u0437\u0437\u0440\u0435\u043d\u0438\u0435 \u043a\u0440\u043e\u043c\u0435 \u0437\u043b\u043e\u0433\u043e","le.lg.ln.n.ne.ng":"\u041b\u044e\u0431\u043e\u0435 \u043c\u0438\u0440\u043e\u0432\u043e\u0437\u0437\u0440\u0435\u043d\u0438\u0435 \u043a\u0440\u043e\u043c\u0435 \u0445\u0430\u043e\u0442\u0438\u0447\u043d\u043e\u0433\u043e","ce.cg.le.lg":"\u041b\u044e\u0431\u043e\u0435 \u043c\u0438\u0440\u043e\u0432\u043e\u0437\u0437\u0440\u0435\u043d\u0438\u0435 \u043a\u0440\u043e\u043c\u0435 \u043d\u0435\u0439\u0442\u0440\u0430\u043b\u044c\u043d\u043e\u0433\u043e"},"damage_types":{"10":"\u0414\u0440\u043e\u0431\u044f\u0449\u0438\u0439","12":"\u041a\u043e\u043b\u044e\u0449\u0438\u0439","11":"\u0420\u0443\u0431\u044f\u0449\u0438\u0439","18":"\u0417\u0432\u0443\u043a","19":"\u0418\u0437\u043b\u0443\u0447\u0435\u043d\u0438\u0435","17":"\u041a\u0438\u0441\u043b\u043e\u0442\u0430","21":"\u041d\u0435\u043a\u0440\u043e\u0442\u0438\u0447\u0435\u0441\u043a\u0430\u044f \u044d\u043d\u0435\u0440\u0433\u0438\u044f","13":"\u041e\u0433\u043e\u043d\u044c","22":"\u041f\u0441\u0438\u0445\u0438\u0447\u0435\u0441\u043a\u0430\u044f \u044d\u043d\u0435\u0440\u0433\u0438\u044f","20":"\u0421\u0438\u043b\u043e\u0432\u043e\u0435 \u043f\u043e\u043b\u0435","14":"\u0425\u043e\u043b\u043e\u0434","15":"\u042d\u043b\u0435\u043a\u0442\u0440\u0438\u0447\u0435\u0441\u0442\u0432\u043e","16":"\u042f\u0434"},"damage_types_tags":{"nm":"\u041d\u0435\u043c\u0430\u0433\u0438\u0447.","ns":"\u041d\u0435\u043f\u043e\u0441\u0435\u0440\u0435\u0431.","na":"\u041d\u0435\u0430\u0434\u0430\u043c\u0430\u043d\u0442.","m":"\u041c\u0430\u0433\u0438\u0447.","a":"\u0410\u0442\u0430\u043a\u0430"}},"eng_to_ru":{"f":"\u0430",",":"\u0431","d":"\u0432","u":"\u0433","l":"\u0434","t":"\u0435","`":"\u0451",";":"\u0436","p":"\u0437","b":"\u0438","q":"\u0439","r":"\u043a","k":"\u043b","v":"\u043c","y":"\u043d","j":"\u043e","g":"\u043f","h":"\u0440","c":"\u0441","n":"\u0442","e":"\u0443","a":"\u0444","\\[":"\u0445","w":"\u0446","x":"\u0447","i":"\u0448","o":"\u0449","m":"\u044c","s":"\u044b","\\]":"\u044a","'":"\u044d","\\.":"\u044e","z":"\u044f"},"ru_to_eng":{"\u0430":"f","\u0431":",","\u0432":"d","\u0433":"u","\u0434":"l","\u0435":"t","\u0451":"`","\u0436":";","\u0437":"p","\u0438":"b","\u0439":"q","\u043a":"r","\u043b":"k","\u043c":"v","\u043d":"y","\u043e":"j","\u043f":"g","\u0440":"h","\u0441":"c","\u0442":"n","\u0443":"e","\u0444":"a","\u0445":"\\[","\u0446":"w","\u0447":"x","\u0448":"i","\u0449":"o","\u044c":"m","\u044b":"s","\u044a":"\\]","\u044d":"'","\u044e":"\\.","\u044f":"z"}};</script>
+<script type="text/javascript"  src="/beta/js/pack.common.min.js?v=3.0.128"></script>
+<script type="text/javascript"  src="/beta/js/common.min.js?v=3.0.128"></script>
+<script type="text/javascript"  src="/ennin/common.min.js?v=3.0.128"></script>
+<script type="text/javascript"  src="/beta/js/user.min.js?v=3.0.128"></script>
+<script type="text/javascript" > (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)}; m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)}) (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym"); ym(42419409, "init", { clickmap:true, trackLinks:true, accurateTrackBounce:true, webvisor:true }); </script> <noscript><div><img src="https://mc.yandex.ru/watch/42419409" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<script type="text/javascript">let ALERTS = [];</script>
+
+</body>
+</html>
