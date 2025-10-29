@@ -1,9 +1,13 @@
+from PyQt6.QtCore import QObject, pyqtSignal
 from PyQt6.QtGui import QIcon
 from PyQt6.QtWidgets import QFrame, QLabel, QHBoxLayout, QPushButton
 
 
-class Item:
+class Item(QObject):
+    deletingItem = pyqtSignal(str)
+
     def __init__(self, name, count=1, index=0):
+        super().__init__()
         self.name = name
         self.count = count
         self.index = index
@@ -17,45 +21,61 @@ class Item:
         if count <= 0:
             return "количество должно быть больше нуля"
         self.count -= count
+        if self.count == 0:
+            self.deletingItem.emit(self.name)
 
     def delete(self):
-        self.count = 0
+        self.deletingItem.emit(self.name)
 
 
 class InventoryItem(QFrame):
     def __init__(self, item=Item("Абракадабрус")):
         super().__init__()
         self.item = item
-        self.index = item.index
-        self.name = item.name
-        self.count = item.count
+        self.item.deletingItem.connect(self.close)
+        self.setupUi()
+        self.setTexts()
 
     def setupUi(self):
-        self.setMaximumHeight(48)
-
         self.mainLayout = QHBoxLayout(self)
 
-        self.indexArea = QLabel()
-        self.mainLayout.addWidget(self.indexArea)
-
         self.nameArea = QLabel()
-        self.mainLayout.addWidget(self.nameArea)
 
         add_icon = QIcon("resources/add_icon.32.png")
         self.addButton = QPushButton(icon=add_icon)
-        self.mainLayout.addWidget(self.addButton)
 
         reduce_icon = QIcon("resources/remove_icon.32.png")
         self.reduceButton = QPushButton(icon=reduce_icon)
-        self.mainLayout.addWidget(self.reduceButton)
 
         delete_icon = QIcon("resources/close_icon.32.png")
         self.deleteButton = QPushButton(icon=delete_icon)
-        self.mainLayout.addWidget(self.deleteButton)
+
+        self.nameArea.setWordWrap(True)
+        self.mainLayout.addWidget(self.nameArea, 24)
+
+        self.addButton.clicked.connect(self.add)
+        self.mainLayout.addWidget(self.addButton, 3)
+
+        self.reduceButton.clicked.connect(self.reduce)
+        self.mainLayout.addWidget(self.reduceButton, 3)
+
+        self.deleteButton.clicked.connect(self.delete)
+        self.mainLayout.addWidget(self.deleteButton, 3)
+
+    def add(self):
+        self.item.add()
+        self.setTexts()
+
+    def reduce(self):
+        self.item.reduce()
+        self.setTexts()
+
+    def delete(self):
+        self.item.delete()
+        super().close()
 
     def setTexts(self):
-        self.indexArea.setText(f"{self.index}")
-        self.nameArea.setText(f"{self.name} - ({self.count})")
+        self.nameArea.setText(f"{self.item.name} - ({self.item.count})")
         self.addButton.setText("")
         self.reduceButton.setText("")
         self.deleteButton.setText("")
