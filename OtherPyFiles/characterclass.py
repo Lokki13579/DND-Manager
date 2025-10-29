@@ -127,13 +127,13 @@ class Character:
     def addItem(
         self,
         item: str = "Абракадабрус",
-        count=1,
-        obj=InventoryItem(),
+        obj=object,
     ):
+        obj.item.deletingItem.connect(self.removeItem)
         self.Stats["inventory"][item] = obj.item
 
     def removeItem(self, item: str):
-        self.Stats["inventory"].remove(item)
+        self.Stats["inventory"].pop(item)
 
     def reduceItem(self, item: str, count=1):
         self.Stats["inventory"][item].reduce(count)

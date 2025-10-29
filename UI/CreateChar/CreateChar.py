@@ -91,5 +91,5 @@ class Ui_MainList(QWidget):
         )
 
     def inventoryCharacteristicsInit(self):
-        self.InvChar = InvChar()
+        self.InvChar = InvChar(self.character)
         self.Characteristics.addTab(self.InvChar, "Инвентарь")

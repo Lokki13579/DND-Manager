@@ -3,7 +3,7 @@ from PyQt6.QtWidgets import (
     QWidget,
     QLabel,
     QLineEdit,
-    QListWidget,
+    QScrollArea,
     QTreeWidget,
     QTreeWidgetItem,
     QVBoxLayout,
@@ -14,7 +14,7 @@ import re
 
 
 from OtherPyFiles.characterclass import Character, jsonLoad
-from UI.CreateChar.invItem import InventoryItem
+from UI.CreateChar.invItem import InventoryItem, Item
 
 files = ["drugs", "giant_bag", "magic_items", "poisons", "trinkets"]
 itemsData = {}
@@ -23,10 +23,10 @@ for file in files:
 
 
 class InventoryCharacteristics(QWidget):
-    def __init__(self):
+    def __init__(self, character: Character):
         super().__init__()
-        self.character: Character
-        self.items = []
+        self.character: Character = character
+        self.items = {}
         self.searching = {}
 
         self.setupUi()
@@ -46,8 +46,12 @@ class InventoryCharacteristics(QWidget):
         self.TableTitle.addWidget(self.emptySlotsTitle)
         self.LeftSide.addLayout(self.TableTitle)
 
-        self.inventoryItems = QListWidget()
-        self.LeftSide.addWidget(self.inventoryItems)
+        self.scrollArea = QScrollArea()
+        self.scrollArea.setWidgetResizable(True)
+        self.invWidget = QWidget()
+        self.inventoryItems = QVBoxLayout(self.invWidget)
+        self.scrollArea.setWidget(self.invWidget)
+        self.LeftSide.addWidget(self.scrollArea)
 
         self.searchLayout = QHBoxLayout()
         self.searchBar = QLineEdit()
@@ -64,7 +68,7 @@ class InventoryCharacteristics(QWidget):
 
         self.LeftSide.addLayout(self.searchLayout)
 
-        self.mainLayout.addLayout(self.LeftSide)
+        self.mainLayout.addLayout(self.LeftSide, 12)
 
         self.RightSide = QVBoxLayout()
 
@@ -74,7 +78,7 @@ class InventoryCharacteristics(QWidget):
         self.searchResult.itemDoubleClicked.connect(self.itemSelected)
 
         self.searchItems("", {})
-        self.RightSide.addWidget(self.searchResult)
+        self.RightSide.addWidget(self.searchResult, 3)
 
         self.mainLayout.addLayout(self.RightSide)
 
@@ -137,21 +141,28 @@ class InventoryCharacteristics(QWidget):
     def addItem(self):
         pattern = r"(\(.*\))?([^(#\[][^#\[]*)?(\[\d*\])?"
         res = re.findall(pattern, self.searchBar.text())
-        itemName = res[0][1]
+        itemName = res[0][1].strip()
         itemNumber = res[0][2]
         if itemNumber:
             itemNumber = int(itemNumber[1:-1])
         else:
             itemNumber = 1
-        self.items.append(self.createObject(itemName, itemNumber))
-        self.inventoryItems.addItem(self.items[-1].name)
-        self.character.addItem(itemName, itemNumber, self.items[-1])
+        invItem = self.createObject(itemName, itemNumber)
+        self.character.addItem(itemName, invItem)
+        for i in self.items.values():
+            self.inventoryItems.removeWidget(i)
+        self.items[itemName] = invItem
+        for it in self.items.values():
+            self.inventoryItems.addWidget(it)
+        print(self.character.Stats)
 
-    def createObj(self, itemName, itemNumber):
-        item = InventoryItem(itemName, itemNumber)
+    def createObject(self, itemName, itemNumber):
+        item = InventoryItem(Item(itemName, itemNumber))
         return item
 
     def itemSelected(self, index: QTreeWidgetItem):
+        if index.text(0) in files:
+            return
         self.searchBar.setText(
             index.text(0)
             + "[1] #введите количество в кв скобках по умолчанию 1. Например: [10]"
