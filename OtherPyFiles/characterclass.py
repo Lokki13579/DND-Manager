@@ -393,7 +393,7 @@ class Character:
 
             full_path = get_resource_path(path)
             with open(full_path, "w", encoding="utf-8") as file:
-                json.dump(data, file, indent=4)
+                json.dump(data, file, indent=4, ensure_ascii=False)
             print(f"Персонаж {self.name} сохранен")
         except Exception as e:
             print(f"Ошибка сохранения: {e}")
@@ -411,7 +411,7 @@ class Character:
         try:
             full_path = get_resource_path(path)
             with open(full_path, "w", encoding="utf-8") as file:
-                json.dump(data, file)
+                json.dump(data, file, indent=4, ensure_ascii=False)
         except Exception as e:
             print(f"Ошибка сохранения JSON: {e}")
 
