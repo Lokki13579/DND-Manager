@@ -8,18 +8,15 @@
 
 from PyQt6.QtCore import QRect, Qt, pyqtSignal
 from PyQt6.QtWidgets import (
-    QGridLayout,
     QListWidget,
-    QListWidgetItem,
     QPushButton,
-    QScrollArea,
-    QTreeWidget,
-    QTreeWidgetItem,
     QVBoxLayout,
+    QHBoxLayout,
     QWidget,
 )
 
 from OtherPyFiles.characterclass import Character, CharLoader
+from UI.characterMainChars import CharMainChar
 
 
 class Ui_CharsList(QWidget):
@@ -28,85 +25,58 @@ class Ui_CharsList(QWidget):
         self.ClientOBJ = client
         self.currCharacter = Character()
         self.Opts = {}
-        self.characterSelected = pyqtSignal(object)
         self.setupUi()
 
     def setupUi(self):
-        self.setObjectName("Main")
-        self.resize(720, 540)
-        self.setGeometry(QRect(0, 0, 720, 540))
+        self.mainLayout = QHBoxLayout(self)
+        self.mainLayout.setContentsMargins(20, 8, 20, 8)
+        self.mainLayout.setContentsMargins(0, 0, 0, 0)
+        self.mainLayout.setSpacing(0)
 
-        self.Panels = QGridLayout(self)
+        self.choose = QVBoxLayout()
+        self.mainLayout.addLayout(self.choose, 2)
 
-        self.BackButton = QPushButton(text="Назад")
-        self.Panels.addWidget(self.BackButton, 0, 0, Qt.AlignmentFlag.AlignHCenter)
+        self.BackButton = QPushButton("Назад")
+        self.choose.addWidget(self.BackButton)
 
         self.CharactersList = QListWidget()
-        self.CharactersList.currentItemChanged.connect(self.characterChange)
-        self.Panels.addWidget(self.CharactersList, 1, 0)
+        self.CharactersList.currentTextChanged.connect(self.characterSelected)
+        self.choose.addWidget(self.CharactersList)
 
-        self.CreateNewCharButton = QPushButton(text="Создать нового")
-        self.Panels.addWidget(
-            self.CreateNewCharButton, 2, 0, Qt.AlignmentFlag.AlignHCenter
-        )
+        self.charButtons = QHBoxLayout()
+        self.charButtons.setSpacing(5)
+        self.createNewButton = QPushButton("Создать нового")
+        self.charButtons.addWidget(self.createNewButton, 6)
 
-        self.CharacterOpts = QScrollArea()
-        self.CharacterOptsLayout = QVBoxLayout(self.CharacterOpts)
-        self.CharacterOptsTree = TreeWidget()
-        self.CharacterOptsTree.setHeaderLabel("Персонаж")
-        self.CharacterOptsLayout.addWidget(self.CharacterOptsTree)
+        self.deleteCharacterButton = QPushButton("Удалить")
+        self.deleteCharacterButton.clicked.connect(self.deleteCharacter)
+        self.charButtons.addWidget(self.deleteCharacterButton, 2)
 
-        # self.CharacterOptsTitle = QTreeWidgetItem(self.CharacterOptsTree,[self.currCharacter.name])
-        self.CharacterOptsTree.recursiveAddTreeItems(
-            self.CharacterOptsTree, self.currCharacter.Stats
-        )
-        self.Panels.addWidget(self.CharacterOpts, 1, 1)
+        self.choose.addLayout(self.charButtons, 1)
 
-        self.characterFind(self.CharactersList)
+        self.characterOpts = CharMainChar()
+        self.mainLayout.addWidget(self.characterOpts, 3)
 
-    def characterChange(self, index: QListWidgetItem):
-        if not index:
-            return
-        index = index.text()
-        self.currCharacter = self.allChars.get(index)
-        self.updatesShow()
-        self.select(self.currCharacter)
+    def charsInit(self):
+        cI = CharLoader().CharClassDispencer()
+        print(cI)
+        return cI
 
-    def characterFind(self, listObject: QListWidget = None):
-        if listObject is None:
-            listObject = self.CharactersList
-        self.allChars = CharLoader().CharClassDispencer()
-        listObject.clear()
-        for character in self.allChars:
-            listObject.addItem(character)
+    def characterFind(self):
+        self.allChars = self.charsInit()
+        self.CharactersList.clear()
+        for char in self.allChars.values():
+            self.CharactersList.addItem(char.name)
 
-    def updatesShow(self):
-        self.CharacterOptsTree.clear()
-        self.CharacterOptsTree.setHeaderLabel(self.currCharacter.name)
-        # self.CharacterOptsTitle = QTreeWidgetItem(self.CharacterOptsTree,[self.currCharacter.name])
-        self.CharacterOptsTree.recursiveAddTreeItems(
-            self.CharacterOptsTree, self.currCharacter.Stats
-        )
-        self.CharacterOptsTree.expandAll()
+    def deleteCharacter(self):
+        selected = self.CharactersList.currentItem()
+        if selected:
+            name = selected.text()
+            if name in self.allChars:
+                self.allChars[name].jsonCharDelete()
+                self.characterFind()
 
-    def select(self, char):
-        self.ClientOBJ.character = char
-
-
-class TreeWidget(QTreeWidget):
-    def recursiveAddTreeItems(
-        self, parent: QTreeWidgetItem, value: str | int | dict | list, _dict={}
-    ):
-        if type(value) == type(1):
-            value = str(value)
-        if type(value) == type(list()):
-            for _val in value:
-                _dict[_val] = QTreeWidgetItem(parent, [_val])
-        if type(value) == type(dict()):
-            for _key, _val in value.items():
-                _dict[_key] = QTreeWidgetItem(parent, [_key])
-                _dict[_key].setHidden(False)
-                _dict[_key + "_"] = self.recursiveAddTreeItems(_dict[_key], _val, _dict)
-        if type(value) == type(str()):
-            _dict[value] = QTreeWidgetItem(parent, [value])
-        return _dict
+    def characterSelected(self, name):
+        if name:
+            print(name, self.allChars[name].Stats)
+            self.characterOpts.showNewCharacter(self.allChars.get(name, Character()))

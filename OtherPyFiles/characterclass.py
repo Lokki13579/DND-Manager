@@ -3,16 +3,8 @@ import os
 import math
 import sys
 from math import floor
+from random import randint
 from PyQt6.QtCore import pyqtSignal
-from UI.CreateChar.invItem import InventoryItem, Item
-
-
-def get_resource_path(relative_path):
-    """Получаем правильный путь к ресурсам в exe"""
-    if hasattr(sys, "_MEIPASS"):
-        return os.path.join(sys._MEIPASS, relative_path)
-    else:
-        return os.path.join(os.path.abspath("."), relative_path)
 
 
 def jsonLoad(path="/home/artem/.config/DNDManager/AllCharacterData.json"):
@@ -61,11 +53,12 @@ class Character:
     sthgChanged = pyqtSignal(str)
 
     def __init__(self, name="Выбирается", stats=None):
-        if stats is None:
-            stats = {}
         self.name = name
+        if stats:
+            self.setStats(stats)
+            return
+        self.Stats = {}
         self.spellCells = {}
-        self.setStats(stats)
         self.setClass("Бард")
         self.setRace("Ааракокра")
         self.setLevel(1)
@@ -276,6 +269,13 @@ class Character:
         except:
             self.Stats["masterBonus"] = ""
 
+    def getNextLevelExp(self):
+        levels_data = jsonLoad("JSONS/dnd_levels.json")
+        current_level = self.Stats.get("level", 0)
+        next_level_data = levels_data.get(str(current_level + 1), {})
+        next_level_exp = next_level_data.get("experience", float("inf"))
+        return next_level_exp
+
     def expReset(self, newLevel):
         try:
             levels_data = jsonLoad("JSONS/dnd_levels.json")
@@ -311,6 +311,17 @@ class Character:
 
     def getHp(self):
         return self.Stats.get("health", {}).get("main", {}).get("val", 0)
+
+    def fullHeal(self):
+        self.Stats["health"]["main"]["val"] = self.getMaxHp()
+
+    def heal(self, amount):
+        self.Stats["health"]["main"]["val"] += amount
+
+    def randomHeal(self):
+        self.Stats["health"]["main"]["val"] += randint(
+            1, int(self.Stats.get("hpDice", 1))
+        )
 
     def invMan(self, action, item=None):
         # Упрощенная версия для избежания ошибок
@@ -427,8 +438,7 @@ class Character:
 
     def jsonSave(self, data, path=characterPath):
         try:
-            full_path = get_resource_path(path)
-            with open(full_path, "w", encoding="utf-8") as file:
+            with open(path, "w", encoding="utf-8") as file:
                 json.dump(data, file, indent=4, ensure_ascii=False)
         except Exception as e:
             print(f"Ошибка сохранения JSON: {e}")

@@ -27,7 +27,6 @@ class MainWin(QMainWindow):
         self.setStyleSheet("""
                            font-family: '3270 Nerd Font';
                            font-size: 24px;
-
                            """)
 
         self.stackedW = QStackedWidget()
@@ -61,9 +60,7 @@ class MainWin(QMainWindow):
         self.stackedW.addWidget(self.ClientLobby)
 
         self.CharacterListMenu = Ui_CharsList(ClientOBJ)
-        self.CharacterListMenu.CreateNewCharButton.clicked.connect(
-            self.showCharCreateMenu
-        )
+        self.CharacterListMenu.createNewButton.clicked.connect(self.showCharCreateMenu)
         self.CharacterListMenu.BackButton.clicked.connect(self.showMainMenu)
         self.stackedW.addWidget(self.CharacterListMenu)
 

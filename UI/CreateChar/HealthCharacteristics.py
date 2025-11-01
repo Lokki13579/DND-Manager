@@ -116,6 +116,7 @@ class HealthCharacteristics(QWidget):
             )
             self.RandomText.setText(str(randomizedHp))
             self.character.maxHealthUp(randomizedHp)
+            self.character.fullHeal()
             self.updateData()
             self.levels -= 1
             if self.levels == 0:
@@ -124,6 +125,7 @@ class HealthCharacteristics(QWidget):
     def middleHp(self):
         if self.levels >= 1:
             self.character.maxHealthUp(self.mid + int(self.stat.modif))
+            self.character.fullHeal()
             self.updateData()
             self.levels -= 1
             if self.levels == 0:
@@ -131,6 +133,7 @@ class HealthCharacteristics(QWidget):
 
     def manualHp(self, text):
         self.character.setMaxHealth(text)
+        self.character.fullHeal()
         self.updateData()
 
 

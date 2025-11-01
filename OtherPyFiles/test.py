@@ -1,10 +1,8 @@
 import re
 
-pattern = r"(\([1-9аговорЗз]\))?([^\(][^#]+[^)])?"
-
-string = "(1) Адское возмездие [Hellish rebuke]"
-string = "(2)"
-string = "Адское возмездие [Hellish rebuke]"
-string = "(Заговор) [Spell]"
-
-print(re.findall(pattern, string))
+_d = {
+    "1": ["Адское возмездие [Hellish rebuke]"],
+    "2": ["Адское возмездие [Hellish rebuke]"],
+    "0": ["123"],
+}
+print([i for k in _d for i in _d[k]])

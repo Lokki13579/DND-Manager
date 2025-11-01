@@ -68,6 +68,7 @@ class ThirdCharacteristics(QWidget):
         self.mainLayout.addLayout(self.placeforDice, 12)
 
         self.mainLayout.addLayout(self.PointLayout)
+        self.applyToCharacter()
 
     def updatePoints(self, newPoints):
         self.points = newPoints
@@ -99,7 +100,6 @@ class ThirdCharacteristics(QWidget):
             self.character.Stats.get("diceStats").get("main").get("modif").update(
                 {obj.name: obj.modif}
             )
-        print(self.character.Stats)
 
     def pointDisp(self):
         for obj in self.diceObjects.values():
