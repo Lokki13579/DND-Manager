@@ -18,8 +18,7 @@ def get_resource_path(relative_path):
 def jsonLoad(path="/home/artem/.config/DNDManager/AllCharacterData.json"):
     """Безопасная загрузка JSON файлов с обработкой ошибок"""
     try:
-        full_path = get_resource_path(path)
-        with open(full_path, "r", encoding="utf-8") as file:
+        with open(path, "r", encoding="utf-8") as file:
             return json.load(file)
     except FileNotFoundError:
         print(f"Файл не найден: {path}")
@@ -55,7 +54,7 @@ Stats = {
     "lore": "",
 }
 
-characterPath = "AllCharacterData.json"
+characterPath = "/home/artem/.config/DNDManager/AllCharacterData.json"
 
 
 class Character:
@@ -71,9 +70,16 @@ class Character:
         self.setRace("Ааракокра")
         self.setLevel(1)
         self.setXp(0)
+        self.Stats["worldview"] = "Нейтральный"
+        self.Stats["background"] = "Артист"
         self.healthInit()
         self.setMaxHealth(max([1, self.getFirstLevMaxHp()]))
         self.Stats["inventory"] = {}
+        self.Stats["spells"] = {}
+        self.Stats["spells"]["readySpells"] = {}
+        self.Stats["spells"]["allSpells"] = {}
+        for i in range(10):
+            self.Stats["spells"]["allSpells"][str(i)] = []
 
         # Безопасная загрузка maxExp
         try:
@@ -130,7 +136,16 @@ class Character:
         obj=object,
     ):
         obj.item.deletingItem.connect(self.removeItem)
-        self.Stats["inventory"][item] = obj.item
+        self.Stats["inventory"][item] = obj.item.count
+
+    def addSpell(self, spellItem):
+        spellItem.spell.deletingSpell.connect(self.removeSpell)
+        self.Stats["spells"]["allSpells"][spellItem.spell.level].append(
+            spellItem.spell.name
+        )
+
+    def removeSpell(self, spellName, spellLevel):
+        self.Stats["spells"]["allSpells"][spellLevel].remove(spellName)
 
     def removeItem(self, item: str):
         self.Stats["inventory"].pop(item)
@@ -173,6 +188,7 @@ class Character:
     def setClass(self, _class):
         self.Stats["class"] = _class
         self.Stats["hpDice"] = classData.get(_class).get("hpDice")
+        self.Stats["mainChar"] = classData.get(_class).get("mainChar", "")
 
         try:
             self.setMaxHealth(self.getFirstLevMaxHp())
@@ -228,10 +244,13 @@ class Character:
             return
         self.Stats["diceStats"] = {}
         self.Stats["diceStats"]["main"] = {}
+        self.Stats["diceStats"]["main"]["value"] = {}
+        self.Stats["diceStats"]["main"]["modif"] = {}
         self.Stats["diceStats"]["addiction"] = {}
 
-    def setDice(self, name, value):
-        self.Stats["diceStats"]["main"][name] = value
+    def setDice(self, name, value, modif):
+        self.Stats["diceStats"]["main"]["value"][name] = value
+        self.Stats["diceStats"]["main"]["modif"][name] = modif
 
     def skillReset(self, cl, newLevel):
         self.Stats["skills"] = []
@@ -388,11 +407,10 @@ class Character:
 
     def charSave(self, path=characterPath):
         try:
-            data = jsonLoad(path)
+            data = jsonLoad()
             data[self.name] = self.Stats
 
-            full_path = get_resource_path(path)
-            with open(full_path, "w", encoding="utf-8") as file:
+            with open(path, "w", encoding="utf-8") as file:
                 json.dump(data, file, indent=4, ensure_ascii=False)
             print(f"Персонаж {self.name} сохранен")
         except Exception as e:
