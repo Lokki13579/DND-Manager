@@ -12,22 +12,18 @@ from random import randint
 
 
 class DiceChar(QFrame):
-    valueChanged = pyqtSignal(str, int, int)
+    valueChanged = pyqtSignal()
+    newPoints = pyqtSignal(int)
 
     def __init__(self, _name, _val, _add, lastpoints):
         super().__init__()
         self.name = _name
         self.value = _val
-        self.modif = str(floor((_val + int(_add) - 10) / 2))
-        if self.modif[0] not in "-+":
-            self.modif = "+" + self.modif
+
+        self.modif = ""
         self.addiction = _add
         self.points = lastpoints
         self.setupUi()
-
-    def pointsUpdate(self, value):
-        self.points = value
-        self.diceManager()
 
     def setupUi(self):
         # self.setMaximumSize(QSize(200,120))
@@ -40,9 +36,8 @@ class DiceChar(QFrame):
         self.charVal = QSpinBox()
         self.charVal.setMinimum(8)
         self.charVal.setMaximum(15)
-        self.charVal.setValue(self.value)
         self.charVal.lineEdit().setReadOnly(True)
-        self.charVal.valueChanged.connect(self.emit_Signal)
+        self.charVal.valueChanged.connect(self.setValue)
         self.charVal.setSuffix(f"(+{self.addiction})")
         self.charVal.setAlignment(Qt.AlignmentFlag.AlignHCenter)
         self.vertLayout.addWidget(self.charVal, 2)
@@ -53,52 +48,60 @@ class DiceChar(QFrame):
             font-size: 28px;
 
         """)
+
         self.vertLayout.addWidget(self.charModificator, 3)
+        self.modifUPD(self.value)
 
-    def diceManager(self):
-        past = self.value  # 8
-        new = self.charVal.value()  # 9
-        if self.points == 0:
-            self.charVal.setMaximum(self.value)
-        else:
-            self.charVal.setMaximum(15)
-        if new == past:
-            return past
+    def setPoints(self, points):
+        self.points = points
+        print(f"New points: {self.points}")
 
-        if new > past:
-            if new > 13 and self.points >= 2:
-                self.points -= 2
-            elif self.points >= 1:
-                self.points -= 1
-            past += 1
-        else:
-            if past > 13:
-                self.points += 2
-            else:
-                self.points += 1
-            past -= 1
+    def setAddiction(self, addiction):
+        self.addiction = addiction
+        self.setValue(self.value)
+        self.modifUPD(self.value)
 
-        return past
+    def setValue(self, value):
+        def isValid(value, allPoints):
+            return (
+                (8 <= value <= 15)
+                and (allPoints > 0 or self.value - value > 0)
+                and allPoints > -1
+            )
 
-    def randomDisp(self):
-        _v = [randint(1, 6) for i in range(4)]
-        _v.remove(min(_v))
-        self.value = sum(_v)
+        def pointsReducer(self, toReduce):
+            self.points += toReduce
+            if self.points < 0:
+                self.points -= toReduce
+                self.newPoints.emit(self.points)
+                return -1
+            self.newPoints.emit(self.points)
+            return self.points
+
+        def pointsGetter(data):
+            data = list(map(int, data.split("&")))
+            m = 1
+            if data[0] > 13 or data[1] > 13:
+                m = 2
+            print(data, m)
+            return (data[0] - data[1]) * m
+
+        if isValid(value, self.points):
+            if pointsReducer(self, pointsGetter(f"{self.value}&{value}")) >= 0:
+                self.value = value
+        print(f"{self.name}{self.value}")
         self.charVal.setValue(self.value)
-        self.modifUpdate()
-        self.charVal.setReadOnly(True)
-        print(_v)
+        self.charVal.setSuffix(f" (+{self.addiction})")
+        self.modifUPD(self.value)
+        self.valueChanged.emit()
 
-    def dataUpdate(self):
-        self.value = self.diceManager()
-        self.modifUpdate()
-
-    def modifUpdate(self):
-        self.modif = str(floor((self.value + int(self.addiction) - 10) / 2))
-        if self.modif[0] not in "-+":
+    def modifUPD(self, value):
+        self.modif = str(floor((value + self.addiction - 10) / 2))
+        if self.modif[0] != "-":
             self.modif = "+" + self.modif
         self.charModificator.setText(str(self.modif))
 
-    def emit_Signal(self):
-        self.dataUpdate()
-        self.valueChanged.emit(self.name, self.value, self.points)
+    def randomize(self):
+        _vals = [randint(1, 6) for _ in range(4)]
+        _vals.remove(min(_vals))
+        self.setValue(sum(_vals))

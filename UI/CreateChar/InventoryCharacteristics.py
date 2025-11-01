@@ -154,6 +154,7 @@ class InventoryCharacteristics(QWidget):
         self.items[itemName] = invItem
         for it in self.items.values():
             self.inventoryItems.addWidget(it)
+        self.searchBar.setText("")
         print(self.character.Stats)
 
     def createObject(self, itemName, itemNumber):

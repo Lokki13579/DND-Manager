@@ -86,6 +86,7 @@ class MainWin(QMainWindow):
         self.stackedW.setCurrentWidget(self.JoinMenu)
 
     def showCharListMenu(self):
+        self.CharacterListMenu.characterFind()
         self.stackedW.setCurrentWidget(self.CharacterListMenu)
 
     def showPlayerListMenu(self):

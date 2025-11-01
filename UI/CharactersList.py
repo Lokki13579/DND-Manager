@@ -28,7 +28,6 @@ class Ui_CharsList(QWidget):
         self.ClientOBJ = client
         self.currCharacter = Character()
         self.Opts = {}
-        self.allChars = CharLoader().CharClassDispencer()
         self.characterSelected = pyqtSignal(object)
         self.setupUi()
 
@@ -66,12 +65,17 @@ class Ui_CharsList(QWidget):
         self.characterFind(self.CharactersList)
 
     def characterChange(self, index: QListWidgetItem):
+        if not index:
+            return
         index = index.text()
         self.currCharacter = self.allChars.get(index)
         self.updatesShow()
         self.select(self.currCharacter)
 
-    def characterFind(self, listObject: QListWidget):
+    def characterFind(self, listObject: QListWidget = None):
+        if listObject is None:
+            listObject = self.CharactersList
+        self.allChars = CharLoader().CharClassDispencer()
         listObject.clear()
         for character in self.allChars:
             listObject.addItem(character)
