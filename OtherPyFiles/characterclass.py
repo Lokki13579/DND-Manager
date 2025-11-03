@@ -245,6 +245,15 @@ class Character:
         next_level_exp = next_level_data.get("experience", float("inf"))
         return next_level_exp
 
+    def getExpTo20Level(self):
+        levels_data = jsonLoad("JSONS/dnd_levels.json")
+        current_level = self.Stats.get("level", 1)
+        exp_to_20 = 0
+        for i in range(current_level + 1, 21):
+            next_level_exp = levels_data.get(str(i), {}).get("experience", float("inf"))
+            exp_to_20 += next_level_exp
+        return exp_to_20
+
     def expReset(self, newLevel):
         try:
             levels_data = jsonLoad("JSONS/dnd_levels.json")
@@ -253,6 +262,9 @@ class Character:
             while True:
                 next_level_data = levels_data.get(str(current_level + 1), {})
                 next_level_exp = next_level_data.get("experience", float("inf"))
+                print(
+                    f"Current Level: {current_level}, Next Level Exp: {next_level_exp}"
+                )
                 if current_exp >= next_level_exp and next_level_exp > 0:
                     current_exp -= next_level_exp
                     current_level += 1
@@ -262,9 +274,8 @@ class Character:
             self.Stats["level"] = current_level
             self.Stats["experience"] = current_exp
             next_level_data = levels_data.get(str(current_level + 1), {})
-            self.maxExp = next_level_data.get("experience", 300)
         except:
-            self.maxExp = 300
+            pass
 
     def getLevel(self):
         return self.Stats.get("level")

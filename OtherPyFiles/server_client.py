@@ -73,7 +73,7 @@ class ServerClass(QObject):
     def _clientMessageGet(self, player):
         while True:
             try:
-                data = player.conn.recv(2048).decode("utf-8").split("&")
+                data = player.conn.recv(4096).decode("utf-8").split("&")
                 if not data or not data[0]:
                     continue
                 print(data)
@@ -87,6 +87,7 @@ class ServerClass(QObject):
                         )
                         print("Data Uptained and signal emitted")
                         # Отправляем сигнал об обновлении данных
+                        print(player.character.Stats)
                         self.player_data_updated.emit(player)
                     case "characterNameChanged":
                         player.character.setName(data[1])
@@ -123,7 +124,7 @@ class Client(QObject):
     def listenCommands(self):
         while True:
             try:
-                data = self.S.recv(2048).decode("utf-8")[:-1]
+                data = self.S.recv(4096).decode("utf-8")[:-1]
                 if not data:
                     continue
                 comm = data.split("&")

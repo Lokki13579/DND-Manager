@@ -128,13 +128,17 @@ class Ui_PlayerCard(QWidget):
 
     def changeLevel(self, inp):
         print(inp)
+        if inp == "experience":
+            max = self.character.getExpTo20Level()
+        else:
+            max = 20
         answer = self.changeLevelDialog.getInt(
             self.changeLevelDialog,
             "Change Level",
-            f"Enter new {inp}:",
+            f"Enter new {inp}\nup to {max}:",
             self.character.Stats.get(inp),
             1,
-            20,
+            max,
             1,
         )
         if answer[1]:
