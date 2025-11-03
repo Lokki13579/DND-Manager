@@ -7,7 +7,7 @@
 
 
 from PyQt6 import QtCore, QtWidgets
-from PyQt6.QtWidgets import QWidget
+from PyQt6.QtWidgets import QVBoxLayout, QWidget, QStackedWidget
 from UI.PlayerCard import Ui_PlayerCard
 from UI.CharactersList import Ui_CharsList
 
@@ -19,11 +19,12 @@ class Ui_Lobby(QWidget):
         self.setupUi()
 
     def setupUi(self):
-        self.stackedWidget = QtWidgets.QStackedWidget(self)
-        self.stackedWidget.setGeometry(QtCore.QRect(0, 0, 720, 540))
-        self.stackedWidget.setObjectName("stackedWidget")
+        self.vbox = QVBoxLayout(self)
+        self.stackedWidget = QStackedWidget(self)
+        self.vbox.addWidget(self.stackedWidget)
 
         self.CharSelect = Ui_CharsList(self.ClientOBJ)
+        self.CharSelect.characterFind()
 
         self.stackedWidget.addWidget(self.CharSelect)
         self.Card = Ui_PlayerCard(char=self.ClientOBJ.character, client=self.ClientOBJ)
@@ -38,6 +39,7 @@ class Ui_Lobby(QWidget):
 
     def send(self):
         print("sendingData")
+        self.Card.updateData(self.ClientOBJ.character)
         self.ClientOBJ.sendToServer(
             "newData",
             self.ClientOBJ.character.Stats,
@@ -46,14 +48,10 @@ class Ui_Lobby(QWidget):
         )
 
     def showCard(self):
+        print("Current Character:", self.CharSelect.currCharacter.name)
+        self.ClientOBJ.character = self.CharSelect.currCharacter
         self.stackedWidget.setCurrentIndex(1)
-        self.Card.updateData(self.ClientOBJ.character)
         self.ClientOBJ.sendToServer(
             "characterNameChanged", self.ClientOBJ.character.name
         )
-        self.ClientOBJ.sendToServer(
-            "newData",
-            self.ClientOBJ.character.Stats,
-            self.ClientOBJ.character.spellCells,
-            self.ClientOBJ.character.status,
-        )
+        self.send()

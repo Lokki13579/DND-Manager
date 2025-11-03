@@ -100,12 +100,12 @@ class MainWin(QMainWindow):
         self.stackedW.setCurrentWidget(self.CharCreateMenu)
 
     def startServer(self, _port):
-        ServerOBJ._startServer(_port)
-        self.showPlayerListMenu()
+        if ServerOBJ._startServer(_port):
+            self.showPlayerListMenu()
 
     def connectToServer(self, _ip, _port):
-        ClientOBJ._connectToServer(_ip, _port)
-        self.showClientLobby()
+        if ClientOBJ._connectToServer(_ip, _port):
+            self.showClientLobby()
 
 
 style = ""

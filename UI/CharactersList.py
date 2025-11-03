@@ -79,4 +79,5 @@ class Ui_CharsList(QWidget):
     def characterSelected(self, name):
         if name:
             print(name, self.allChars[name].Stats)
+            self.currCharacter = self.allChars[name]
             self.characterOpts.showNewCharacter(self.allChars.get(name, Character()))

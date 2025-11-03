@@ -21,13 +21,19 @@ class ServerClass(QObject):
 
     def _startServer(self, port=randint(4000, 5000), ip=gethostbyname(gethostname())):
         self.S = socket(AF_INET, SOCK_STREAM)
-        self.S.bind((ip, port))
+        print("trying to create to", ip, port)
+        try:
+            self.S.bind((ip, port))
+        except Exception as e:
+            print(f"Error binding socket: {e}")
+            return False
         self._ip = ip
         self._port = port
         self.S.listen(5)
         waitToConnect = threading.Thread(target=self._waitConnecting)
         waitToConnect.daemon = True
         waitToConnect.start()
+        return True
 
     def _waitConnecting(self):
         while True:
@@ -70,6 +76,7 @@ class ServerClass(QObject):
                 data = player.conn.recv(2048).decode("utf-8").split("&")
                 if not data or not data[0]:
                     continue
+                print(data)
                 match data[0]:
                     case "newData":
                         player.character.setStats(eval(data[1]))
@@ -105,6 +112,7 @@ class Client(QObject):
         self.S = socket()
         address = (ip, port)
         try:
+            print(f"trying to connect to {address}")
             self.S.connect(address)
             self.whenConnected()
             return True
@@ -141,6 +149,7 @@ class Client(QObject):
         for i in data:
             out += str(i) + "&"
         try:
+            print(out)
             self.S.send(str(out).encode("utf-8"))
         except Exception as e:
             print(f"Ошибка отправки данных: {e}")

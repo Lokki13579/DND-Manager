@@ -1,6 +1,7 @@
 import json
 import os
 import math
+import stat
 import sys
 from math import floor
 from random import randint
@@ -53,9 +54,21 @@ class Character:
     sthgChanged = pyqtSignal(str)
 
     def __init__(self, name="Выбирается", stats=None):
+        def statusesInit():
+            statuses_data = jsonLoad("JSONS/dnd_statuses.json")
+            status_keys = list(statuses_data)[:15]
+            self.status = dict(
+                zip(status_keys, [False for _ in range(len(status_keys))])
+            )
+
         self.name = name
         if stats:
             self.setStats(stats)
+            statusesInit()
+            self.otherStatsReset()
+            self.spellCells = self.Stats.get("otherStats", {}).get(
+                "ЯчейкиЗаклинаний", {}
+            )
             return
         self.Stats = {}
         self.spellCells = {}
@@ -73,55 +86,9 @@ class Character:
         self.Stats["spells"]["allSpells"] = {}
         for i in range(10):
             self.Stats["spells"]["allSpells"][str(i)] = []
-
+        statusesInit()
+        self.otherStatsReset()
         # Безопасная загрузка maxExp
-        try:
-            levels_data = jsonLoad("JSONS/dnd_levels.json")
-            current_level = self.Stats.get("level", 0)
-            next_level_data = levels_data.get(str(current_level + 1), {})
-            self.maxExp = next_level_data.get("experience", 300)
-        except:
-            self.maxExp = 300
-
-        # Безопасная загрузка статусов
-        try:
-            statuses_data = jsonLoad("JSONS/dnd_statuses.json")
-            if isinstance(statuses_data, dict):
-                status_keys = list(statuses_data.keys())[:15]
-            else:
-                # Стандартные статусы по умолчанию
-                status_keys = [
-                    "Poisoned",
-                    "Blinded",
-                    "Frightened",
-                    "Grappled",
-                    "Incapacitated",
-                    "Invisible",
-                    "Paralyzed",
-                    "Petrified",
-                    "Exhaustion",
-                    "Deafened",
-                    "Stunned",
-                    "Unconscious",
-                    "Charmed",
-                    "Restrained",
-                    "Prone",
-                ]
-            self.status = dict(
-                zip(status_keys, [False for _ in range(len(status_keys))])
-            )
-        except:
-            # Резервные статусы
-            default_statuses = [
-                "Poisoned",
-                "Blinded",
-                "Frightened",
-                "Grappled",
-                "Incapacitated",
-            ]
-            self.status = dict(
-                zip(default_statuses, [False for _ in range(len(default_statuses))])
-            )
 
     def addItem(
         self,
@@ -153,6 +120,8 @@ class Character:
         self.name = newName
 
     def setLevel(self, value):
+        if value == -1:
+            return
         if isinstance(value, str) and value[0] in "+-":
             self.Stats["level"] += int(value)
         else:
