@@ -85,7 +85,7 @@ class FirstCharacteristics(QWidget):
     def expMan(self, _level):
         _maxXp = (
             jsonLoad("JSONS/dnd_levels.json")
-            .get(str(_level + 1), 1)
+            .get(str(_level + 1), {})
             .get("experience", 0)
             - 1
         )

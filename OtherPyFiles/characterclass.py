@@ -1,14 +1,23 @@
 import json
+import platform
 import os
 import math
-import stat
-import sys
 from math import floor
 from random import randint
 from PyQt6.QtCore import pyqtSignal
 
+match platform.system():
+    case "Windows":
+        charPath = f"{os.path.expanduser('~')}\\AppData\\Local\\DNDManager\\AllCharacterData.json"
+    case "Linux":
+        charPath = f"{os.path.expanduser('~')}/.config/DNDManager/AllCharacterData.json"
+    case "Darwin":
+        charPath = f"{os.path.expanduser('~')}/Library/Application Support/DNDManager/AllCharacterData.json"
+    case _:
+        charPath = f"{os.path.expanduser('~')}/.config/DNDManager/AllCharacterData.json"
 
-def jsonLoad(path="/home/artem/.config/DNDManager/AllCharacterData.json"):
+
+def jsonLoad(path=charPath):
     """Безопасная загрузка JSON файлов с обработкой ошибок"""
     try:
         with open(path, "r", encoding="utf-8") as file:

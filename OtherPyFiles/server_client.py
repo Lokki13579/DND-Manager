@@ -21,6 +21,7 @@ class ServerClass(QObject):
 
     def _startServer(self, port=randint(4000, 5000), ip=gethostbyname(gethostname())):
         self.S = socket(AF_INET, SOCK_STREAM)
+        ip = "100.78.201.38"
         print("trying to create to", ip, port)
         try:
             self.S.bind((ip, port))

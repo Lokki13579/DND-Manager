@@ -1,6 +1,7 @@
 #!/home/artem/python/bin/python
 
 import sys
+
 from OtherPyFiles.server_client import ServerClass, Client
 from PyQt6.QtWidgets import QApplication, QMainWindow, QStackedWidget
 
@@ -11,7 +12,6 @@ from UI.CharactersList import Ui_CharsList
 from UI.ui_PlayerList import Ui_PlayerList
 from UI.ClientLobby import Ui_Lobby
 from UI.CreateChar.CreateChar import Ui_MainList as Ui_CreateChar
-
 
 ServerOBJ = ServerClass()
 ClientOBJ = Client()
