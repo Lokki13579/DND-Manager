@@ -4,7 +4,6 @@ import os
 import math
 from math import floor
 from random import randint
-from PyQt6.QtCore import pyqtSignal
 
 match platform.system():
     case "Windows":
@@ -30,6 +29,18 @@ def jsonLoad(path=charPath):
         return {}
     except Exception as e:
         print(f"Ошибка загрузки {path}: {e}")
+        return {}
+
+
+def statusesGet(path="JSONS/dnd_statuses.json"):
+    try:
+        with open(path, "r", encoding="utf-8") as file:
+            return json.load(file)
+    except FileNotFoundError:
+        print(f"Файл не найден: {path}")
+        return {}
+    except json.JSONDecodeError:
+        print(f"Ошибка формата JSON в файле: {path}")
         return {}
 
 
@@ -60,8 +71,6 @@ characterPath = "/home/artem/.config/DNDManager/AllCharacterData.json"
 
 
 class Character:
-    sthgChanged = pyqtSignal(str)
-
     def __init__(self, name="Выбирается", stats=None):
         def statusesInit():
             statuses_data = jsonLoad("JSONS/dnd_statuses.json")
@@ -74,13 +83,10 @@ class Character:
         if stats:
             self.setStats(stats)
             statusesInit()
-            self.otherStatsReset()
-            self.spellCells = self.Stats.get("otherStats", {}).get(
-                "ЯчейкиЗаклинаний", {}
-            )
+
             return
         self.Stats = {}
-        self.spellCells = {}
+
         self.setClass("Бард")
         self.setRace("Ааракокра")
         self.setLevel(1)
@@ -96,7 +102,6 @@ class Character:
         for i in range(10):
             self.Stats["spells"]["allSpells"][str(i)] = []
         statusesInit()
-        self.otherStatsReset()
         # Безопасная загрузка maxExp
 
     def addItem(
@@ -145,6 +150,7 @@ class Character:
         self.expReset(self.Stats["level"])
         self.BMReset(self.Stats["level"])
         self.skillReset(self.Stats.get("class", ""), self.Stats["level"])
+        self.otherStatsReset()
         self.initSpellCell()
 
     def setXp(self, value):
@@ -159,7 +165,7 @@ class Character:
     def setClass(self, _class):
         self.Stats["class"] = _class
         self.Stats["hpDice"] = classData.get(_class).get("hpDice")
-        self.Stats["mainChar"] = classData.get(_class).get("mainChar", "")
+        self.Stats["mainChar"] = classData.get(_class).get("mainChar", "").split("?")
 
         try:
             self.setMaxHealth(self.getFirstLevMaxHp())
@@ -271,9 +277,6 @@ class Character:
             while True:
                 next_level_data = levels_data.get(str(current_level + 1), {})
                 next_level_exp = next_level_data.get("experience", float("inf"))
-                print(
-                    f"Current Level: {current_level}, Next Level Exp: {next_level_exp}"
-                )
                 if current_exp >= next_level_exp and next_level_exp > 0:
                     current_exp -= next_level_exp
                     current_level += 1
@@ -363,12 +366,14 @@ class Character:
 
     def setStats(self, st):
         self.Stats = st
+        self.otherStatsReset()
         self.initSpellCell()
+        self.expReset(self.Stats.get("level", 1))
 
     def initSpellCell(self):
         try:
             other_stats = self.Stats.get("otherStats", {})
-            max_cells = other_stats.get("MaxspellCells", {})
+            max_cells = other_stats.get("ЯчейкиЗаклинаний", {})
 
             if max_cells:
                 for key, val in max_cells.items():
@@ -441,7 +446,9 @@ class CharLoader:
         try:
             characters_data = jsonLoad()
             for charName, charData in characters_data.items():
-                char = Character(charName, charData)
+                char = Character()
+                char.setName(charName)
+                char.setStats(charData)
                 self.allCharacters[charName] = char
         except Exception as e:
             print(f"Ошибка загрузки персонажей: {e}")

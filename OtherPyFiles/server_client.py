@@ -7,6 +7,8 @@ from PyQt6.QtCore import QObject, pyqtSignal
 # Импорты из вашего кода
 from OtherPyFiles.playerClass import Player, Character
 
+dataSize = 1024 * 8
+
 
 class ServerClass(QObject):
     # Сигналы для обновления UI
@@ -62,44 +64,37 @@ class ServerClass(QObject):
             pass
         self.connectedClients = {}
 
-    def sendToClient(self, connection, *data):
-        out = ""
-        for i in data:
-            out += str(i) + "&"
+    def sendToClient(self, connection, *args):
+        data = [*args]
         try:
-            connection.send(out.encode("utf-8"))
+            print(f"sending {data}")
+            connection.send(str(data).encode("utf-8"))
         except:
             pass
 
     def _clientMessageGet(self, player):
         while True:
-            try:
-                data = player.conn.recv(4096).decode("utf-8").split("&")
-                if not data or not data[0]:
-                    continue
-                print(data)
-                match data[0]:
-                    case "newData":
-                        player.character.setStats(eval(data[1]))
-                        player.character.spellCells = eval(data[2])
-                        player.character.status = eval(data[3])
-                        player.character.expReset(
-                            player.character.Stats.get("level", 1)
-                        )
-                        print("Data Uptained and signal emitted")
-                        # Отправляем сигнал об обновлении данных
-                        print(player.character.Stats)
-                        self.player_data_updated.emit(player)
-                    case "characterNameChanged":
-                        player.character.setName(data[1])
-                        # Отправляем сигнал об обновлении имени
-                        self.player_data_updated.emit(player)
+            data = player.conn.recv(dataSize).decode("utf-8")
+            print(f"Getted{data}")
+            if not data:
+                continue
+            data = eval(data)
+            for d in data:
+                print("D", d)
+                match d:
+                    case ["characterNameChanged", _name]:
+                        player.character.setName(_name)
+                        print("set Name")
+                    case ["newStats", _stats]:
+                        print("_STATS", _stats)
+                        player.character.setStats(_stats)
+                    case ["newSpellCells", _spells]:
+                        player.character.spellCells = _spells
+                    case ["newStatus", _status]:
+                        player.character.status = _status
                     case _:
                         break
-                print("\nЧто-то изменилось, введите -2, чтобы обновить")
-            except Exception as e:
-                print(f"Ошибка получения данных: {e}")
-                break
+            self.player_data_updated.emit(player)
 
 
 class Client(QObject):
@@ -124,35 +119,35 @@ class Client(QObject):
 
     def listenCommands(self):
         while True:
-            try:
-                data = self.S.recv(4096).decode("utf-8")[:-1]
-                if not data:
-                    continue
-                comm = data.split("&")
-                match comm[0]:
-                    case "newData":
-                        self.character.setStats(eval(comm[1]))
-                        self.character.spellCells = eval(comm[2])
-                        self.character.status = eval(comm[3])
+            data = self.S.recv(dataSize).decode("utf-8")
+            print("Getted" + data)
+            if not data:
+                continue
+            data = eval(data)
+            for d in data:
+                print("D", d)
+                match d:
+                    case ["newStats", _stats]:
+                        print("_STATS", _stats)
+                        self.character.setStats(_stats)
+                    case ["newSpellCells", _spells]:
+                        self.character.spellCells = _spells
+                    case ["newStatus", _status]:
+                        self.character.status = _status
                         # Сигнализируем об обновлении данных
-                        self.data_updated.emit(self.character)
-                print("\nЧто-то изменилось, введите <Enter>, чтобы обновить")
-            except Exception as e:
-                print(f"Ошибка получения данных: {e}")
-                break
+                self.data_updated.emit(self.character)
 
     def whenConnected(self):
         listen_thread = threading.Thread(target=self.listenCommands)
         listen_thread.daemon = True
         listen_thread.start()
 
-    def sendToServer(self, *data):
-        out = ""
-        for i in data:
-            out += str(i) + "&"
+    def sendToServer(self, *args):
+        """данные типа [title,data],[title,data]"""
+        data = [*args]
+        print(data)
         try:
-            print(out)
-            self.S.send(str(out).encode("utf-8"))
+            self.S.send(str(data).encode("utf-8"))
         except Exception as e:
             print(f"Ошибка отправки данных: {e}")
 

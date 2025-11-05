@@ -86,7 +86,6 @@ class InventoryCharacteristics(QWidget):
         self.searchResult.clear()
         pattern = r"(\(.*\))?([^(#\[][^#\[]*)?(\[\d*\])?"
         res = re.findall(pattern, text) + [("None", "None")]
-        print(res[0])
         searchGroup, searchItem, trash = res[0]
         searchGroup = searchGroup.strip("()")
         searchItem = searchItem.strip()
@@ -155,7 +154,6 @@ class InventoryCharacteristics(QWidget):
         for it in self.items.values():
             self.inventoryItems.addWidget(it)
         self.searchBar.setText("")
-        print(self.character.Stats)
 
     def createObject(self, itemName, itemNumber):
         item = InventoryItem(Item(itemName, itemNumber))

@@ -61,14 +61,11 @@ class Ui_MainList(QWidget):
         self.Characteristics.setCurrentIndex(0)
 
     def class_changed(self):
-        print("classCh")
         self.HealthChar.classUpd(
             self.character, self.ThirdChar.diceObjects.get("Телосложение")
         )
 
     def level_changed(self, level):
-        print(level)
-        print(self.Characteristics.indexOf(self.HealthChar))
         if level > 1:
             self.Characteristics.insertTab(3, self.HealthChar, "Здоровье")
             self.HealthChar.varUpd(
@@ -121,5 +118,4 @@ class Ui_MainList(QWidget):
         self.Dialog.show()
 
     def createAgree(self):
-        print(self.character.Stats)
         self.character.charSave()

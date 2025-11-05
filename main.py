@@ -1,6 +1,7 @@
 #!/home/artem/python/bin/python
 
 import sys
+from typing_extensions import final
 
 from OtherPyFiles.server_client import ServerClass, Client
 from PyQt6.QtWidgets import QApplication, QMainWindow, QStackedWidget
@@ -17,6 +18,7 @@ ServerOBJ = ServerClass()
 ClientOBJ = Client()
 
 
+@final
 class MainWin(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -91,6 +93,7 @@ class MainWin(QMainWindow):
 
     def showClientLobby(self):
         self.stackedW.setCurrentWidget(self.ClientLobby)
+        self.ClientLobby.CharSelect.characterFind()
 
     def showCharCreateMenu(self):
         self.stackedW.removeWidget(self.CharCreateMenu)

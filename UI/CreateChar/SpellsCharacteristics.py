@@ -97,7 +97,6 @@ class SpellsCharacteristics(QWidget):
         self.searchResult.clear()
         pattern = r"(\([0-9]\))?([^#\(\)]+)?"
         res = re.findall(pattern, text) + [("None", "None")]
-        print(res[0])
         searchGroup, searchSpell = res[0]
         searchGroup = searchGroup.strip("()")
         searchSpell = searchSpell.strip()
@@ -123,9 +122,7 @@ class SpellsCharacteristics(QWidget):
         pattern = r"(\([0-9]\))?([^#\(\)]+)?"
         res = re.findall(pattern, self.searchBar.text())
         spellName = res[0][1].strip()
-        print(spellName)
         spD = spellsData(spellName)
-        print(spD)
         if not spD:
             self.searchBar.setText("Такого заклинания не существует")
             return
@@ -137,7 +134,6 @@ class SpellsCharacteristics(QWidget):
         for it in self.spells.values():
             self.spellsContainer.addWidget(it)
         self.searchBar.setText("")
-        print(self.character.Stats)
 
     def createObject(self, spellData):
         item = SpellListItem(Spell(**spellData))

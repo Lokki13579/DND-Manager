@@ -168,7 +168,7 @@ class Ui_JoinToServer(QWidget):
             )
         )
         self.AddressEnter.setText(
-            QCoreApplication.translate("JoinToServer", "192.168.50.186", None)
+            QCoreApplication.translate("JoinToServer", "100.78.201.38", None)
         )
         self.AddressEnter.setPlaceholderText(
             QCoreApplication.translate("JoinToServer", "server address", None)

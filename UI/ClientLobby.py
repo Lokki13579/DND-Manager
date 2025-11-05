@@ -8,7 +8,7 @@
 
 from PyQt6 import QtCore, QtWidgets
 from PyQt6.QtWidgets import QVBoxLayout, QWidget, QStackedWidget
-from UI.PlayerCard import Ui_PlayerCard
+from UI.playerCard.PlayerCard import Ui_PlayerCard
 from UI.CharactersList import Ui_CharsList
 
 
@@ -24,34 +24,27 @@ class Ui_Lobby(QWidget):
         self.vbox.addWidget(self.stackedWidget)
 
         self.CharSelect = Ui_CharsList(self.ClientOBJ)
-        self.CharSelect.characterFind()
 
+        self.CharSelect.CharactersList.doubleClicked.connect(self.showCard)
         self.stackedWidget.addWidget(self.CharSelect)
         self.Card = Ui_PlayerCard(char=self.ClientOBJ.character, client=self.ClientOBJ)
         self.ClientOBJ.data_updated.connect(self.Card.updateData)
         self.Card.needToSend.connect(self.send)
         self.stackedWidget.addWidget(self.Card)
-        if self.ClientOBJ.character.name == "Выбирается":
-            self.stackedWidget.setCurrentIndex(0)
-            self.CharSelect.CharactersList.doubleClicked.connect(self.showCard)
-        else:
-            self.showCard()
+        self.stackedWidget.setCurrentWidget(self.CharSelect)
 
     def send(self):
-        print("sendingData")
-        self.Card.updateData(self.ClientOBJ.character)
         self.ClientOBJ.sendToServer(
-            "newData",
-            self.ClientOBJ.character.Stats,
-            self.ClientOBJ.character.spellCells,
-            self.ClientOBJ.character.status,
+            ["newStats", self.ClientOBJ.character.Stats],
+            ["newSpellCells", self.ClientOBJ.character.spellCells],
+            ["newStatus", self.ClientOBJ.character.status],
         )
+        self.Card.updateData(self.ClientOBJ.character)
 
     def showCard(self):
-        print("Current Character:", self.CharSelect.currCharacter.name)
         self.ClientOBJ.character = self.CharSelect.currCharacter
         self.stackedWidget.setCurrentIndex(1)
         self.ClientOBJ.sendToServer(
-            "characterNameChanged", self.ClientOBJ.character.name
+            ["characterNameChanged", self.ClientOBJ.character.name]
         )
         self.send()

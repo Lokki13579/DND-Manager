@@ -1,5 +1,5 @@
 from PyQt6.QtWidgets import QWidget, QTabWidget, QVBoxLayout
-from UI.PlayerCard import Ui_PlayerCard
+from UI.playerCard.PlayerCard import Ui_PlayerCard
 
 
 class Ui_PlayerList(QWidget):
@@ -18,14 +18,12 @@ class Ui_PlayerList(QWidget):
         widget = self.tabWidget.currentWidget()
         for pl, plc in self.playersTab.items():
             if widget == plc:
-                print("sendingData")
                 plc.updateData(pl.character)
                 self.ServerObj.sendToClient(
                     pl.conn,
-                    "newData",
-                    pl.character.Stats,
-                    pl.character.spellCells,
-                    pl.character.status,
+                    ["newStats", pl.character.Stats],
+                    ["newSpellCells", pl.character.spellCells],
+                    ["newStatus", pl.character.status],
                 )
 
     def add_player_tab(self, player):
@@ -35,7 +33,6 @@ class Ui_PlayerList(QWidget):
         self.playersTab[player] = player_card
 
     def update_player_tab(self, player):
-        print(player.character.Stats)
         if player in self.playersTab:
             # Обновляем данные в карточке игрока
             self.playersTab[player].updateData(player.character)
