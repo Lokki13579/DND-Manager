@@ -32,16 +32,18 @@ class Ui_PlayerList(QWidget):
         player_card.needToSend.connect(self.send)
         self.playersTab[player] = player_card
 
-    def update_player_tab(self, player):
+    def update_player_tab(self, player, whatToUpdate):
         if player in self.playersTab:
-            # Обновляем данные в карточке игрока
-            self.playersTab[player].updateData(player.character)
+            plObj = self.playersTab[player]
 
-            # Обновляем название вкладки если изменилось имя
-            for i in range(self.tabWidget.count()):
-                if self.tabWidget.widget(i) == self.playersTab[player]:
-                    self.tabWidget.setTabText(i, player.character.name)
-                    break
+            match whatToUpdate:
+                case "exp":
+                    plObj.expUPD(
+                        plObj.character.Stats.get("experience"),
+                        plObj.character.getNextLevelExp(),
+                    )
+                case _:
+                    plObj.updateData(player.character)
 
     def setupUi(self):
         self.resize(720, 540)

@@ -14,8 +14,6 @@ class CellObj(QHBoxLayout):
 
     def setMax(self, max):
         self.max = max
-        print(self.level, max)
-        self.setCount(self.count)
 
     def setCount(self, count):
         self.count = count
@@ -34,7 +32,6 @@ class CellObj(QHBoxLayout):
         self.addWidget(self.redButton)
 
     def addCount(self):
-        print(self.max)
         if int(self.count) == int(self.max):
             return
         self.count += 1

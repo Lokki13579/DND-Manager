@@ -8,6 +8,7 @@
 
 from PyQt6 import QtCore, QtWidgets
 from PyQt6.QtWidgets import QVBoxLayout, QWidget, QStackedWidget
+from OtherPyFiles.server_client import dataSize
 from UI.playerCard.PlayerCard import Ui_PlayerCard
 from UI.CharactersList import Ui_CharsList
 
@@ -33,7 +34,18 @@ class Ui_Lobby(QWidget):
         self.stackedWidget.addWidget(self.Card)
         self.stackedWidget.setCurrentWidget(self.CharSelect)
 
-    def send(self):
+    def send(self, dataToSend):
+        print("Sending data:", dataToSend)
+        print(self.ClientOBJ.character.status)
+        if dataToSend:
+            self.ClientOBJ.sendToServer(*dataToSend)
+
+            match dataToSend[0]:
+                case ["newLevel", l]:
+                    if l != -1:
+                        self.Card.updateData(self.ClientOBJ.character)
+
+            return
         self.ClientOBJ.sendToServer(
             ["newStats", self.ClientOBJ.character.Stats],
             ["newSpellCells", self.ClientOBJ.character.spellCells],
@@ -47,4 +59,4 @@ class Ui_Lobby(QWidget):
         self.ClientOBJ.sendToServer(
             ["characterNameChanged", self.ClientOBJ.character.name]
         )
-        self.send()
+        self.send(None)

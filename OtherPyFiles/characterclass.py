@@ -3,7 +3,7 @@ import platform
 import os
 import math
 from math import floor
-from random import randint
+
 
 match platform.system():
     case "Windows":
@@ -16,32 +16,31 @@ match platform.system():
         charPath = f"{os.path.expanduser('~')}/.config/DNDManager/AllCharacterData.json"
 
 
-def jsonLoad(path=charPath):
+def jsonLoad(path: str = charPath) -> dict[str, object] | list[object]:
     """Безопасная загрузка JSON файлов с обработкой ошибок"""
     try:
         with open(path, "r", encoding="utf-8") as file:
             return json.load(file)
     except FileNotFoundError:
         print(f"Файл не найден: {path}")
-        return {}
     except json.JSONDecodeError:
         print(f"Ошибка формата JSON в файле: {path}")
-        return {}
     except Exception as e:
         print(f"Ошибка загрузки {path}: {e}")
-        return {}
+    return {}
 
 
-def statusesGet(path="JSONS/dnd_statuses.json"):
+def statusesGet(
+    path: str = "JSONS/dnd_statuses.json",
+) -> dict[str, object] | list[object]:
     try:
         with open(path, "r", encoding="utf-8") as file:
             return json.load(file)
     except FileNotFoundError:
         print(f"Файл не найден: {path}")
-        return {}
     except json.JSONDecodeError:
         print(f"Ошибка формата JSON в файле: {path}")
-        return {}
+    return {}
 
 
 classData = jsonLoad("JSONS/dnd_classes.json")
@@ -71,21 +70,26 @@ characterPath = "/home/artem/.config/DNDManager/AllCharacterData.json"
 
 
 class Character:
-    def __init__(self, name="Выбирается", stats=None):
+    def __init__(
+        self, name: str = "Выбирается", stats: dict[str, object] | None = None
+    ):
         def statusesInit():
+            statuses_data: dict[str, object] | list[object]
             statuses_data = jsonLoad("JSONS/dnd_statuses.json")
             status_keys = list(statuses_data)[:15]
             self.status = dict(
                 zip(status_keys, [False for _ in range(len(status_keys))])
             )
 
-        self.name = name
-        if stats:
-            self.setStats(stats)
-            statusesInit()
-
             return
-        self.Stats = {}
+
+        self.name = name
+        self.Stats: dict[
+            str,
+            str | list[str] | dict[str, str | list[str] | dict[str, str | list[str]]],
+        ] = {}
+        self.status: dict[object, bool] = {}
+        self.spellCells: dict[str, object] = {}
 
         self.setClass("Бард")
         self.setRace("Ааракокра")
@@ -107,7 +111,7 @@ class Character:
     def addItem(
         self,
         item: str = "Абракадабрус",
-        obj=object,
+        obj: object = object,
     ):
         obj.item.deletingItem.connect(self.removeItem)
         self.Stats["inventory"][item] = obj.item.count
@@ -363,6 +367,10 @@ class Character:
             print(f"Ошибка в otherStatsReset: {e}")
 
         self.Stats["otherStats"] = otherSt
+
+    def setState(self, statName, statChecked):
+        self.status.update({statName: statChecked})
+        print(f"State updated: {statName} = {statChecked}")
 
     def setStats(self, st):
         self.Stats = st

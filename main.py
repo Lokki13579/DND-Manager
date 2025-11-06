@@ -1,8 +1,7 @@
 #!/home/artem/python/bin/python
 
 import sys
-from typing_extensions import final
-
+from typing import final
 from OtherPyFiles.server_client import ServerClass, Client
 from PyQt6.QtWidgets import QApplication, QMainWindow, QStackedWidget
 
@@ -44,14 +43,14 @@ class MainWin(QMainWindow):
 
         self.CreateMenu = Ui_CreateLobby()
         self.CreateMenu.HostButton.clicked.connect(
-            lambda host: self.startServer(int(self.CreateMenu.PortEnter.text()))
+            lambda: self.startServer(int(self.CreateMenu.PortEnter.text()))
         )
         self.CreateMenu.BackButton.clicked.connect(self.showMainMenu)
         self.stackedW.addWidget(self.CreateMenu)
 
         self.JoinMenu = Ui_JoinToServer()
         self.JoinMenu.ConnectButton.clicked.connect(
-            lambda connect: self.connectToServer(
+            lambda: self.connectToServer(
                 self.JoinMenu.AddressEnter.text(), int(self.JoinMenu.PortEnter.text())
             )
         )
@@ -103,11 +102,11 @@ class MainWin(QMainWindow):
         self.stackedW.setCurrentWidget(self.CharCreateMenu)
 
     def startServer(self, _port):
-        if ServerOBJ._startServer(_port):
+        if ServerOBJ.startServer(_port):
             self.showPlayerListMenu()
 
     def connectToServer(self, _ip, _port):
-        if ClientOBJ._connectToServer(_ip, _port):
+        if ClientOBJ.connectToServer(_ip, _port):
             self.showClientLobby()
 
 
@@ -129,5 +128,6 @@ if __name__ == "__main__":
     mainwin.show()
     ex = app.exec()
     if ex == 0:
-        ServerOBJ._closeServer()
+        ServerOBJ.closeServer()
+        ClientOBJ.disconnectFromServer()
     sys.exit(ex)

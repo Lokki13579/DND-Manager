@@ -1,6 +1,7 @@
+from pickle import OBJ
 import threading
-from random import randint
 from socket import gethostbyname, gethostname, socket, AF_INET, SOCK_STREAM
+from typing import final
 
 from PyQt6.QtCore import QObject, pyqtSignal
 
@@ -10,29 +11,34 @@ from OtherPyFiles.playerClass import Player, Character
 dataSize = 1024 * 8
 
 
+@final
 class ServerClass(QObject):
     # Сигналы для обновления UI
     player_connected = pyqtSignal(object)  # Передаем объект Player
-    player_data_updated = pyqtSignal(object)  # Сигнал об обновлении данных игрока
+    player_data_updated = pyqtSignal(object, str)  # Сигнал об обновлении данных игрока
+    _ip: str
+    _port: int
+    connectedClients: dict[object, Player]
+    connectionSocket: socket
 
     def __init__(self):
         super().__init__()
-        self._ip = None
-        self._port = None
+        self._ip = ""
+        self._port = 0
         self.connectedClients = {}
+        self.connectionSocket = socket(AF_INET, SOCK_STREAM)
 
-    def _startServer(self, port=randint(4000, 5000), ip=gethostbyname(gethostname())):
-        self.S = socket(AF_INET, SOCK_STREAM)
+    def startServer(self, port: int, ip: str = gethostbyname(gethostname())):
         ip = "100.78.201.38"
         print("trying to create to", ip, port)
         try:
-            self.S.bind((ip, port))
+            self.connectionSocket.bind((ip, port))
         except Exception as e:
             print(f"Error binding socket: {e}")
             return False
         self._ip = ip
         self._port = port
-        self.S.listen(5)
+        self.connectionSocket.listen(5)
         waitToConnect = threading.Thread(target=self._waitConnecting)
         waitToConnect.daemon = True
         waitToConnect.start()
@@ -41,7 +47,7 @@ class ServerClass(QObject):
     def _waitConnecting(self):
         while True:
             try:
-                conn, addr = self.S.accept()
+                conn, addr = self.connectionSocket.accept()
                 player = Player(conn, addr, len(self.connectedClients.keys()) + 1)
                 self.connectedClients[addr] = player
 
@@ -57,9 +63,9 @@ class ServerClass(QObject):
                 print(f"Ошибка подключения: {e}")
                 break
 
-    def _closeServer(self):
+    def closeServer(self):
         try:
-            self.S.close()
+            self.connectionSocket.close()
         except:
             pass
         self.connectedClients = {}
@@ -75,28 +81,42 @@ class ServerClass(QObject):
     def _clientMessageGet(self, player):
         while True:
             data = player.conn.recv(dataSize).decode("utf-8")
-            print(f"Getted{data}")
             if not data:
                 continue
+            print(data)
             data = eval(data)
+
             for d in data:
                 print("D", d)
                 match d:
                     case ["characterNameChanged", _name]:
                         player.character.setName(_name)
-                        print("set Name")
+                        self.player_data_updated.emit(player, None)
                     case ["newStats", _stats]:
                         print("_STATS", _stats)
                         player.character.setStats(_stats)
+                        self.player_data_updated.emit(player, None)
                     case ["newSpellCells", _spells]:
                         player.character.spellCells = _spells
+                        self.player_data_updated.emit(player, None)
                     case ["newStatus", _status]:
                         player.character.status = _status
+                        self.player_data_updated.emit(player, None)
+                    case ["newLevel", _level]:
+                        if _level == -1:
+                            continue
+                        player.character.setLevel(_level)
+                        self.player_data_updated.emit(player, None)
+                    case ["newExp", _exp]:
+                        player.character.setXp(_exp)
+                        self.player_data_updated.emit(player, "exp")
+                        continue
+
                     case _:
                         break
-            self.player_data_updated.emit(player)
 
 
+@final
 class Client(QObject):
     # Сигналы для клиента
     data_updated = pyqtSignal(object)
@@ -104,13 +124,13 @@ class Client(QObject):
     def __init__(self):
         super().__init__()
         self.character = Character()
+        self.connectionSocket = socket()
 
-    def _connectToServer(self, ip=gethostbyname(gethostname()), port=4242):
-        self.S = socket()
+    def connectToServer(self, ip=gethostbyname(gethostname()), port=4242):
         address = (ip, port)
         try:
             print(f"trying to connect to {address}")
-            self.S.connect(address)
+            self.connectionSocket.connect(address)
             self.whenConnected()
             return True
         except Exception as e:
@@ -119,13 +139,12 @@ class Client(QObject):
 
     def listenCommands(self):
         while True:
-            data = self.S.recv(dataSize).decode("utf-8")
-            print("Getted" + data)
+            data = self.connectionSocket.recv(dataSize).decode("utf-8")
             if not data:
                 continue
+            print(data)
             data = eval(data)
             for d in data:
-                print("D", d)
                 match d:
                     case ["newStats", _stats]:
                         print("_STATS", _stats)
@@ -142,17 +161,16 @@ class Client(QObject):
         listen_thread.daemon = True
         listen_thread.start()
 
-    def sendToServer(self, *args):
+    def sendToServer(self, *args: list[str | dict[str, object]]):
         """данные типа [title,data],[title,data]"""
-        data = [*args]
-        print(data)
+        data: list[list[str | dict[str, object]]] = [*args]
         try:
-            self.S.send(str(data).encode("utf-8"))
+            self.connectionSocket.send(str(data).encode("utf-8"))
         except Exception as e:
             print(f"Ошибка отправки данных: {e}")
 
-    def _disconnect(self):
+    def disconnectFromServer(self):
         try:
-            self.S.close()
+            self.connectionSocket.close()
         except:
             pass

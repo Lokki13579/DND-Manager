@@ -5,7 +5,7 @@ from UI.playerCard.cellObj import CellObj
 
 
 class spellGroup(QGroupBox):
-    sbmChanged = pyqtSignal()
+    sbmChanged = pyqtSignal(object)
 
     def __init__(self, character):
         super().__init__()
@@ -41,9 +41,8 @@ class spellGroup(QGroupBox):
         self.spellCellsUpdate()
 
     def on_cell_changed(self, level, count):
-        print(level, count)
         self.character.spellCells[level] = count
-        self.sbmChanged.emit()
+        self.sbmChanged.emit(None)
 
     def spellCellsUpdate(self):
         for level, count in self.character.spellCells.items():

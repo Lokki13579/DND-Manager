@@ -22,13 +22,13 @@ from PyQt6.QtWidgets import (
 from UI.playerCard.SpellCellsObj import Ui_SpellCellObj
 from UI.playerCard.spellContainer import spellGroup as SpellCont
 from UI.playerCard.statusObj import StatusObj
-from UI.playerCard.statusContainer import StatusContainer
+from UI.playerCard.statusContainer import StatusContainer as StatusCont
 from OtherPyFiles.characterclass import Character
 
 
 # class Ui_PlayerCard(QWidget):
 class Ui_PlayerCard(QWidget):
-    needToSend = pyqtSignal()
+    needToSend = pyqtSignal(object)
     scratch = {"1": 2, "2": 2, "3": 4, "4": 4, "5": 5, "6": 5}
 
     def __init__(self, char=Character(), client=None):
@@ -56,7 +56,12 @@ class Ui_PlayerCard(QWidget):
     def charLevelUpdate(self, data):
         self.character.setLevel(data.get("level", -1))
         self.character.setXp(data.get("experience", 0))
-        self.needToSend.emit()
+        self.expUPD(
+            self.character.Stats.get("experience", 0), self.character.getNextLevelExp()
+        )
+        self.needToSend.emit(
+            [["newLevel", data.get("level", -1)], ["newExp", data.get("experience", 0)]]
+        )
 
     def firstCharsInit(self):
         self.firstCharsObjects = {}
@@ -93,7 +98,8 @@ class Ui_PlayerCard(QWidget):
         self.secondCharsObjects = {}
         self.secondCharsObjects.update({"spells": SpellCont(self.character)})
         self.secondCharsObjects.get("spells").sbmChanged.connect(self.needToSend.emit)
-        self.secondCharsObjects.update({"status": QGroupBox(title="Статус")})
+        self.secondCharsObjects.update({"status": StatusCont(self.character)})
+        self.secondCharsObjects.get("status").sbmChanged.connect(self.needToSend.emit)
         self.secondCharsObjects.update({"otherButtons": QGroupBox()})
         for obj in self.secondCharsObjects.values():
             self.secondChars.addWidget(obj)
@@ -110,6 +116,7 @@ class Ui_PlayerCard(QWidget):
         self.worldviewUPD(self.character.Stats.get("worldview"))
         self.backgroundUPD(self.character.Stats.get("background"))
         self.spellsUPD(self.character)
+        self.statusUPD(self.character)
 
     def levelUPD(self, level):
         self.firstCharsObjects["level"].setText(f"{level}")
@@ -131,6 +138,9 @@ class Ui_PlayerCard(QWidget):
 
     def spellsUPD(self, char):
         self.secondCharsObjects.get("spells").setNewCharacter(char)
+
+    def statusUPD(self, char):
+        self.secondCharsObjects.get("status").setNewCharacter(char)
 
     def changeLevel(self, inp):
         if inp == "experience":
