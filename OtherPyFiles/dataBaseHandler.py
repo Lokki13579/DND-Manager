@@ -1,137 +1,103 @@
 import sqlite3
+from characterclass import jsonLoad
 
 
 def create_database(name: str, *columns: str, file="DND.db"):
-    DATABASE = sqlite3.connect(f"dataBase/{file}")
+    DATABASE = sqlite3.connect(f"dataBase/DND.db")
     cursor = DATABASE.cursor()
     cursor.execute(f"CREATE TABLE IF NOT EXISTS {name} ({', '.join(columns)})")
     DATABASE.commit()
     DATABASE.close()
 
 
-def insert_data(name, data):
-    DATABASE = sqlite3.connect("DNDManager/OtherPyFiles/DND.db")
-    cursor = DATABASE.cursor()
-    cursor.execute(f"INSERT INTO {name} VALUES ({', '.join(['?'] * len(data))})", data)
-    DATABASE.commit()
-    DATABASE.close()
+class SpellHandler:
+    def __init__(self):
+        self.database = sqlite3.connect(f"dataBase/DND.db")
+        self.cursor = self.database.cursor()
+
+    def add_spell(
+        self,
+        name: str,
+        level: int,
+        school: str,
+        casting_time: str,
+        distance: str,
+        components: str,
+        duration: str,
+        classes,
+        subclasses,
+        description: str,
+    ):
+        self.cursor.execute(
+            "INSERT INTO Spells VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+            (
+                name,
+                level,
+                school,
+                casting_time,
+                distance,
+                components,
+                duration,
+                classes,
+                subclasses,
+                description,
+                True,
+            ),
+        )
+        self.database.commit()
+        self.database.close()
+
+    def setSpellActive(self, name: str, active: bool):
+        self.cursor.execute(
+            "UPDATE Spells SET Active = ? WHERE Name = ?",
+            (active, name),
+        )
+        self.database.commit()
+        self.database.close()
+
+    def getSpellInfo(self, selectingItems: str, filter: str | None = None):
+        if filter:
+            self.cursor.execute(
+                f"SELECT {selectingItems} FROM Spells WHERE Active = ? AND {filter}",
+                (True,),
+            )
+        else:
+            self.cursor.execute(
+                f"SELECT {selectingItems} FROM Spells WHERE Active=true"
+            )
+        result = self.cursor.fetchall()
+        self.database.commit()
+        self.database.close()
+        return result
+
+    def fullDeleteSpell(self, name: str):
+        self.cursor.execute(
+            "DELETE FROM Spells WHERE Name = ?",
+            (name,),
+        )
+        self.database.commit()
+        self.database.close()
 
 
-def insert_spell(
-    name,
-    level=None,
-    school=None,
-    casting_time=None,
-    distance=None,
-    components=None,
-    duration=None,
-    classes=None,
-    subclasses=None,
-    description=None,
-    file="DND.db",
-):
-    DATABASE = sqlite3.connect(f"dataBase/{file}")
-    cursor = DATABASE.cursor()
-    cursor.execute(
-        "INSERT INTO Spells VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-        (
-            name,
-            level,
-            school,
-            casting_time,
-            distance,
-            components,
-            duration,
-            classes,
-            subclasses,
-            description,
-        ),
-    )
-    DATABASE.commit()
-    DATABASE.close()
+class ClassInfoHandler:
+    def __init__(self):
+        self.database = sqlite3.connect("dataBase/dnd_classes.db")
+        self.cursor = self.database.cursor()
 
-
-def insert_homebrew_spell(
-    name,
-    level=None,
-    school=None,
-    casting_time=None,
-    distance=None,
-    components=None,
-    duration=None,
-    classes=None,
-    subclasses=None,
-    description=None,
-):
-    DATABASE = sqlite3.connect("DNDManager/OtherPyFiles/Homebrew.db")
-    cursor = DATABASE.cursor()
-    cursor.execute(
-        "INSERT INTO Spells VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-        (
-            name,
-            level,
-            school,
-            casting_time,
-            distance,
-            components,
-            duration,
-            classes,
-            subclasses,
-            description,
-        ),
-    )
-    DATABASE.commit()
-    DATABASE.close()
-
-
-def update_data(name, whatUpdate: list[str]):
-    DATABASE = sqlite3.connect("DNDManager/OtherPyFiles/DND.db")
-    cursor = DATABASE.cursor()
-    cursor.execute(f"UPDATE {name} SET {', '.join(whatUpdate)}")
-    DATABASE.commit()
-    DATABASE.close()
-
-
-def delete_data(name, whatDelete: str):
-    DATABASE = sqlite3.connect("DNDManager/OtherPyFiles/DND.db")
-    cursor = DATABASE.cursor()
-    cursor.execute(f"DELETE FROM {name} WHERE {whatDelete}")
-    DATABASE.commit()
-    DATABASE.close()
+    def getClassInfo(self, selectingItems: str, filter: str = "1=1"):
+        self.cursor.execute(f"""SELECT {selectingItems}
+        FROM classes c
+        JOIN class_levels cl ON c.class_id = cl.class_id
+        LEFT JOIN spell_slots ss ON cl.level_id = ss.level_id
+        WHERE {filter}""")
+        result = self.cursor.fetchall()
+        self.database.commit()
+        self.database.close()
+        try:
+            return dict(result)
+        except ValueError:
+            return sorted(list(map(lambda x: x[0], list(set(result)))))
 
 
 if __name__ == "__main__":
-    create_database(
-        "Spells",
-        "Name TEXT",
-        "Level INTEGER",
-        "School TEXT",
-        "Casting Time TEXT",
-        "Distance TEXT",
-        "Components TEXT",
-        "Duration TEXT",
-        "Classes TEXT",
-        "Subclasses TEXT",
-        "Description TEXT",
-    )
-    create_database(
-        "Characters",
-        "Name TEXT",
-        "Level INTEGER",
-        "Experience INTEGER",
-        "MasterBonus INTEGER",
-        "Class TEXT",
-        "HpDice TEXT",
-        "Skills TEXT",
-        "Race TEXT",
-        "Speed TEXT",
-        "Background TEXT",
-        "WorldView TEXT",
-        "MaxHP INTEGER",
-        "CurrentHP INTEGER",
-        "TempHP INTEGER",
-        "DiceStats TEXT",
-        "Inventory TEXT",
-        "Spells TEXT",
-        "OtherStats TEXT",
-    )
+    print(ClassInfoHandler().getClassInfo("class_name"))
