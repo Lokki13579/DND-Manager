@@ -1,9 +1,20 @@
+from ast import Constant
 import json
 import platform
 import os
 import math
 from math import floor
+import OtherPyFiles.dataBaseHandler as dbHandler
 
+
+CHARACTERISTICS = {
+    "STR": "Сила",
+    "DEX": "Ловкость",
+    "CON": "Телосложение",
+    "INT": "Интеллект",
+    "WIS": "Мудрость",
+    "CHA": "Харизма",
+}
 
 match platform.system():
     case "Windows":
@@ -14,20 +25,6 @@ match platform.system():
         charPath = f"{os.path.expanduser('~')}/Library/Application Support/DNDManager/AllCharacterData.json"
     case _:
         charPath = f"{os.path.expanduser('~')}/.config/DNDManager/AllCharacterData.json"
-
-
-def jsonLoad(path: str = charPath) -> dict[str, object] | list[object]:
-    """Безопасная загрузка JSON файлов с обработкой ошибок"""
-    try:
-        with open(path, "r", encoding="utf-8") as file:
-            return json.load(file)
-    except FileNotFoundError:
-        print(f"Файл не найден: {path}")
-    except json.JSONDecodeError:
-        print(f"Ошибка формата JSON в файле: {path}")
-    except Exception as e:
-        print(f"Ошибка загрузки {path}: {e}")
-    return {}
 
 
 def statusesGet(
@@ -43,7 +40,7 @@ def statusesGet(
     return {}
 
 
-classData = jsonLoad("JSONS/dnd_classes.json")
+classData = dbHandler.ClassInfoHandler()
 racesData = jsonLoad("JSONS/dnd_races.json")
 Stats = {
     "class": "Ааракокра",
@@ -168,8 +165,13 @@ class Character:
 
     def setClass(self, _class):
         self.Stats["class"] = _class
-        self.Stats["hpDice"] = classData.get(_class).get("hpDice")
-        self.Stats["mainChar"] = classData.get(_class).get("mainChar", "").split("?")
+        self.Stats["hpDice"] = classData.getClassInfo(
+            "hp_dice", f"class_name='{_class}'"
+        )
+        print(self.Stats["hpDice"])
+        self.Stats["mainChar"] = classData.getClassInfo(
+            "main_characteristic", f"class_name='{_class}'"
+        )[0]
 
         try:
             self.setMaxHealth(self.getFirstLevMaxHp())

@@ -1,5 +1,24 @@
 import sqlite3
-from characterclass import jsonLoad
+from platform import system
+from os import path
+
+match system():
+    case "Windows":
+        spellsDataBase = (
+            f"{path.expanduser('~')}\\AppData\\Local\\DNDManager\\dnd_spells.db"
+        )
+        classDataBase = (
+            f"{path.expanduser('~')}\\AppData\\Local\\DNDManager\\dnd_classes.db"
+        )
+    case "Linux":
+        spellDataBase = f"{path.expanduser('~')}/.config/DNDManager/dnd_spells.db"
+        classDataBase = f"{path.expanduser('~')}/.config/DNDManager/dnd_classes.db"
+    case "Darwin":
+        spellDataBase = f"{path.expanduser('~')}/Library/Application Support/DNDManager/dnd_spells.db"
+        classDataBase = f"{path.expanduser('~')}/Library/Application Support/DNDManager/dnd_classes.db"
+    case _:
+        spellDataBase = f"{path.expanduser('~')}/.config/DNDManager/dnd_spells.db"
+        classDataBase = f"{path.expanduser('~')}/.config/DNDManager/dnd_classes.db"
 
 
 def create_database(name: str, *columns: str, file="DND.db"):
@@ -12,7 +31,7 @@ def create_database(name: str, *columns: str, file="DND.db"):
 
 class SpellHandler:
     def __init__(self):
-        self.database = sqlite3.connect(f"dataBase/DND.db")
+        self.database = sqlite3.connect(f"{spellDataBase}")
         self.cursor = self.database.cursor()
 
     def add_spell(
@@ -81,10 +100,13 @@ class SpellHandler:
 
 class ClassInfoHandler:
     def __init__(self):
-        self.database = sqlite3.connect("dataBase/dnd_classes.db")
+        self.database = sqlite3.connect(f"{classDataBase}")
         self.cursor = self.database.cursor()
+        self.database.close()
 
     def getClassInfo(self, selectingItems: str, filter: str = "1=1"):
+        self.database = sqlite3.connect(f"{classDataBase}")
+        self.cursor = self.database.cursor()
         self.cursor.execute(f"""SELECT {selectingItems}
         FROM classes c
         JOIN class_levels cl ON c.class_id = cl.class_id
@@ -100,4 +122,8 @@ class ClassInfoHandler:
 
 
 if __name__ == "__main__":
-    print(ClassInfoHandler().getClassInfo("class_name"))
+    print(
+        ClassInfoHandler().getClassInfo(
+            "hp_dice", f"class_name='{input('Enter class name:')}'"
+        )
+    )
