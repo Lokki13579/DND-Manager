@@ -2,25 +2,27 @@ import json
 import sqlite3
 
 
-def create_database_schema(conn):
+def create_database_schema(conn, file):
     """Создает структуру таблиц в базе данных"""
 
     # Таблица классов
-    conn.execute("""
-        CREATE TABLE IF NOT EXISTS statuses (
-            status_id INTEGER PRIMARY KEY AUTOINCREMENT,
-            status_name TEXT UNIQUE NOT NULL
+    conn.execute(f"""
+        CREATE TABLE IF NOT EXISTS {file.replace("dnd_", "")} (
+            level_id INTEGER PRIMARY KEY AUTOINCREMENT,
+            experience TEXT NOT NULL,
+            master_bonus TEXT NOT NULL
         )
     """)
 
 
-def insert_races_data(conn, name: str):
+def insert_races_data(conn, name: str, *value):
     """Вставляет данные одной расы в базу"""
 
+    print(value)
     # Вставляем основную расу
     cursor = conn.execute(
-        "INSERT OR IGNORE INTO statuses (status_name) VALUES (?)",
-        (name,),
+        "INSERT OR IGNORE INTO levels (level_id, experience, master_bonus) VALUES (?, ?, ?)",
+        (name, *value),
     )
 
 
@@ -30,17 +32,17 @@ def main(file):
 
     conn = sqlite3.connect(f"dataBase/{file}.db")
 
-    create_database_schema(conn)
+    create_database_schema(conn, file)
 
-    for name in data:
-        print(f"Обрабатываю: {name}")
-        insert_races_data(conn, name)
+    for name, value in data.items():
+        print(f"Обрабатываю: {name} - {value}")
+        insert_races_data(conn, name, *list(value.values()))
 
     conn.commit()
     print("База данных успешно создана!")
 
     stats = conn.execute("""
-        SELECT COUNT(*) as count FROM statuses
+        SELECT COUNT(*) as count FROM drugs
     """).fetchone()
     print(f"Добавлено: {stats[0]}")
 
@@ -48,5 +50,4 @@ def main(file):
 
 
 if __name__ == "__main__":
-    main(file="dnd_backgrounds")
-    main(file="dnd_trinkets")
+    main(file="dnd_levels")
