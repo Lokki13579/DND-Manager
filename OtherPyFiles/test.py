@@ -8,9 +8,11 @@ def create_database_schema(conn, file):
     # Таблица классов
     conn.execute(f"""
         CREATE TABLE IF NOT EXISTS {file.replace("dnd_", "")} (
-            level_id INTEGER PRIMARY KEY AUTOINCREMENT,
-            experience TEXT NOT NULL,
-            master_bonus TEXT NOT NULL
+            item_id INTEGER PRIMARY KEY AUTOINCREMENT,
+            item_name TEXT NOT NULL,
+            item_rarity TEXT NOT NULL,
+            item_cost TEXT NOT NULL,
+            item_description TEXT NOT NULL
         )
     """)
 
@@ -21,7 +23,7 @@ def insert_races_data(conn, name: str, *value):
     print(value)
     # Вставляем основную расу
     cursor = conn.execute(
-        "INSERT OR IGNORE INTO levels (level_id, experience, master_bonus) VALUES (?, ?, ?)",
+        "INSERT OR IGNORE INTO magic_items (item_name, item_rarity, item_cost, item_description) VALUES (?, ?, ?, ?)",
         (name, *value),
     )
 
@@ -42,7 +44,7 @@ def main(file):
     print("База данных успешно создана!")
 
     stats = conn.execute("""
-        SELECT COUNT(*) as count FROM drugs
+        SELECT COUNT(*) as count FROM magic_items
     """).fetchone()
     print(f"Добавлено: {stats[0]}")
 
@@ -50,4 +52,4 @@ def main(file):
 
 
 if __name__ == "__main__":
-    main(file="dnd_levels")
+    main(file="dnd_magic_items")
