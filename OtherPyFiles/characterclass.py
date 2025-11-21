@@ -72,7 +72,7 @@ class Character:
     ):
         def statusesInit():
             statuses_data: dict[str, object] | list[object]
-            statuses_data = jsonLoad("JSONS/dnd_statuses.json")
+            statuses_data = dbHandler.StatusesHandler.getStatuses()
             status_keys = list(statuses_data)[:15]
             self.status = dict(
                 zip(status_keys, [False for _ in range(len(status_keys))])
