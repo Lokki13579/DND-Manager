@@ -41,7 +41,7 @@ def statusesGet(
 
 
 classData = dbHandler.ClassInfoHandler()
-racesData = jsonLoad("JSONS/dnd_races.json")
+racesData = dbHandler.RaceInfoHandler()
 Stats = {
     "class": "Ааракокра",
     "race": "Бард",

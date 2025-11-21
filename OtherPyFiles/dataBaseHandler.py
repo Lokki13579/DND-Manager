@@ -10,15 +10,21 @@ match system():
         classDataBase = (
             f"{path.expanduser('~')}\\AppData\\Local\\DNDManager\\dnd_classes.db"
         )
+        raceDataBase = (
+            f"{path.expanduser('~')}\\AppData\\Local\\DNDManager\\dnd_races.db"
+        )
     case "Linux":
         spellDataBase = f"{path.expanduser('~')}/.config/DNDManager/dnd_spells.db"
         classDataBase = f"{path.expanduser('~')}/.config/DNDManager/dnd_classes.db"
+        raceDataBase = f"{path.expanduser('~')}/.config/DNDManager/dnd_races.db"
     case "Darwin":
         spellDataBase = f"{path.expanduser('~')}/Library/Application Support/DNDManager/dnd_spells.db"
         classDataBase = f"{path.expanduser('~')}/Library/Application Support/DNDManager/dnd_classes.db"
+        raceDataBase = f"{path.expanduser('~')}/Library/Application Support/DNDManager/dnd_races.db"
     case _:
         spellDataBase = f"{path.expanduser('~')}/.config/DNDManager/dnd_spells.db"
         classDataBase = f"{path.expanduser('~')}/.config/DNDManager/dnd_classes.db"
+        raceDataBase = f"{path.expanduser('~')}/.config/DNDManager/dnd_races.db"
 
 
 def create_database(name: str, *columns: str, file="DND.db"):
@@ -121,9 +127,32 @@ class ClassInfoHandler:
             return sorted(list(map(lambda x: x[0], list(set(result)))))
 
 
+class RaceInfoHandler:
+    def __init__(self):
+        self.database = sqlite3.connect(f"{raceDataBase}")
+        self.cursor = self.database.cursor()
+        self.database.close()
+
+    def getRaceInfo(self, selectingItems: str, filter: str = "1=1"):
+        self.database = sqlite3.connect(f"{raceDataBase}")
+        self.cursor = self.database.cursor()
+        self.cursor.execute(f"""SELECT {selectingItems}
+        FROM race_addictions ra
+        JOIN races r ON ra.race_id = r.race_id
+        JOIN characteristics c ON ra.char_id = c.char_id
+        WHERE {filter}""")
+        result = self.cursor.fetchall()
+        self.database.commit()
+        self.database.close()
+        try:
+            return dict(result)
+        except ValueError:
+            return sorted(list(map(lambda x: x[0], list(set(result)))))
+
+
 if __name__ == "__main__":
     print(
-        ClassInfoHandler().getClassInfo(
-            "hp_dice", f"class_name='{input('Enter class name:')}'"
+        RaceInfoHandler().getRaceInfo(
+            "char_name, increase", f"race_name='{input('Enter race name:').strip()}'"
         )
     )
