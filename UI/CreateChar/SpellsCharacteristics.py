@@ -13,25 +13,11 @@ from PyQt6.QtWidgets import (
 import re
 
 
-from OtherPyFiles.characterclass import Character, jsonLoad
+from OtherPyFiles.characterclass import Character
+from OtherPyFiles.dataBaseHandler import SpellHandler
 from UI.CreateChar.spellItem import SpellListItem, Spell
 
 files = ["spells"]
-
-
-def searchSpell(name):
-    for i in range(10):
-        spD = jsonLoad(f"JSONS/dnd_{files[0]}.json")[str(i)].get(name, 0)
-        if spD:
-            return spD
-    return None
-
-
-def searchingGroup(level):
-    return jsonLoad(f"JSONS/dnd_{files[0]}.json")[str(level)]
-
-
-spellsData = lambda n: searchSpell(n)
 
 
 class SpellsCharacteristics(QWidget):
@@ -104,7 +90,7 @@ class SpellsCharacteristics(QWidget):
             for i in range(10):
                 header = QTreeWidgetItem(self.searchResult, [f"{i} уровень"])
                 _dict[f"{i}"] = header
-                for spell in searchingGroup(i):
+                for spell in SpellHandler().getSpellInfo("spell_name", f"level={i}"):
                     if searchSpell.lower() in spell.lower():
                         item = QTreeWidgetItem(header, [spell])
                         _dict[spell] = item
@@ -112,7 +98,9 @@ class SpellsCharacteristics(QWidget):
         else:
             header = QTreeWidgetItem(self.searchResult, [f"{searchGroup} уровень"])
             _dict[searchGroup] = header
-            for spell in searchingGroup(searchGroup):
+            for spell in SpellHandler().getSpellInfo(
+                "spell_name", f"level={searchGroup}"
+            ):
                 if searchSpell.lower() in spell.lower():
                     item = QTreeWidgetItem(header, [spell])
                     _dict[spell] = item
@@ -122,7 +110,7 @@ class SpellsCharacteristics(QWidget):
         pattern = r"(\([0-9]\))?([^#\(\)]+)?"
         res = re.findall(pattern, self.searchBar.text())
         spellName = res[0][1].strip()
-        spD = spellsData(spellName)
+        spD = SpellHandler().getSpellInfo("spell_name", f"spell_name='{spellName}'")
         if not spD:
             self.searchBar.setText("Такого заклинания не существует")
             return

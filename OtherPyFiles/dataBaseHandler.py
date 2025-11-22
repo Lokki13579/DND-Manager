@@ -135,7 +135,7 @@ class SpellHandler:
 
     def setSpellActive(self, name: str, active: bool):
         self.cursor.execute(
-            "UPDATE Spells SET Active = ? WHERE Name = ?",
+            "UPDATE Spells SET active = ? WHERE name = ?",
             (active, name),
         )
         self.database.commit()
@@ -144,12 +144,12 @@ class SpellHandler:
     def getSpellInfo(self, selectingItems: str, filter: str | None = None):
         if filter:
             self.cursor.execute(
-                f"SELECT {selectingItems} FROM Spells WHERE Active = ? AND {filter}",
+                f"SELECT {selectingItems} FROM Spells WHERE active = ? AND {filter}",
                 (True,),
             )
         else:
             self.cursor.execute(
-                f"SELECT {selectingItems} FROM Spells WHERE Active=true"
+                f"SELECT {selectingItems} FROM Spells WHERE active=true"
             )
         result = self.cursor.fetchall()
         self.database.commit()
@@ -158,7 +158,7 @@ class SpellHandler:
 
     def fullDeleteSpell(self, name: str):
         self.cursor.execute(
-            "DELETE FROM Spells WHERE Name = ?",
+            "DELETE FROM Spells WHERE spell_name = ?",
             (name,),
         )
         self.database.commit()
