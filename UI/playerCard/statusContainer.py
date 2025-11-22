@@ -1,6 +1,6 @@
 from PyQt6.QtWidgets import QGroupBox, QGridLayout
 from PyQt6.QtCore import pyqtSignal
-from OtherPyFiles.characterclass import statusesGet
+from OtherPyFiles.characterclass import dbHandler
 from UI.playerCard.statusObj import StatusObj
 
 
@@ -29,7 +29,7 @@ class StatusContainer(QGroupBox):
         self.statusInit()
 
     def statusInit(self):
-        for _name in statusesGet("JSONS/dnd_statuses.json"):
+        for _name in dbHandler.StatusesHandler().getStatuses():
             print(_name)
             self.statusObjects[_name] = StatusObj(_name)
         self.tryToApplyChar()

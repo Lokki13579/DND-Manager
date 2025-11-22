@@ -1,6 +1,7 @@
 import sqlite3
 from platform import system
 from os import path
+from typing import final
 
 match system():
     case "Windows":
@@ -20,36 +21,70 @@ match system():
             f"{path.expanduser('~')}\\AppData\\Local\\DNDManager\\dnd_magic_items.db",
             f"{path.expanduser('~')}\\AppData\\Local\\DNDManager\\dnd_giant_bag.db",
             f"{path.expanduser('~')}\\AppData\\Local\\DNDManager\\dnd_trinkets.db",
+            f"{path.expanduser('~')}\\AppData\\Local\\DNDManager\\dnd_poisons.db",
+            f"{path.expanduser('~')}\\AppData\\Local\\DNDManager\\dnd_drugs.db",
+        )
+        statusDataBase = (
+            f"{path.expanduser('~')}\\AppData\\Local\\DNDManager\\dnd_statuses.db"
+        )
+        backgroundsDataBase = (
+            f"{path.expanduser('~')}\\AppData\\Local\\DNDManager\\dnd_backgrounds.db"
+        )
+        alignmentDataBase = (
+            f"{path.expanduser('~')}\\AppData\\Local\\DNDManager\\dnd_alignments.db"
         )
     case "Linux":
         spellDataBase = f"{path.expanduser('~')}/.config/DNDManager/dnd_spells.db"
         classDataBase = f"{path.expanduser('~')}/.config/DNDManager/dnd_classes.db"
         raceDataBase = f"{path.expanduser('~')}/.config/DNDManager/dnd_races.db"
         levelDataBase = f"{path.expanduser('~')}/.config/DNDManager/dnd_levels.db"
+        statusDataBase = f"{path.expanduser('~')}/.config/DNDManager/dnd_statuses.db"
         itemDataBase = (
             f"{path.expanduser('~')}/.config/DNDManager/dnd_magic_items.db",
             f"{path.expanduser('~')}/.config/DNDManager/dnd_giant_bag.db",
             f"{path.expanduser('~')}/.config/DNDManager/dnd_trinkets.db",
+            f"{path.expanduser('~')}/.config/DNDManager/dnd_poisons.db",
+            f"{path.expanduser('~')}/.config/DNDManager/dnd_drugs.db",
+        )
+        backgroundsDataBase = (
+            f"{path.expanduser('~')}/.config/DNDManager/dnd_backgrounds.db"
+        )
+        alignmentDataBase = (
+            f"{path.expanduser('~')}/.config/DNDManager/dnd_alignments.db"
         )
     case "Darwin":
         spellDataBase = f"{path.expanduser('~')}/Library/Application Support/DNDManager/dnd_spells.db"
         classDataBase = f"{path.expanduser('~')}/Library/Application Support/DNDManager/dnd_classes.db"
         raceDataBase = f"{path.expanduser('~')}/Library/Application Support/DNDManager/dnd_races.db"
         levelDataBase = f"{path.expanduser('~')}/Library/Application Support/DNDManager/dnd_levels.db"
+        statusDataBase = f"{path.expanduser('~')}/Library/Application Support/DNDManager/dnd_statuses.db"
         itemDataBase = (
             f"{path.expanduser('~')}/Library/Application Support/DNDManager/dnd_magic_items.db",
             f"{path.expanduser('~')}/Library/Application Support/DNDManager/dnd_giant_bag.db",
             f"{path.expanduser('~')}/Library/Application Support/DNDManager/dnd_trinkets.db",
+            f"{path.expanduser('~')}/Library/Application Support/DNDManager/dnd_poisons.db",
+            f"{path.expanduser('~')}/Library/Application Support/DNDManager/dnd_drugs.db",
         )
+        backgroundsDataBase = f"{path.expanduser('~')}/Library/Application Support/DNDManager/dnd_backgrounds.db"
+        alignmentDataBase = f"{path.expanduser('~')}/Library/Application Support/DNDManager/dnd_alignments.db"
     case _:
         spellDataBase = f"{path.expanduser('~')}/.config/DNDManager/dnd_spells.db"
         classDataBase = f"{path.expanduser('~')}/.config/DNDManager/dnd_classes.db"
         raceDataBase = f"{path.expanduser('~')}/.config/DNDManager/dnd_races.db"
         levelDataBase = f"{path.expanduser('~')}/.config/DNDManager/dnd_levels.db"
+        statusDataBase = f"{path.expanduser('~')}/.config/DNDManager/dnd_statuses.db"
         itemDataBase = (
             f"{path.expanduser('~')}/.config/DNDManager/dnd_magic_items.db",
             f"{path.expanduser('~')}/.config/DNDManager/dnd_giant_bag.db",
             f"{path.expanduser('~')}/.config/DNDManager/dnd_trinkets.db",
+            f"{path.expanduser('~')}/.config/DNDManager/dnd_poisons.db",
+            f"{path.expanduser('~')}/.config/DNDManager/dnd_drugs.db",
+        )
+        backgroundsDataBase = (
+            f"{path.expanduser('~')}/.config/DNDManager/dnd_backgrounds.db"
+        )
+        alignmentDataBase = (
+            f"{path.expanduser('~')}/.config/DNDManager/dnd_alignments.db"
         )
 
 
@@ -130,11 +165,11 @@ class SpellHandler:
         self.database.close()
 
 
+@final
 class ClassInfoHandler:
     def __init__(self):
-        self.database: sqlite3.Connection = sqlite3.connect(f"{classDataBase}")
-        self.cursor: sqlite3.Cursor = self.database.cursor()
-        self.database.close()
+        self.database: sqlite3.Connection
+        self.cursor: sqlite3.Cursor
 
     def getClassInfo(self, selectingItems: str, filter: str = "1=1"):
         self.database = sqlite3.connect(f"{classDataBase}")
@@ -153,11 +188,11 @@ class ClassInfoHandler:
             return sorted(list(map(lambda x: x[0], list(set(result)))))
 
 
+@final
 class RaceInfoHandler:
     def __init__(self):
-        self.database: sqlite3.Connection = sqlite3.connect(f"{raceDataBase}")
-        self.cursor: sqlite3.Cursor = self.database.cursor()
-        self.database.close()
+        self.database: sqlite3.Connection
+        self.cursor: sqlite3.Cursor
 
     def getRaceInfo(self, selectingItems: str, filter: str = "1=1"):
         self.database = sqlite3.connect(f"{raceDataBase}")
@@ -176,11 +211,11 @@ class RaceInfoHandler:
             return sorted(list(map(lambda x: x[0], list(set(result)))))
 
 
+@final
 class LevelInfoHandler:
     def __init__(self):
-        self.database: sqlite3.Connection = sqlite3.connect(f"{levelDataBase}")
-        self.cursor: sqlite3.Cursor = self.database.cursor()
-        self.database.close()
+        self.database: sqlite3.Connection
+        self.cursor: sqlite3.Cursor
 
     def getLevelInfo(self, selectingItems: str, filter: str = "level_id=1"):
         self.database = sqlite3.connect(f"{levelDataBase}")
@@ -197,6 +232,7 @@ class LevelInfoHandler:
             return sorted(list(map(lambda x: x[0], list(set(result)))))
 
 
+@final
 class ItemInfoHandler:
     def __init__(self):
         self.database: sqlite3.Connection
@@ -243,13 +279,16 @@ class ItemInfoHandler:
                 return sorted(list(map(lambda x: x[0], list(set(result)))))
 
 
+@final
 class StatusesHandler:
     def __init__(self):
-        self.database = sqlite3.connect("JSONS/dnd_statuses.json")
-        self.cursor = self.database.cursor()
+        self.database: sqlite3.Connection
+        self.cursor: sqlite3.Cursor
 
     def getStatuses(self):
-        self.cursor.execute("SELECT * FROM statuses")
+        self.database = sqlite3.connect(f"{statusDataBase}")
+        self.cursor = self.database.cursor()
+        self.cursor.execute("SELECT status_name FROM statuses")
         result = self.cursor.fetchall()
         self.database.commit()
         self.database.close()
@@ -259,12 +298,15 @@ class StatusesHandler:
             return sorted(list(map(lambda x: x[0], list(set(result)))))
 
 
+@final
 class AlignmentHandler:
     def __init__(self):
-        self.database = sqlite3.connect("JSONS/dnd_alignments.json")
-        self.cursor = self.database.cursor()
+        self.database: sqlite3.Connection
+        self.cursor: sqlite3.Cursor
 
     def getAlignments(self):
+        self.database = sqlite3.connect(f"{alignmentsDataBase}")
+        self.cursor = self.database.cursor()
         self.cursor.execute("SELECT * FROM alignments")
         result = self.cursor.fetchall()
         self.database.commit()
@@ -275,12 +317,15 @@ class AlignmentHandler:
             return sorted(list(map(lambda x: x[0], list(set(result)))))
 
 
+@final
 class BackgroundHandler:
     def __init__(self):
-        self.database = sqlite3.connect("JSONS/dnd_backgrounds.json")
-        self.cursor = self.database.cursor()
+        self.database: sqlite3.Connection
+        self.cursor: sqlite3.Cursor
 
     def getBackgrounds(self):
+        self.database = sqlite3.connect(f"{backgroundsDataBase}")
+        self.cursor = self.database.cursor()
         self.cursor.execute("SELECT * FROM backgrounds")
         result = self.cursor.fetchall()
         self.database.commit()
@@ -292,4 +337,5 @@ class BackgroundHandler:
 
 
 if __name__ == "__main__":
-    print(ItemInfoHandler().getItemInfo("item_name", "giant_id=1"))
+    print(StatusesHandler().getStatuses())
+    # Ааракокра

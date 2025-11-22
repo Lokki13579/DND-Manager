@@ -1,3 +1,4 @@
+from operator import ipow
 from PyQt6.QtGui import QIcon
 from PyQt6.QtWidgets import (
     QWidget,
@@ -13,13 +14,19 @@ from PyQt6.QtWidgets import (
 import re
 
 
-from OtherPyFiles.characterclass import Character, jsonLoad
+from OtherPyFiles.characterclass import Character
+from OtherPyFiles.dataBaseHandler import ItemInfoHandler, itemDataBase
 from UI.CreateChar.invItem import InventoryItem, Item
 
 files = ["drugs", "giant_bag", "magic_items", "poisons", "trinkets"]
-itemsData = {}
-for file in files:
-    itemsData[file] = jsonLoad(f"JSONS/dnd_{file}.json")
+
+itemsTable = {
+    "Магические предметы": 0,
+    "Сумка Гиганта": 1,
+    "Безделушки": 2,
+    "Яды": 3,
+    "Препараты": 4,
+}
 
 
 class InventoryCharacteristics(QWidget):
@@ -91,37 +98,46 @@ class InventoryCharacteristics(QWidget):
         searchItem = searchItem.strip()
 
         if searchGroup == "None" or searchGroup == "":
-            for group, item in itemsData.items():
+            for group, index in itemsTable.items():
                 header = QTreeWidgetItem(self.searchResult, [group])
                 header.setExpanded(True)
                 _dict[group] = header
 
-                if group == "giant_bag":
+                if group == "Сумка Гиганта":
                     self.giantAdd(item, searchItem, header, _dict)
                     continue
-                for subitem in item:
+                for subitem in ItemInfoHandler().getItemInfo(
+                    "item_name", justAllTable=index
+                ):
                     if searchItem.lower() in subitem.lower():
                         child = QTreeWidgetItem(header, [subitem])
                         _dict[subitem] = child
             self.searchResult.expandAll()
             return _dict
 
-        for name in itemsData.keys():
-            if searchGroup.lower() in name.lower():
-                header = QTreeWidgetItem(self.searchResult, [name])
-                header.setExpanded(True)
-                _dict[name] = header
-                if name == "giant_bag":
-                    self.giantAdd(itemsData[name], searchItem, header, _dict)
-                    continue
-                for item in itemsData.get(name, []):
-                    if searchItem.lower() in item.lower():
-                        child = QTreeWidgetItem(header, [item])
-                        _dict[item] = child
+        header = QTreeWidgetItem(self.searchResult, [searchGroup])
+        header.setExpanded(True)
+        _dict[searchGroup] = header
+        for item in ItemInfoHandler().getItemInfo(
+            "item_name", justAllTable=itemsTable[searchGroup]
+        ):
+            if searchGroup == "Сумка Гиганта":
+                self.giantAdd(
+                    ItemInfoHandler().getItemInfo(
+                        "giant_name,item_name", justAllTable=1
+                    ),
+                    searchItem,
+                    header,
+                    _dict,
+                )
+                continue
+            if searchItem.lower() in item.lower():
+                child = QTreeWidgetItem(header, [item])
+                _dict[item] = child
         self.searchResult.expandAll()
         return _dict
 
-    def giantAdd(self, item, searchItem, header, _dict):
+    def giantAdd(self, item: dict, searchItem, header, _dict):
         checked = False
 
         for giant, loot in item.items():

@@ -9,7 +9,7 @@ from PyQt6.QtWidgets import (
 )
 
 
-from OtherPyFiles.characterclass import Character, jsonLoad
+from OtherPyFiles.characterclass import Character
 from UI.CreateChar.DiceCharModule import DiceChar
 
 

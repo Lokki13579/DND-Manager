@@ -8,7 +8,7 @@ from PyQt6.QtWidgets import (
     QTreeWidgetItem,
 )
 
-from OtherPyFiles.characterclass import classData, racesData, jsonLoad
+from OtherPyFiles.characterclass import classData, racesData
 
 
 class SecondCharacteristics(QWidget):

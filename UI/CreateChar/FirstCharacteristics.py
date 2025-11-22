@@ -9,7 +9,7 @@ from PyQt6.QtWidgets import (
     QGroupBox,
 )
 
-from OtherPyFiles.characterclass import jsonLoad
+from OtherPyFiles.characterclass import dbHandler
 
 
 class FirstCharacteristics(QWidget):
@@ -84,10 +84,11 @@ class FirstCharacteristics(QWidget):
 
     def expMan(self, _level):
         _maxXp = (
-            jsonLoad("JSONS/dnd_levels.json")
-            .get(str(_level + 1), {})
-            .get("experience", 0)
+            dbHandler.LevelInfoHandler().getLevelInfo(
+                "experience", "level_id=" + str(_level + 1)
+            )[0]
             - 1
         )
+        print(_maxXp)
         self.expRange.setText(f"Введите опыт от 0 до {_maxXp}")
         self.expSelectBox.setMaximum(_maxXp)

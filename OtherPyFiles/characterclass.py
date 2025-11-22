@@ -27,19 +27,6 @@ match platform.system():
         charPath = f"{os.path.expanduser('~')}/.config/DNDManager/AllCharacterData.json"
 
 
-def statusesGet(
-    path: str = "JSONS/dnd_statuses.json",
-) -> dict[str, object] | list[object]:
-    try:
-        with open(path, "r", encoding="utf-8") as file:
-            return json.load(file)
-    except FileNotFoundError:
-        print(f"Файл не найден: {path}")
-    except json.JSONDecodeError:
-        print(f"Ошибка формата JSON в файле: {path}")
-    return {}
-
-
 classData = dbHandler.ClassInfoHandler()
 racesData = dbHandler.RaceInfoHandler()
 Stats = {
@@ -72,7 +59,7 @@ class Character:
     ):
         def statusesInit():
             statuses_data: dict[str, object] | list[object]
-            statuses_data = dbHandler.StatusesHandler.getStatuses()
+            statuses_data = dbHandler.StatusesHandler().getStatuses()
             status_keys = list(statuses_data)[:15]
             self.status = dict(
                 zip(status_keys, [False for _ in range(len(status_keys))])
@@ -167,8 +154,7 @@ class Character:
         self.Stats["class"] = _class
         self.Stats["hpDice"] = classData.getClassInfo(
             "hp_dice", f"class_name='{_class}'"
-        )
-        print(self.Stats["hpDice"])
+        )[0]
         self.Stats["mainChar"] = classData.getClassInfo(
             "main_characteristic", f"class_name='{_class}'"
         )[0]
@@ -215,11 +201,13 @@ class Character:
 
     def setRace(self, race):
         self.Stats["race"] = race
-        self.Stats["speed"] = racesData.get(race).get("скорость", 30)
+        self.Stats["speed"] = racesData.getRaceInfo(
+            "speed", "race_name=" + f"'{race.strip()}'"
+        )
 
         self.diceInit()
-        self.Stats["diceStats"]["addiction"] = racesData.get(race).get(
-            "УвеличениеХарактеристик"
+        self.Stats["diceStats"]["addiction"] = racesData.getRaceInfo(
+            "char_name,increase", "race_name='Ааракокра'"
         )
 
     def diceInit(self):
@@ -328,8 +316,8 @@ class Character:
     def otherStatsReset(self):
         otherSt = {}
         try:
-            class_data = jsonLoad("JSONS/dnd_classes.json").get(
-                self.Stats.get("class", ""), {}
+            class_data = classData.getClassInfo(
+                "*", "class_name=" + str(self.Stats.get("class"))
             )
             level_data = class_data.get(str(self.Stats.get("level", 1)), {})
 
