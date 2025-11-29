@@ -47,7 +47,7 @@ class Ui_Lobby(QWidget):
 
             return
         self.ClientOBJ.sendToServer(
-            ["newStats", self.ClientOBJ.character.Stats],
+            ["newStats", self.ClientOBJ.character.stats],
             ["newSpellCells", self.ClientOBJ.character.spellCells],
             ["newStatus", self.ClientOBJ.character.status],
         )

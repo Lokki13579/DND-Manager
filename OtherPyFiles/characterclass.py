@@ -130,7 +130,7 @@ class Character:
         print(f"Class set to {_class}")
         self.stats["hpDice"] = classData.getClassInfo(
             "hp_dice", f"class_name='{_class}' AND level={self.stats.get('level', 1)}"
-        )[0][0]
+        )[0]
         print(self.stats["hpDice"])
         self.stats["mainChar"] = classData.getClassInfo(
             "main_characteristic", f"class_name='{_class}'"
@@ -177,15 +177,15 @@ class Character:
     def setTempHp(self, tempHp):
         self.stats["health"]["temp"] = tempHp
 
-    def setRace(self, race):
+    def setRace(self, race: str):
         self.stats["race"] = race
         self.stats["speed"] = racesData.getRaceInfo(
-            "speed", "race_name=" + f"'{race.strip()}'"
-        )
+            "speed", f"race_name='{race.strip()}'"
+        )[0]
 
         self.diceInit()
         self.stats["diceStats"]["addiction"] = racesData.getRaceInfo(
-            "char_name,increase", "race_name='Ааракокра'"
+            "char_name,increase", f"race_name='{race.strip()}'"
         )
 
     def diceInit(self):
@@ -207,10 +207,14 @@ class Character:
             return
 
         try:
-            for _level in range(int(newLevel), 0, -1):
-                skills = classData.getClassInfo("features", f"class_name='{cl}'")
+            for _level in range(1, int(newLevel) + 1):
+                skills = classData.getClassInfo(
+                    "features", f"class_name='{cl}' AND level={_level}"
+                )
+                print("skills =", skills)
                 if skills:
-                    self.stats["skills"] += skills.split(", ")
+                    self.stats["skills"] += skills[0].split(", ")
+                    print("skills =", self.stats.get("skills"))
             while "0" in self.stats["skills"]:
                 self.stats["skills"].remove("0")
         except:
@@ -354,19 +358,19 @@ class Character:
                 self.spellCells[key] = 0
 
     def charLoad(self):
-        with open(charPath, "r", encoding="utf-8") as file:
-            return json.load(file)
+        try:
+            with open(charPath, "r", encoding="utf-8") as file:
+                return json.load(file)
+        except FileNotFoundError:
+            return {}
 
     def charSave(self, path=charPath):
-        try:
-            data = self.charLoad()
-            data[self.name] = self.stats
+        data = self.charLoad()
+        data[self.name] = self.stats
 
-            with open(path, "w", encoding="utf-8") as file:
-                json.dump(data, file, indent=4, ensure_ascii=False)
-            print(f"Персонаж {self.name} сохранен")
-        except Exception as e:
-            print(f"Ошибка сохранения: {e}")
+        with open(path, "w", encoding="utf-8") as file:
+            json.dump(data, file, indent=4, ensure_ascii=False)
+        print(f"Персонаж {self.name} сохранен")
 
     def jsonCharDelete(self):
         try:

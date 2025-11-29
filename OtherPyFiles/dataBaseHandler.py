@@ -3,6 +3,7 @@ import sqlite3
 from platform import system
 from os import path
 from typing import final
+from webbrowser import BackgroundBrowser
 
 
 match system():
@@ -198,7 +199,7 @@ class ClassInfoHandler:
         try:
             return dict(result)
         except ValueError:
-            return sorted(result)
+            return sorted(list(set(list(map(lambda x: x[0], result)))))
 
 
 @final
@@ -221,7 +222,7 @@ class RaceInfoHandler:
         try:
             return dict(result)
         except ValueError:
-            return sorted(list(map(lambda x: x[0], list(set(result)))))
+            return sorted(list(set(list(map(lambda x: x[0], result)))))
 
 
 @final
@@ -332,7 +333,7 @@ class AlignmentHandler:
     def getAlignments(self):
         self.database = sqlite3.connect(f"{alignmentDataBase}")
         self.cursor = self.database.cursor()
-        self.cursor.execute("SELECT * FROM alignments")
+        self.cursor.execute("SELECT alignment_name FROM alignments")
         result = self.cursor.fetchall()
         self.database.commit()
         self.database.close()
@@ -351,7 +352,7 @@ class BackgroundHandler:
     def getBackgrounds(self):
         self.database = sqlite3.connect(f"{backgroundsDataBase}")
         self.cursor = self.database.cursor()
-        self.cursor.execute("SELECT * FROM backgrounds")
+        self.cursor.execute("SELECT background_name FROM backgrounds")
         result = self.cursor.fetchall()
         self.database.commit()
         self.database.close()
@@ -362,4 +363,4 @@ class BackgroundHandler:
 
 
 if __name__ == "__main__":
-    print(SpellHandler().getSpellInfo("*", "spell_name='Брызги кислоты [Acid splash]'"))
+    print(RaceInfoHandler().getRaceInfo("speed", "race_name='Ааракокра'"))

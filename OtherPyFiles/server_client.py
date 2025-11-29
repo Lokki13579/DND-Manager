@@ -29,7 +29,7 @@ class ServerClass(QObject):
         self.connectionSocket = socket(AF_INET, SOCK_STREAM)
 
     def startServer(self, port: int, ip: str = gethostbyname(gethostname())):
-        ip = "100.78.201.38"
+        # ip = "100.78.201.38"
         print("trying to create to", ip, port)
         try:
             self.connectionSocket.bind((ip, port))

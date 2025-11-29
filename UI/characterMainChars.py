@@ -44,7 +44,7 @@ class CharMainChar(QWidget):
 
         self.dicesLabel = QLabel()
         self.dicesLabel.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.dicesLabel.setText("Кости")
+        self.dicesLabel.setText("Параметры")
         self.info.addWidget(self.dicesLabel)
 
         self.skillsLabel = QLabel()

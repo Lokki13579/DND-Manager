@@ -8,8 +8,12 @@ from PyQt6.QtWidgets import (
     QTreeWidgetItem,
 )
 
-from OtherPyFiles.characterclass import classData, racesData
-from OtherPyFiles.dataBaseHandler import ClassInfoHandler, RaceInfoHandler
+from OtherPyFiles.dataBaseHandler import (
+    ClassInfoHandler,
+    RaceInfoHandler,
+    BackgroundHandler,
+    AlignmentHandler,
+)
 
 
 class SecondCharacteristics(QWidget):
@@ -33,7 +37,6 @@ class SecondCharacteristics(QWidget):
         self.classSkillTree = QTreeWidget()
         self.classSkillTree.setStyleSheet("font-size: 18pt;")
         self.classSkillTree.setHeaderLabel("Особенности класса")
-        self.classSkillTreeGroup = QTreeWidgetItem(self.classSkillTree, ["Умения"])
         self.skills = {}
         self.classLayout.addWidget(self.classSkillTree, 12)
 
@@ -54,12 +57,8 @@ class SecondCharacteristics(QWidget):
 
         self.raceParamsTree = QTreeWidget()
         self.raceParamsTree.setStyleSheet("font-size: 18pt;")
-        self.raceParamsTree.setHeaderLabel("Особенности расы")
-        self.raceParamsTreeGroup = QTreeWidgetItem(
-            self.raceParamsTree, [self.raceChoose.currentText()]
-        )
-        self.raceData = {}
-        self.on_race_changed(self.raceChoose.currentText())
+        self.raceParamsTree.setHeaderLabels(["Особенности расы", "Значение"])
+        self.raceParamsTree.setColumnWidth(0, 42 * 6 - 20)
         self.raceLayout.addWidget(self.raceParamsTree, 12)
 
         self.wvChoose = QComboBox()
@@ -68,11 +67,18 @@ class SecondCharacteristics(QWidget):
 
         self.mainLayout.addLayout(self.raceLayout)
 
+        self.classComboAdder()
+        self.racesComboAdder()
+        self.backgroundsComboAdder()
+        self.alignmentsComboAdder()
+
     def on_class_changed(self, _class):
         print(_class)
         self.character.setClass(_class)
         self.classSkillTree.clear()
         self.classSkillTreeGroup = QTreeWidgetItem(self.classSkillTree, ["Умения"])
+        for i in self.character.stats.get("skills"):
+            QTreeWidgetItem(self.classSkillTreeGroup, [i])
         self.classSkillTree.expandAll()
 
     def on_wv_changed(self, wv):
@@ -82,9 +88,33 @@ class SecondCharacteristics(QWidget):
         self.character.setRace(race)
         self.raceParamsTree.clear()
         self.raceParamsTreeGroup = QTreeWidgetItem(
-            self.raceParamsTree, [self.raceChoose.currentText()]
+            self.raceParamsTree, [self.raceChoose.currentText(), ""]
         )
+        QTreeWidgetItem(
+            self.raceParamsTreeGroup, ["Скорость", self.character.stats.get("speed")]
+        )
+        addict = QTreeWidgetItem(self.raceParamsTreeGroup, ["Характеристики +", ""])
+        for key, val in (
+            self.character.stats.get("diceStats", {}).get("addiction", {}).items()
+        ):
+            QTreeWidgetItem(addict, [key, str(val)])
         self.raceParamsTree.expandAll()
 
     def on_bg_changed(self, bg):
         self.character.stats["background"] = bg
+
+    def classComboAdder(self):
+        for i in ClassInfoHandler().getClassInfo("class_name"):
+            self.classChoose.addItem(i)
+
+    def racesComboAdder(self):
+        for i in RaceInfoHandler().getRaceInfo("race_name"):
+            self.raceChoose.addItem(i)
+
+    def backgroundsComboAdder(self):
+        for i in BackgroundHandler().getBackgrounds():
+            self.bgChoose.addItem(i)
+
+    def alignmentsComboAdder(self):
+        for i in AlignmentHandler().getAlignments():
+            self.wvChoose.addItem(i)

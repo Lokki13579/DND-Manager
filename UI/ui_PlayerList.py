@@ -21,7 +21,7 @@ class Ui_PlayerList(QWidget):
                 plc.updateData(pl.character)
                 self.ServerObj.sendToClient(
                     pl.conn,
-                    ["newStats", pl.character.Stats],
+                    ["newStats", pl.character.stats],
                     ["newSpellCells", pl.character.spellCells],
                     ["newStatus", pl.character.status],
                 )
@@ -39,7 +39,7 @@ class Ui_PlayerList(QWidget):
             match whatToUpdate:
                 case "exp":
                     plObj.expUPD(
-                        plObj.character.Stats.get("experience"),
+                        plObj.character.stats.get("experience"),
                         plObj.character.getNextLevelExp(),
                     )
                 case _:

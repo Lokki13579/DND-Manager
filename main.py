@@ -106,7 +106,7 @@ class MainWin(QMainWindow):
             self.showPlayerListMenu()
 
     def connectToServer(self, _ip, _port):
-        if ClientOBJ.connectToServer(_ip, _port):
+        if ClientOBJ.connectToServer(port=_port):
             self.showClientLobby()
 
 

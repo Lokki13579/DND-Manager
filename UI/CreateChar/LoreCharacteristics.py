@@ -18,5 +18,4 @@ class LoreCharacteristics(QWidget):
 
     def onTextChanged(self):
         self.lore = self.textEdit.toPlainText()
-        self.character.Stats["lore"] = self.lore
-        print(self.character.Stats)
+        self.character.stats["lore"] = self.lore
