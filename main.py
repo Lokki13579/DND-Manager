@@ -13,7 +13,7 @@ from UI.ui_PlayerList import Ui_PlayerList
 from UI.ClientLobby import Ui_Lobby
 from UI.CreateChar.CreateChar import Ui_MainList as Ui_CreateChar
 
-ServerOBJ = ServerClass()
+ServerOBJ = Server()
 ClientOBJ = Client()
 
 
@@ -80,11 +80,13 @@ class MainWin(QMainWindow):
 
     def initCreateMenu(self):
         self.CreateMenu = Ui_CreateLobby()
+        self.CreateMenu.HostButton.clicked.connect(self.startServer)
         self.CreateMenu.BackButton.clicked.connect(self.showMainMenu)
         self.stackedW.addWidget(self.CreateMenu)
 
     def initJoinMenu(self):
         self.JoinMenu = Ui_JoinToServer()
+        self.JoinMenu.ConnectButton.clicked.connect(self.connectToServer)
         self.JoinMenu.BackButton.clicked.connect(self.showMainMenu)
         self.stackedW.addWidget(self.JoinMenu)
 
@@ -104,7 +106,7 @@ class MainWin(QMainWindow):
         self.stackedW.addWidget(self.CharCreateMenu)
 
     def initPlayerListMenu(self):
-        self.PlayerListMenu = Ui_PlayerList(ClientOBJ)
+        self.PlayerListMenu = Ui_PlayerList(ServerOBJ)
         self.stackedW.addWidget(self.PlayerListMenu)
 
     def startServer(self, _port):
@@ -133,7 +135,7 @@ if __name__ == "__main__":
         app = applicationset(sys.argv)
         mainwin = MainWin()
         mainwin.show()
-        ex = app.exec()
+        app.exec()
     except KeyboardInterrupt:
         ServerOBJ.closeServer()
         ClientOBJ.disconnectFromServer()
