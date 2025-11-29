@@ -55,11 +55,6 @@ class Ui_PlayerList(QWidget):
                         self.ServerObj.players[player.addr].character.name,
                     )
                     plObj.NameUPD(self.ServerObj.players[player.addr].character.name)
-                case "exp":
-                    plObj.expUPD(
-                        plObj.character.stats.get("experience"),
-                        plObj.character.getNextLevelExp(),
-                    )
                 case _:
                     plObj.updateData(self.ServerObj.players[player.addr].character)
 

@@ -126,10 +126,10 @@ class Server(QObject):
                             self.players[address[0]], "status"
                         )
                     case ["newLevel", level]:
-                        self.players[address[0]].character.setLevel(level)
+                        self.players[address[0]].character.setLevel(int(level))
                         self.player_data_updated.emit(self.players[address[0]], "level")
                     case ["newExp", xp]:
-                        self.players[address[0]].character.setXp(xp)
+                        self.players[address[0]].character.setXp(int(xp))
                         self.player_data_updated.emit(self.players[address[0]], "exp")
                     case _:
                         response = "Unknown command"
