@@ -11,12 +11,14 @@ from PyQt6.QtWidgets import QVBoxLayout, QWidget, QStackedWidget
 from OtherPyFiles.server_client import dataSize
 from UI.playerCard.PlayerCard import Ui_PlayerCard
 from UI.CharactersList import Ui_CharsList
+from OtherPyFiles.characterclass import Character
 
 
 class Ui_Lobby(QWidget):
     def __init__(self, client):
         super().__init__()
         self.ClientOBJ = client
+        self.character = Character()
         self.setupUi()
 
     def setupUi(self):
@@ -28,35 +30,44 @@ class Ui_Lobby(QWidget):
 
         self.CharSelect.CharactersList.doubleClicked.connect(self.showCard)
         self.stackedWidget.addWidget(self.CharSelect)
-        self.Card = Ui_PlayerCard(char=self.ClientOBJ.character, client=self.ClientOBJ)
-        self.ClientOBJ.data_updated.connect(self.Card.updateData)
+        self.Card = Ui_PlayerCard(char=self.character)
+        for client in self.ClientOBJ:
+            client.data_updated.connect(self.data_updated)
         self.Card.needToSend.connect(self.send)
         self.stackedWidget.addWidget(self.Card)
         self.stackedWidget.setCurrentWidget(self.CharSelect)
 
-    def send(self, dataToSend):
-        print("Sending data:", dataToSend)
-        print(self.ClientOBJ.character.status)
-        if dataToSend:
-            self.ClientOBJ.sendToServer(*dataToSend)
+    def data_updated(self, type, data):
+        match type:
+            case "character":
+                self.character = data
+            case "stats":
+                self.character.setStats(eval(data))
+            case "spells":
+                self.character.spellCells = eval(data)
+            case "status":
+                self.character.status = eval(data)
+        self.Card.updateData(self.character)
 
-            match dataToSend[0]:
+    def send(self, dataToSend):
+        if dataToSend:
+            match dataToSend.split("&"):
                 case ["newLevel", l]:
                     if l != -1:
-                        self.Card.updateData(self.ClientOBJ.character)
+                        self.ClientOBJ[0].send_message(dataToSend)
+                        self.Card.updateData(self.character)
+                case ["newExp", exp]:
+                    self.ClientOBJ[0].send_message(dataToSend)
+                    self.Card.updateData(self.character)
 
             return
-        self.ClientOBJ.sendToServer(
-            ["newStats", self.ClientOBJ.character.stats],
-            ["newSpellCells", self.ClientOBJ.character.spellCells],
-            ["newStatus", self.ClientOBJ.character.status],
-        )
-        self.Card.updateData(self.ClientOBJ.character)
+        self.ClientOBJ[0].send_message("newStats&" + str(self.character.stats))
+        self.ClientOBJ[1].send_message("newSpells&" + str(self.character.spellCells))
+        self.ClientOBJ[2].send_message("newStatus&" + str(self.character.status))
+        self.Card.updateData(self.character)
 
     def showCard(self):
-        self.ClientOBJ.character = self.CharSelect.currCharacter
+        self.character = self.CharSelect.currCharacter
         self.stackedWidget.setCurrentIndex(1)
-        self.ClientOBJ.sendToServer(
-            ["characterNameChanged", self.ClientOBJ.character.name]
-        )
+        self.ClientOBJ[0].send_message("char_name&" + self.character.name)
         self.send(None)

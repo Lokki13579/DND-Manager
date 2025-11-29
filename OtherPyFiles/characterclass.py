@@ -4,7 +4,11 @@ import platform
 import os
 import math
 from math import floor
-import OtherPyFiles.dataBaseHandler as dbHandler
+
+try:
+    import OtherPyFiles.dataBaseHandler as dbHandler
+except ModuleNotFoundError:
+    import dataBaseHandler as dbHandler
 
 
 CHARACTERISTICS = {
@@ -48,9 +52,9 @@ class Character:
         self.status = {}
         self.spellCells = {}
 
+        self.setLevel(1)
         self.setClass("Бард")
         self.setRace("Ааракокра")
-        self.setLevel(1)
         self.setXp(0)
         self.stats["worldview"] = "Нейтральный"
         self.stats["background"] = "Артист"
@@ -228,10 +232,17 @@ class Character:
         except:
             self.stats["masterBonus"] = ""
 
+    def getExpTo20Level(self):
+        return sum(
+            dbHandler.LevelInfoHandler().getLevelInfo(
+                "experience_to_next_level", f"level_id>{self.stats.get('level', 1)}"
+            )
+        )
+
     def getNextLevelExp(self):
         return dbHandler.LevelInfoHandler().getLevelInfo(
             "experience_to_next_level", f"level_id={self.stats.get('level', 1)}"
-        )
+        )[0]
 
     def expReset(self, newLevel):
         try:
@@ -286,24 +297,13 @@ class Character:
     def otherStatsReset(self):
         otherSt = {}
         try:
-            for feature, value in dbHandler.ClassInfoHandler.getClassInfo(
+            for feature, value in dbHandler.ClassInfoHandler().getClassInfo(
                 "feature_name,feature_value",
-                f"class_name='{self.stats.get('class')}' AND level={self.stats.get('level')}",
+                f"class_name='{self.stats.get('class', 'Бард')}' AND level={self.stats.get('level', 1)}",
             ):
                 otherSt[feature] = value
-
-            if "formula" in class_data:
-                formula = class_data["formula"].split(" ") + ["1"]
-                dice_stat = self.stats.get("diceStats", {}).get(formula[0], 10)
-                other_stat = self.stats.get(formula[1], 0)
-                otherSt["Известные заклинания"] = max(
-                    1,
-                    math.floor((int(dice_stat) - 10) / 2)
-                    + math.floor(int(other_stat) / int(formula[2])),
-                )
-
-        except Exception as e:
-            print(f"Ошибка в otherStatsReset: {e}")
+        except TypeError:
+            pass
 
         self.stats["otherStats"] = otherSt
 
@@ -312,6 +312,7 @@ class Character:
         print(f"State updated: {statName} = {statChecked}")
 
     def setStats(self, st):
+        print(type(st), st)
         self.stats = st
         self.otherStatsReset()
         self.initSpellCell()
@@ -398,16 +399,14 @@ class CharLoader:
             return json.load(file)
 
     def CharClassDispencer(self):
-        try:
-            characters_data = self.charLoad()
-            print("char_data", characters_data)
-            for charName, charData in characters_data.items():
-                char = Character()
-                char.setName(charName)
-                char.setStats(charData)
-                self.allCharacters[charName] = char
-        except Exception as e:
-            print(f"Ошибка загрузки персонажей: {e}")
+        characters_data = self.charLoad()
+        print("char_data=", characters_data)
+        print("char_data", characters_data)
+        for charName, charData in characters_data.items():
+            char = Character()
+            char.setName(charName)
+            char.setStats(charData)
+            self.allCharacters[charName] = char
         return self.allCharacters
 
 

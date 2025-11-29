@@ -31,7 +31,7 @@ class Ui_PlayerCard(QWidget):
     needToSend = pyqtSignal(object)
     scratch = {"1": 2, "2": 2, "3": 4, "4": 4, "5": 5, "6": 5}
 
-    def __init__(self, char=Character(), client=None):
+    def __init__(self, char=Character()):
         super().__init__()
         self.character = char
         self.setupUi()
@@ -52,16 +52,27 @@ class Ui_PlayerCard(QWidget):
         self.secondCharsInit()
 
         self.changeLevelDialog = QInputDialog(self)
+        self.changeExpDialog = QInputDialog(self)
 
     def charLevelUpdate(self, data):
-        self.character.setLevel(data.get("level", -1))
-        self.character.setXp(data.get("experience", 0))
+        self.character.setLevel(data)
+        self.needToSend.emit("newLevel&" + str(data))
+
+    def charExpUpdate(self, data):
+        self.character.setXp(data)
+        self.needToSend.emit("newExp&" + str(data))
+
+    def updateData(self, character):
+        self.character = character
+        self.mainGroup.setTitle(self.character.name)
+        self.levelUPD(self.character.stats.get("level"))
         self.expUPD(
-            self.character.stats.get("experience", 0), self.character.getNextLevelExp()
+            self.character.stats.get("experience"), self.character.getNextLevelExp()
         )
-        self.needToSend.emit(
-            [["newLevel", data.get("level", -1)], ["newExp", data.get("experience", 0)]]
-        )
+        self.classUPD(self.character.stats.get("class"))
+        self.raceUPD(self.character.stats.get("race"))
+        self.worldviewUPD(self.character.stats.get("worldview"))
+        self.backgroundUPD(self.character.stats.get("background"))
 
     def firstCharsInit(self):
         self.firstCharsObjects = {}
@@ -79,44 +90,12 @@ class Ui_PlayerCard(QWidget):
             self.firstCharsObjects.update({f"{name}": o.get(name, QLabel)()})
             vbox.addWidget(self.firstCharsObjects[f"{name}"])
 
-        self.firstCharsObjects["level"].clicked.connect(
-            lambda: self.changeLevel("level")
-        )
-        self.firstCharsObjects["experience"].clicked.connect(
-            lambda: self.changeLevel("experience")
-        )
+        self.firstCharsObjects["level"].clicked.connect(self.changeLevel)
+        self.firstCharsObjects["experience"].clicked.connect(self.changeExp)
 
-    def secondCharsInit(self):
-        try:
-            self.secondChars.removeWidget(self.secondCharsObjects["spells"])
-            self.secondChars.removeWidget(self.secondCharsObjects["status"])
-            self.secondChars.removeWidget(self.secondCharsObjects["otherButtons"])
-        except KeyError:
-            pass
-        except AttributeError:
-            pass
-        self.secondCharsObjects = {}
-        self.secondCharsObjects.update({"spells": SpellCont(self.character)})
-        self.secondCharsObjects.get("spells").sbmChanged.connect(self.needToSend.emit)
-        self.secondCharsObjects.update({"status": StatusCont(self.character)})
-        self.secondCharsObjects.get("status").sbmChanged.connect(self.needToSend.emit)
-        self.secondCharsObjects.update({"otherButtons": QGroupBox()})
-        for obj in self.secondCharsObjects.values():
-            self.secondChars.addWidget(obj)
-
-    def updateData(self, character):
-        self.character = character
-        self.mainGroup.setTitle(self.character.name)
-        self.levelUPD(self.character.stats.get("level"))
-        self.expUPD(
-            self.character.stats.get("experience"), self.character.getNextLevelExp()
-        )
-        self.classUPD(self.character.stats.get("class"))
-        self.raceUPD(self.character.stats.get("race"))
-        self.worldviewUPD(self.character.stats.get("worldview"))
-        self.backgroundUPD(self.character.stats.get("background"))
-        self.spellsUPD(self.character)
-        self.statusUPD(self.character)
+    def NameUPD(self, name):
+        self.character.name = name
+        self.mainGroup.setTitle(f"{name}")
 
     def levelUPD(self, level):
         self.firstCharsObjects["level"].setText(f"{level}")
@@ -136,25 +115,32 @@ class Ui_PlayerCard(QWidget):
     def backgroundUPD(self, background):
         self.firstCharsObjects["background"].setText(f"{background}")
 
-    def spellsUPD(self, char):
-        self.secondCharsObjects.get("spells").setNewCharacter(char)
-
-    def statusUPD(self, char):
-        self.secondCharsObjects.get("status").setNewCharacter(char)
-
     def changeLevel(self, inp):
-        if inp == "experience":
-            max = self.character.getExpTo20Level()
-        else:
-            max = 20
+        max = 20
         answer = self.changeLevelDialog.getInt(
             self.changeLevelDialog,
             "Change Level",
             f"Enter new {inp}\nup to {max}:",
-            self.character.stats.get(inp),
+            self.character.stats.get("level"),
             1,
             max,
             1,
         )
         if answer[1]:
-            self.charLevelUpdate({inp: answer[0]})
+            self.charLevelUpdate(answer[0])
+
+    def changeExp(self):
+        max = self.character.getExpTo20Level()
+        answer = self.changeExpDialog.getInt(
+            self.changeExpDialog,
+            "Change Experience",
+            f"Enter new experience\nup to {max}:",
+            self.character.stats.get("experience"),
+            0,
+            max,
+            1,
+        )
+        if answer[1]:
+            self.charExpUpdate(answer[0])
+
+    def secondCharsInit(self): ...

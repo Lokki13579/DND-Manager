@@ -30,7 +30,6 @@ class StatusContainer(QGroupBox):
 
     def statusInit(self):
         for _name in dbHandler.StatusesHandler().getStatuses():
-            print(_name)
             self.statusObjects[_name] = StatusObj(_name)
         self.tryToApplyChar()
 

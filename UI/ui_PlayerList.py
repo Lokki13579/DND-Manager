@@ -9,7 +9,7 @@ class Ui_PlayerList(QWidget):
         self.playersTab = {}
 
         # Подключаем сигналы сервера к слотам
-        self.ServerObj.player_connected.connect(self.add_player_tab)
+        self.ServerObj.new_client_connected.connect(self.add_player_tab)
         self.ServerObj.player_data_updated.connect(self.update_player_tab)
 
         self.setupUi()
@@ -18,32 +18,50 @@ class Ui_PlayerList(QWidget):
         widget = self.tabWidget.currentWidget()
         for pl, plc in self.playersTab.items():
             if widget == plc:
-                plc.updateData(pl.character)
-                self.ServerObj.sendToClient(
-                    pl.conn,
-                    ["newStats", pl.character.stats],
-                    ["newSpellCells", pl.character.spellCells],
-                    ["newStatus", pl.character.status],
+                plc.updateData(self.ServerObj.players[pl].character)
+                self.ServerObj.send_to_client(
+                    self.ServerObj.players[pl].addr,
+                    0,
+                    "stats&" + str(self.ServerObj.players[pl].character.stats),
+                )
+                self.ServerObj.send_to_client(
+                    self.ServerObj.players[pl].addr,
+                    1,
+                    "spellCells&"
+                    + str(self.ServerObj.players[pl].character.spellCells),
+                )
+                self.ServerObj.send_to_client(
+                    self.ServerObj.players[pl].addr,
+                    2,
+                    "status&" + str(self.ServerObj.players[pl].character.status),
                 )
 
     def add_player_tab(self, player):
-        player_card = Ui_PlayerCard(player.character)
-        self.tabWidget.addTab(player_card, player.character.name)
+        player_card = Ui_PlayerCard(self.ServerObj.players[player].character)
+        self.tabWidget.addTab(
+            player_card, self.ServerObj.players[player].character.name
+        )
         player_card.needToSend.connect(self.send)
         self.playersTab[player] = player_card
 
     def update_player_tab(self, player, whatToUpdate):
-        if player in self.playersTab:
-            plObj = self.playersTab[player]
+        if player.addr in self.playersTab:
+            plObj = self.playersTab[player.addr]
 
             match whatToUpdate:
+                case "name":
+                    self.tabWidget.setTabText(
+                        self.tabWidget.indexOf(plObj),
+                        self.ServerObj.players[player.addr].character.name,
+                    )
+                    plObj.NameUPD(self.ServerObj.players[player.addr].character.name)
                 case "exp":
                     plObj.expUPD(
                         plObj.character.stats.get("experience"),
                         plObj.character.getNextLevelExp(),
                     )
                 case _:
-                    plObj.updateData(player.character)
+                    plObj.updateData(self.ServerObj.players[player.addr].character)
 
     def setupUi(self):
         self.resize(720, 540)

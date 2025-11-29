@@ -363,4 +363,4 @@ class BackgroundHandler:
 
 
 if __name__ == "__main__":
-    print(RaceInfoHandler().getRaceInfo("speed", "race_name='Ааракокра'"))
+    print(LevelInfoHandler().getLevelInfo("experience_to_next_level", "level_id>2"))

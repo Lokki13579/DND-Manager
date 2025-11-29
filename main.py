@@ -2,7 +2,7 @@
 
 import sys
 from typing import final
-from OtherPyFiles.server_client import ServerClass, Client
+from OtherPyFiles.server_client import Server, Client
 from PyQt6.QtWidgets import QApplication, QMainWindow, QStackedWidget, QStackedLayout
 
 from UI.MainMenu import Ui_MainMenu
@@ -14,7 +14,7 @@ from UI.ClientLobby import Ui_Lobby
 from UI.CreateChar.CreateChar import Ui_MainList as Ui_CreateChar
 
 ServerOBJ = Server()
-ClientOBJ = Client()
+ClientOBJ = [Client("stats"), Client("spells"), Client("status")]
 
 
 @final
@@ -110,11 +110,11 @@ class MainWin(QMainWindow):
         self.stackedW.addWidget(self.PlayerListMenu)
 
     def startServer(self, _port):
-        if ServerOBJ.startServer(_port):
+        if ServerOBJ.start():
             self.showPlayerListMenu()
 
-    def connectToServer(self, _ip, _port):
-        if ClientOBJ.connectToServer(port=_port):
+    def connectToServer(self):
+        if all(list(map(lambda x: x.connect(), ClientOBJ))):
             self.showClientLobby()
 
 
