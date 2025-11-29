@@ -24,7 +24,7 @@ class spellGroup(QGroupBox):
             self.spellCellsObj[level] = CellObj(
                 level,
                 count,
-                self.character.Stats.get("otherStats", {})
+                self.character.stats.get("otherStats", {})
                 .get("ЯчейкиЗаклинаний", {})
                 .get(level, 0),
             )
@@ -34,7 +34,7 @@ class spellGroup(QGroupBox):
         self.character = character
         for level, count in self.character.spellCells.items():
             self.spellCellsObj[level].setMax(
-                self.character.Stats.get("otherStats", {})
+                self.character.stats.get("otherStats", {})
                 .get("ЯчейкиЗаклинаний", {})
                 .get(level, 0)
             )

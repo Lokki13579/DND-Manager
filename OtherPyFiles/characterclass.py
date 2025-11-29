@@ -29,34 +29,10 @@ match platform.system():
 
 classData = dbHandler.ClassInfoHandler()
 racesData = dbHandler.RaceInfoHandler()
-Stats = {
-    "class": "Ааракокра",
-    "race": "Бард",
-    "level": 1,
-    "experience": 0,
-    "speed": "30",
-    "worldview": "Нейтральный",
-    "background": "Артист",
-    "masterBonus": "+2",
-    "skills": "",
-    "diceStats": "",
-    "inventory": "",
-    "spells": "",
-    "otherData": {
-        "learnedSpells": 0,
-        "learnedFocuses": 0,
-        "spellCells": {"1": 0, "2": 0, "3": 0},
-    },
-    "lore": "",
-}
-
-characterPath = "/home/artem/.config/DNDManager/AllCharacterData.json"
 
 
 class Character:
-    def __init__(
-        self, name: str = "Выбирается", stats: dict[str, object] | None = None
-    ):
+    def __init__(self, name: str = "Выбирается", stats: dict[str, object] = {}):
         def statusesInit():
             statuses_data: dict[str, object] | list[object]
             statuses_data = dbHandler.StatusesHandler().getStatuses()
@@ -67,28 +43,25 @@ class Character:
 
             return
 
-        self.name = name
-        self.Stats: dict[
-            str,
-            str | list[str] | dict[str, str | list[str] | dict[str, str | list[str]]],
-        ] = {}
-        self.status: dict[object, bool] = {}
-        self.spellCells: dict[str, object] = {}
+        self.name: str = name
+        self.stats = stats or {}
+        self.status = {}
+        self.spellCells = {}
 
         self.setClass("Бард")
         self.setRace("Ааракокра")
         self.setLevel(1)
         self.setXp(0)
-        self.Stats["worldview"] = "Нейтральный"
-        self.Stats["background"] = "Артист"
+        self.stats["worldview"] = "Нейтральный"
+        self.stats["background"] = "Артист"
         self.healthInit()
-        self.setMaxHealth(max([1, self.getFirstLevMaxHp()]))
-        self.Stats["inventory"] = {}
-        self.Stats["spells"] = {}
-        self.Stats["spells"]["readySpells"] = {}
-        self.Stats["spells"]["allSpells"] = {}
+        self.setMaxHealth(max(1, self.getFirstLevMaxHp()))
+        self.stats["inventory"] = {}
+        self.stats["spells"] = {}
+        self.stats["spells"]["readySpells"] = {}
+        self.stats["spells"]["allSpells"] = {}
         for i in range(10):
-            self.Stats["spells"]["allSpells"][str(i)] = []
+            self.stats["spells"]["allSpells"][i] = []
         statusesInit()
         # Безопасная загрузка maxExp
 
@@ -98,25 +71,26 @@ class Character:
         obj: object = object,
     ):
         obj.item.deletingItem.connect(self.removeItem)
-        self.Stats["inventory"][item] = obj.item.count
+        self.stats["inventory"][item] = obj.item.count
 
     def addSpell(self, spellItem):
         spellItem.spell.deletingSpell.connect(self.removeSpell)
-        self.Stats["spells"]["allSpells"][spellItem.spell.level].append(
-            spellItem.spell.name
+        print(self.stats)
+        self.stats["spells"]["allSpells"][spellItem.spell.spell_level].append(
+            spellItem.spell.spell_name
         )
 
     def removeSpell(self, spellName, spellLevel):
-        self.Stats["spells"]["allSpells"][spellLevel].remove(spellName)
+        self.stats["spells"]["allSpells"][spellLevel].remove(spellName)
 
     def removeItem(self, item: str):
-        self.Stats["inventory"].pop(item)
+        self.stats["inventory"].pop(item)
 
     def reduceItem(self, item: str, count=1):
-        self.Stats["inventory"][item].reduce(count)
+        self.stats["inventory"][item].reduce(count)
 
     def increaseItem(self, item: str, count=1):
-        self.Stats["inventory"][item].add(count)
+        self.stats["inventory"][item].add(count)
 
     def setName(self, newName):
         self.name = newName
@@ -125,9 +99,9 @@ class Character:
         if value == -1:
             return
         if isinstance(value, str) and value[0] in "+-":
-            self.Stats["level"] += int(value)
+            self.stats["level"] += int(value)
         else:
-            self.Stats["level"] = int(value)
+            self.stats["level"] = int(value)
 
         if int(value) == 1:
             try:
@@ -135,27 +109,30 @@ class Character:
             except:
                 pass
 
-        self.expReset(self.Stats["level"])
-        self.BMReset(self.Stats["level"])
-        self.skillReset(self.Stats.get("class", ""), self.Stats["level"])
+        self.expReset(self.stats["level"])
+        self.BMReset(self.stats["level"])
+        self.skillReset(self.stats.get("class", ""), self.stats["level"])
         self.otherStatsReset()
         self.initSpellCell()
 
     def setXp(self, value):
         if isinstance(value, str) and value[0] in "+-":
-            self.Stats["experience"] += int(value)
+            self.stats["experience"] += int(value)
         else:
-            self.Stats["experience"] = int(value)
+            self.stats["experience"] = int(value)
 
-        self.expReset(self.Stats.get("level", 0))
+        self.expReset(self.stats.get("level", 0))
         self.initSpellCell()
 
     def setClass(self, _class):
-        self.Stats["class"] = _class
-        self.Stats["hpDice"] = classData.getClassInfo(
-            "hp_dice", f"class_name='{_class}'"
-        )[0]
-        self.Stats["mainChar"] = classData.getClassInfo(
+        print(self.name)
+        self.stats["class"] = _class
+        print(f"Class set to {_class}")
+        self.stats["hpDice"] = classData.getClassInfo(
+            "hp_dice", f"class_name='{_class}' AND level={self.stats.get('level', 1)}"
+        )[0][0]
+        print(self.stats["hpDice"])
+        self.stats["mainChar"] = classData.getClassInfo(
             "main_characteristic", f"class_name='{_class}'"
         )[0]
 
@@ -164,19 +141,20 @@ class Character:
         except:
             pass
 
-        self.skillReset(_class, self.Stats.get("level", 1))
+        self.skillReset(_class, self.stats.get("level", 1))
 
     def healthInit(self):
-        self.Stats["health"] = {}
-        self.Stats["health"]["main"] = {"max": 0, "val": 0}
-        self.Stats["health"]["temp"] = 0
+        self.stats["health"] = {}
+        self.stats["health"]["main"] = {"max": 0, "val": 0}
+        self.stats["health"]["temp"] = 0
 
     def getFirstLevMaxHp(self):
-        diceSt = self.Stats.get("diceStats", {})
-        return int(self.Stats.get("hpDice")[1:]) + floor(
+        diceSt = self.stats.get("diceStats", {})
+        print(self.stats.get("hpDice"))
+        return int(self.stats.get("hpDice", "d6")[1:]) + floor(
             (
                 diceSt.get("main", {}).get(
-                    "Телосложение", int(self.Stats.get("hpDice")[1:])
+                    "Телосложение", int(self.stats.get("hpDice", "d6")[1:])
                 )
                 + diceSt.get("addiction", {}).get("Телосложение", 0)
                 - 10
@@ -188,86 +166,74 @@ class Character:
         if maxHealth == "":
             maxHealth = self.getFirstLevMaxHp()
         maxHealth = int(maxHealth)
-        self.Stats["health"]["main"]["max"] = maxHealth
+        self.stats["health"]["main"]["max"] = maxHealth
 
     def maxHealthUp(self, newMaxHealth: int):
-        self.Stats["health"]["main"]["max"] += newMaxHealth
+        self.stats["health"]["main"]["max"] += newMaxHealth
 
     def setHealth(self, hp):
-        self.Stats["health"]["main"]["val"] = hp
+        self.stats["health"]["main"]["val"] = hp
 
     def setTempHp(self, tempHp):
-        self.Stats["health"]["temp"] = tempHp
+        self.stats["health"]["temp"] = tempHp
 
     def setRace(self, race):
-        self.Stats["race"] = race
-        self.Stats["speed"] = racesData.getRaceInfo(
+        self.stats["race"] = race
+        self.stats["speed"] = racesData.getRaceInfo(
             "speed", "race_name=" + f"'{race.strip()}'"
         )
 
         self.diceInit()
-        self.Stats["diceStats"]["addiction"] = racesData.getRaceInfo(
+        self.stats["diceStats"]["addiction"] = racesData.getRaceInfo(
             "char_name,increase", "race_name='Ааракокра'"
         )
 
     def diceInit(self):
-        if self.Stats.get("diceStats", {}) != {}:
+        if self.stats.get("diceStats", {}) != {}:
             return
-        self.Stats["diceStats"] = {}
-        self.Stats["diceStats"]["main"] = {}
-        self.Stats["diceStats"]["main"]["value"] = {}
-        self.Stats["diceStats"]["main"]["modif"] = {}
-        self.Stats["diceStats"]["addiction"] = {}
+        self.stats["diceStats"] = {}
+        self.stats["diceStats"]["main"] = {}
+        self.stats["diceStats"]["main"]["value"] = {}
+        self.stats["diceStats"]["main"]["modif"] = {}
+        self.stats["diceStats"]["addiction"] = {}
 
     def setDice(self, name, value, modif):
-        self.Stats["diceStats"]["main"]["value"][name] = value
-        self.Stats["diceStats"]["main"]["modif"][name] = modif
+        self.stats["diceStats"]["main"]["value"][name] = value
+        self.stats["diceStats"]["main"]["modif"][name] = modif
 
     def skillReset(self, cl, newLevel):
-        self.Stats["skills"] = []
+        self.stats["skills"] = []
         if not cl:
             return
 
         try:
-            class_data = jsonLoad("JSONS/dnd_classes.json").get(cl, {})
             for _level in range(int(newLevel), 0, -1):
-                level_data = class_data.get(str(_level), {})
-                skills = level_data.get("Умения", "")
+                skills = classData.getClassInfo("features", f"class_name='{cl}'")
                 if skills:
-                    self.Stats["skills"] += skills.split(", ")
-            while "0" in self.Stats["skills"]:
-                self.Stats["skills"].remove("0")
+                    self.stats["skills"] += skills.split(", ")
+            while "0" in self.stats["skills"]:
+                self.stats["skills"].remove("0")
         except:
-            self.Stats["skills"] = []
+            self.stats["skills"] = []
 
     def BMReset(self, newLevel):
         try:
-            levels_data = jsonLoad("JSONS/dnd_levels.json")
-            self.Stats["masterBonus"] = levels_data.get(str(newLevel), {}).get("BM", "")
+            self.stats["masterBonus"] = dbHandler.LevelInfoHandler().getLevelInfo(
+                "master_bonus", f"level_id='{newLevel}'"
+            )
         except:
-            self.Stats["masterBonus"] = ""
+            self.stats["masterBonus"] = ""
 
     def getNextLevelExp(self):
-        levels_data = jsonLoad("JSONS/dnd_levels.json")
-        current_level = self.Stats.get("level", 0)
-        next_level_data = levels_data.get(str(current_level + 1), {})
-        next_level_exp = next_level_data.get("experience", float("inf"))
-        return next_level_exp
-
-    def getExpTo20Level(self):
-        levels_data = jsonLoad("JSONS/dnd_levels.json")
-        current_level = self.Stats.get("level", 1)
-        exp_to_20 = 0
-        for i in range(current_level + 1, 21):
-            next_level_exp = levels_data.get(str(i), {}).get("experience", float("inf"))
-            exp_to_20 += next_level_exp
-        return exp_to_20
+        return dbHandler.LevelInfoHandler().getLevelInfo(
+            "experience_to_next_level", f"level_id={self.stats.get('level', 1)}"
+        )
 
     def expReset(self, newLevel):
         try:
-            levels_data = jsonLoad("JSONS/dnd_levels.json")
-            current_level = self.Stats.get("level", 0)
-            current_exp = self.Stats.get("experience", 0)
+            levels_data = charLoad("JSONS/dnd_levels.json")
+            current_level = self.stats.get("level", 0)
+            current_exp = self.stats.get("experience", 0)
             while True:
                 next_level_data = levels_data.get(str(current_level + 1), {})
                 next_level_exp = next_level_data.get("experience", float("inf"))
@@ -277,36 +243,36 @@ class Character:
                 else:
                     break
 
-            self.Stats["level"] = current_level
-            self.Stats["experience"] = current_exp
+            self.stats["level"] = current_level
+            self.stats["experience"] = current_exp
             next_level_data = levels_data.get(str(current_level + 1), {})
         except:
             pass
 
     def getLevel(self):
-        return self.Stats.get("level")
+        return self.stats.get("level", 1)
 
     def getStats(self):
         out = ""
-        for k, v in self.Stats.items():
+        for k, v in self.stats.items():
             out += "&" + k.center(15, "-") + "\n" + str(v).center(15) + "\n"
         return out
 
     def getMaxHp(self):
-        return self.Stats.get("health", {}).get("main", {}).get("max", 0)
+        return self.stats.get("health", {}).get("main", {}).get("max", 0)
 
     def getHp(self):
-        return self.Stats.get("health", {}).get("main", {}).get("val", 0)
+        return self.stats.get("health", {}).get("main", {}).get("val", 0)
 
     def fullHeal(self):
-        self.Stats["health"]["main"]["val"] = self.getMaxHp()
+        self.stats["health"]["main"]["val"] = self.getMaxHp()
 
     def heal(self, amount):
-        self.Stats["health"]["main"]["val"] += amount
+        self.stats["health"]["main"]["val"] += amount
 
     def randomHeal(self):
-        self.Stats["health"]["main"]["val"] += randint(
-            1, int(self.Stats.get("hpDice", 1))
+        self.stats["health"]["main"]["val"] += randint(
+            1, int(self.stats.get("hpDice", 1))
         )
 
     def invMan(self, action, item=None):
@@ -316,37 +282,16 @@ class Character:
     def otherStatsReset(self):
         otherSt = {}
         try:
-            class_data = classData.getClassInfo(
-                "*", "class_name=" + str(self.Stats.get("class"))
-            )
-            level_data = class_data.get(str(self.Stats.get("level", 1)), {})
-
-            for i in level_data:
-                if i == "Умения":
-                    continue
-                if i == "DifferentSpellCells":
-                    otherSt["MaxspellCells"] = {}
-                    for spCell in level_data[i]:
-                        cell_level = (
-                            spCell[-1] if isinstance(spCell, str) and spCell else "1"
-                        )
-                        otherSt["MaxspellCells"][cell_level] = str(
-                            level_data[i].get(spCell, 0)
-                        )
-                    continue
-                if i == "Ячейки заклинаний" or i == "Уровень ячеек":
-                    otherSt["MaxspellCells"] = {}
-                    cell_level = level_data.get("Уровень ячеек", "1")
-                    otherSt["MaxspellCells"][cell_level] = level_data.get(
-                        "Ячейки заклинаний", 0
-                    )
-                    continue
-                otherSt[i] = level_data[i]
+            for feature, value in dbHandler.ClassInfoHandler.getClassInfo(
+                "feature_name,feature_value",
+                f"class_name='{self.stats.get('class')}' AND level={self.stats.get('level')}",
+            ):
+                otherSt[feature] = value
 
             if "formula" in class_data:
                 formula = class_data["formula"].split(" ") + ["1"]
-                dice_stat = self.Stats.get("diceStats", {}).get(formula[0], 10)
-                other_stat = self.Stats.get(formula[1], 0)
+                dice_stat = self.stats.get("diceStats", {}).get(formula[0], 10)
+                other_stat = self.stats.get(formula[1], 0)
                 otherSt["Известные заклинания"] = max(
                     1,
                     math.floor((int(dice_stat) - 10) / 2)
@@ -356,21 +301,21 @@ class Character:
         except Exception as e:
             print(f"Ошибка в otherStatsReset: {e}")
 
-        self.Stats["otherStats"] = otherSt
+        self.stats["otherStats"] = otherSt
 
     def setState(self, statName, statChecked):
         self.status.update({statName: statChecked})
         print(f"State updated: {statName} = {statChecked}")
 
     def setStats(self, st):
-        self.Stats = st
+        self.stats = st
         self.otherStatsReset()
         self.initSpellCell()
-        self.expReset(self.Stats.get("level", 1))
+        self.expReset(self.stats.get("level", 1))
 
     def initSpellCell(self):
         try:
-            other_stats = self.Stats.get("otherStats", {})
+            other_stats = self.stats.get("otherStats", {})
             max_cells = other_stats.get("ЯчейкиЗаклинаний", {})
 
             if max_cells:
@@ -391,12 +336,12 @@ class Character:
             self.spellCells[key] += int(value)
 
         try:
-            max_cells = self.Stats.get("otherStats", {}).get("MaxspellCells", {})
+            max_cells = self.stats.get("otherStats", {}).get("MaxspellCells", {})
             if max_cells:
                 max_cell_value = int(max_cells.get(key, 0))
             else:
                 max_cell_value = int(
-                    self.Stats.get("otherStats", {}).get("Ячейки заклинаний", 0)
+                    self.stats.get("otherStats", {}).get("Ячейки заклинаний", 0)
                 )
 
             if max_cell_value < self.spellCells[key]:
@@ -408,10 +353,14 @@ class Character:
             if self.spellCells[key] < 0:
                 self.spellCells[key] = 0
 
-    def charSave(self, path=characterPath):
+    def charLoad(self):
+        with open(charPath, "r", encoding="utf-8") as file:
+            return json.load(file)
+
+    def charSave(self, path=charPath):
         try:
-            data = jsonLoad()
-            data[self.name] = self.Stats
+            data = self.charLoad()
+            data[self.name] = self.stats
 
             with open(path, "w", encoding="utf-8") as file:
                 json.dump(data, file, indent=4, ensure_ascii=False)
@@ -421,14 +370,14 @@ class Character:
 
     def jsonCharDelete(self):
         try:
-            oldData = jsonLoad()
+            oldData = self.charLoad()
             if self.name in oldData:
                 oldData.pop(self.name)
                 self.jsonSave(oldData)
         except Exception as e:
             print(f"Ошибка удаления персонажа: {e}")
 
-    def jsonSave(self, data, path=characterPath):
+    def jsonSave(self, data, path=charPath):
         try:
             with open(path, "w", encoding="utf-8") as file:
                 json.dump(data, file, indent=4, ensure_ascii=False)
@@ -440,9 +389,14 @@ class CharLoader:
     def __init__(self):
         self.allCharacters = {}
 
+    def charLoad(self):
+        with open(charPath, "r", encoding="utf-8") as file:
+            return json.load(file)
+
     def CharClassDispencer(self):
         try:
-            characters_data = jsonLoad()
+            characters_data = self.charLoad()
+            print("char_data", characters_data)
             for charName, charData in characters_data.items():
                 char = Character()
                 char.setName(charName)

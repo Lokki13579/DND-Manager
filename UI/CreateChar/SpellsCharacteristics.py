@@ -90,7 +90,9 @@ class SpellsCharacteristics(QWidget):
             for i in range(10):
                 header = QTreeWidgetItem(self.searchResult, [f"{i} уровень"])
                 _dict[f"{i}"] = header
-                for spell in SpellHandler().getSpellInfo("spell_name", f"level={i}"):
+                for spell in SpellHandler().getSpellInfo(
+                    "spell_name", f"spell_level={i}"
+                ):
                     if searchSpell.lower() in spell.lower():
                         item = QTreeWidgetItem(header, [spell])
                         _dict[spell] = item
@@ -110,11 +112,12 @@ class SpellsCharacteristics(QWidget):
         pattern = r"(\([0-9]\))?([^#\(\)]+)?"
         res = re.findall(pattern, self.searchBar.text())
         spellName = res[0][1].strip()
-        spD = SpellHandler().getSpellInfo("spell_name", f"spell_name='{spellName}'")
+        spD = SpellHandler().getSpellInfo("*", f"spell_name='{spellName}'")
+        print(spD)
         if not spD:
             self.searchBar.setText("Такого заклинания не существует")
             return
-        spellItem = self.createObject(spD)
+        spellItem = self.createObject(spD[spellName])
         self.character.addSpell(spellItem)
         for i in self.spells.values():
             self.spellsContainer.removeWidget(i)

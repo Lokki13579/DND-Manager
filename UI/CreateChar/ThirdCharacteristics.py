@@ -58,7 +58,7 @@ class ThirdCharacteristics(QWidget):
             self.diceObjects[st] = DiceChar(
                 st,
                 8,
-                self.character.Stats.get("diceStats").get("addiction").get(st, 0),
+                self.character.stats.get("diceStats").get("addiction").get(st, 0),
                 self.points,
             )
             self.diceObjects[st].newPoints.connect(self.updatePoints)
@@ -89,15 +89,15 @@ class ThirdCharacteristics(QWidget):
     def addictionDisp(self):
         for obj in self.diceObjects.values():
             obj.setAddiction(
-                self.character.Stats.get("diceStats").get("addiction").get(obj.name, 0)
+                self.character.stats.get("diceStats").get("addiction").get(obj.name, 0)
             )
 
     def applyToCharacter(self):
         for obj in self.diceObjects.values():
-            self.character.Stats.get("diceStats").get("main").get("value").update(
+            self.character.stats.get("diceStats").get("main").get("value").update(
                 {obj.name: obj.value}
             )
-            self.character.Stats.get("diceStats").get("main").get("modif").update(
+            self.character.stats.get("diceStats").get("main").get("modif").update(
                 {obj.name: obj.modif}
             )
 

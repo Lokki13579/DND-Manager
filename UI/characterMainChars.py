@@ -61,10 +61,10 @@ class CharMainChar(QWidget):
     def showNewCharacter(self, character):
         self.showingCharacter = character
         self.nameLabel.setText(character.name)
-        self.classLabel.setText("Класс: " + character.Stats.get("class"))
-        self.raceLabel.setText("Раса: " + character.Stats.get("race"))
-        self.levelLabel.setText(str("Уровень: " + str(character.Stats.get("level"))))
-        dStats = character.Stats.get("diceStats")
+        self.classLabel.setText("Класс: " + character.stats.get("class"))
+        self.raceLabel.setText("Раса: " + character.stats.get("race"))
+        self.levelLabel.setText(str("Уровень: " + str(character.stats.get("level"))))
+        dStats = character.stats.get("diceStats")
         # телосложение (значение) (модификатор)
         dstatsToPrint = []
         for key, value in dStats.get("main", {}).get("value", {}).items():
@@ -73,7 +73,7 @@ class CharMainChar(QWidget):
             )
         self.dicesLabel.setText(str("Параметры:\n" + "\n".join(dstatsToPrint)))
         self.skillsLabel.setText(
-            str("Умения:\n" + "\n".join(character.Stats.get("skills")))
+            str("Умения:\n" + "\n".join(character.stats.get("skills")))
         )
         self.moreInfo = MoreInfoDialog()
         self.moreInfo.setNewCharacter(character)

@@ -29,54 +29,54 @@ class MoreInfoDialog(QDialog):
         self.widgets.update(
             {
                 "Level": QLabel(
-                    f"Уровень: {character.Stats.get('level')} - ({character.Stats.get('experience')}/{character.getNextLevelExp()})"
+                    f"Уровень: {character.stats.get('level')} - ({character.stats.get('experience')}/{character.getNextLevelExp()})"
                 )
             }
         )
         # self.widgets.update(
-        #    {"Experience": QLabel(f"Опыт: {character.Stats.get('experience')}")}
+        #    {"Experience": QLabel(f"Опыт: {character.stats.get('experience')}")}
         # )
-        self.widgets.update({"Class": QLabel(f"Класс: {character.Stats.get('class')}")})
+        self.widgets.update({"Class": QLabel(f"Класс: {character.stats.get('class')}")})
         self.widgets.update(
             {
                 "MainChar": QLabel(
-                    f"Глав. характеристика: {character.Stats.get('mainChar')}"
+                    f"Глав. характеристика: {character.stats.get('mainChar')}"
                 )
             }
         )
-        self.widgets.update({"Race": QLabel(f"Раса: {character.Stats.get('race')}")})
+        self.widgets.update({"Race": QLabel(f"Раса: {character.stats.get('race')}")})
         self.widgets.update(
-            {"Speed": QLabel(f"Скорость: {character.Stats.get('speed')}")}
+            {"Speed": QLabel(f"Скорость: {character.stats.get('speed')}")}
         )
         self.widgets.update(
-            {"Worldview": QLabel(f"Видение мира: {character.Stats.get('worldview')}")}
+            {"Worldview": QLabel(f"Видение мира: {character.stats.get('worldview')}")}
         )
         self.widgets.update(
-            {"Background": QLabel(f"Прошлое: {character.Stats.get('background')}")}
+            {"Background": QLabel(f"Прошлое: {character.stats.get('background')}")}
         )
         self.widgets.update(
             {
                 "MasterBonus": QLabel(
-                    f"Мастер бонус: {character.Stats.get('masterBonus')}"
+                    f"Мастер бонус: {character.stats.get('masterBonus')}"
                 )
             }
         )
         self.widgets.update(
             {
                 "HitPoints": QLabel(
-                    f"Здоровье: {character.Stats.get('health', {}).get('main', {}).get('val', 0)}"
+                    f"Здоровье: {character.stats.get('health', {}).get('main', {}).get('val', 0)}"
                 )
             }
         )
         self.widgets.update(
             {
                 "Inventory": QLabel(
-                    f"Инвентарь:\n  {'\n  '.join(character.Stats.get('inventory', []))}"
+                    f"Инвентарь:\n  {'\n  '.join(character.stats.get('inventory', []))}"
                 )
             }
         )
 
-        _d = character.Stats.get("spells", {}).get("allSpells", {})
+        _d = character.stats.get("spells", {}).get("allSpells", {})
         self.widgets.update(
             {
                 "Spells": QLabel(
@@ -85,7 +85,7 @@ class MoreInfoDialog(QDialog):
             }
         )
         self.widgets.update(
-            {"Lore": QLabel(f"Лор: {character.Stats.get('lore', 'Неизвестен')}")}
+            {"Lore": QLabel(f"Лор: {character.stats.get('lore', 'Неизвестен')}")}
         )
 
         self.widgetsInit()

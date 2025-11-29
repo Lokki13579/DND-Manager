@@ -104,7 +104,15 @@ class InventoryCharacteristics(QWidget):
                 _dict[group] = header
 
                 if group == "Сумка Гиганта":
-                    self.giantAdd(item, searchItem, header, _dict)
+                    self.giantAdd(
+                        ItemInfoHandler().getItemInfo(
+                            selectingItems="giant_name,item_name",
+                            justAllTable=itemsTable["Сумка Гиганта"],
+                        ),
+                        searchItem,
+                        header,
+                        _dict,
+                    )
                     continue
                 for subitem in ItemInfoHandler().getItemInfo(
                     "item_name", justAllTable=index

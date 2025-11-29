@@ -1,7 +1,9 @@
+from collections import defaultdict
 import sqlite3
 from platform import system
 from os import path
 from typing import final
+
 
 match system():
     case "Windows":
@@ -141,20 +143,28 @@ class SpellHandler:
         self.database.commit()
         self.database.close()
 
-    def getSpellInfo(self, selectingItems: str, filter: str | None = None):
-        if filter:
-            self.cursor.execute(
-                f"SELECT {selectingItems} FROM Spells WHERE active = ? AND {filter}",
-                (True,),
-            )
-        else:
-            self.cursor.execute(
-                f"SELECT {selectingItems} FROM Spells WHERE active=true"
-            )
+    def getSpellInfo(self, selectingItems: str, filter: str = "1=1"):
+        self.cursor.execute(
+            f"SELECT {selectingItems} FROM Spells WHERE {filter} AND active=true"
+        )
         result = self.cursor.fetchall()
         self.database.commit()
         self.database.close()
-        return result
+
+        columns = list(map(lambda x: x[0], self.cursor.description))
+        try:
+            out = defaultdict(list)
+            for key, val in result:
+                out[key].append(val)
+            return dict(out)
+        except ValueError:
+            try:
+                out = {}
+                for spell in result:
+                    out[spell[0]] = dict(zip(columns, spell))
+                return out
+            except ValueError:
+                return sorted(list(map(lambda x: x[0], list(set(result)))))
 
     def fullDeleteSpell(self, name: str):
         self.cursor.execute(
@@ -178,6 +188,9 @@ class ClassInfoHandler:
         FROM classes c
         JOIN class_levels cl ON c.class_id = cl.class_id
         LEFT JOIN spell_slots ss ON cl.level_id = ss.level_id
+        LEFT JOIN warlock_features wf ON cl.level_id = wf.level_id
+        LEFT JOIN artificer_features af  ON cl.level_id = af.level_id
+        LEFT JOIN class_specific_features csf ON cl.level_id = csf.level_id
         WHERE {filter}""")
         result = self.cursor.fetchall()
         self.database.commit()
@@ -185,7 +198,7 @@ class ClassInfoHandler:
         try:
             return dict(result)
         except ValueError:
-            return sorted(list(map(lambda x: x[0], list(set(result)))))
+            return sorted(result)
 
 
 @final
@@ -248,14 +261,26 @@ class ItemInfoHandler:
             print(itemDataBase[justAllTable])
             self.database = sqlite3.connect(itemDataBase[justAllTable])
             self.cursor = self.database.cursor()
-            self.cursor.execute(f"""SELECT {selectingItems}
-            FROM items
-            WHERE 1=1""")
+            match justAllTable:
+                case 1:
+                    request = f"""SELECT {selectingItems}
+                                FROM items i
+                                LEFT JOIN giants g ON i.giant_id = g.giant_id
+                                WHERE 1=1"""
+                case _:
+                    request = f"""SELECT {selectingItems}
+                                FROM items
+                                WHERE 1=1"""
+
+            self.cursor.execute(request)
             result = self.cursor.fetchall()
             self.database.commit()
             self.database.close()
             try:
-                return dict(result)
+                out = defaultdict(list)
+                for key, val in result:
+                    out[key].append(val)
+                return dict(out)
             except ValueError:
                 return sorted(list(map(lambda x: x[0], list(set(result)))))
 
@@ -305,7 +330,7 @@ class AlignmentHandler:
         self.cursor: sqlite3.Cursor
 
     def getAlignments(self):
-        self.database = sqlite3.connect(f"{alignmentsDataBase}")
+        self.database = sqlite3.connect(f"{alignmentDataBase}")
         self.cursor = self.database.cursor()
         self.cursor.execute("SELECT * FROM alignments")
         result = self.cursor.fetchall()
@@ -337,5 +362,4 @@ class BackgroundHandler:
 
 
 if __name__ == "__main__":
-    print(StatusesHandler().getStatuses())
-    # Ааракокра
+    print(SpellHandler().getSpellInfo("*", "spell_name='Брызги кислоты [Acid splash]'"))

@@ -8,8 +8,8 @@ class Spell(QWidget):
 
     def __init__(
         self,
-        name,
-        level,
+        spell_name,
+        spell_level,
         school,
         components,
         casting_time,
@@ -18,10 +18,11 @@ class Spell(QWidget):
         classes,
         subclasses,
         description,
+        active,
     ):
         super().__init__()
-        self.name = name
-        self.level = level
+        self.spell_name = spell_name
+        self.spell_level = spell_level
         self.school = school
         self.components = components
         self.casting_time = casting_time
@@ -61,5 +62,5 @@ class SpellListItem(QFrame):
         super().close()
 
     def setTexts(self):
-        self.nameArea.setText(self.spell.name)
+        self.nameArea.setText(self.spell.spell_name)
         self.deleteButton.setText("")

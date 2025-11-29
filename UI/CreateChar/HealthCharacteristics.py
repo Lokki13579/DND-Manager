@@ -30,7 +30,7 @@ class HealthCharacteristics(QWidget):
     def varUpd(self, character, stat):
         self.character: Character = character
         self.stat: DiceChar = stat
-        self.dice = self.character.Stats.get("hpDice")
+        self.dice = self.character.stats.get("hpDice")
         self.levels = self.character.getLevel() - 1
         self.character.setMaxHealth(self.character.getFirstLevMaxHp())
         self.mid = int(int(self.dice[1:]) / 2 + 1)
