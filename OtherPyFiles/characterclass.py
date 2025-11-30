@@ -235,7 +235,7 @@ class Character:
     def getExpTo20Level(self):
         return sum(
             dbHandler.LevelInfoHandler().getLevelInfo(
-                "experience_to_next_level", f"level_id>{self.stats.get('level', 1)}"
+                "experience_to_next_level", f"level_id>={self.stats.get('level', 1)}"
             )
         )
 
@@ -245,7 +245,10 @@ class Character:
         )[0]
 
     def expReset(self, newLevel):
-        while self.stats.get("experience", 0) > self.getNextLevelExp():
+        while (
+            self.stats.get("experience", 0) >= self.getNextLevelExp()
+            and self.stats.get("level") < 20
+        ):
             self.stats["experience"] -= self.getNextLevelExp()
             self.setLevel("+1")
 
