@@ -243,7 +243,7 @@ class LevelInfoHandler:
         try:
             return dict(result)
         except ValueError:
-            return sorted(list(map(lambda x: x[0], list(set(result)))))
+            return sorted(list(map(lambda x: x[0], result)))
 
 
 @final
@@ -363,4 +363,4 @@ class BackgroundHandler:
 
 
 if __name__ == "__main__":
-    print(LevelInfoHandler().getLevelInfo("experience_to_next_level", "level_id>2"))
+    print(LevelInfoHandler().getLevelInfo("experience_to_next_level", "level_id>=2"))

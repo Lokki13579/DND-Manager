@@ -19,10 +19,6 @@ from PyQt6.QtWidgets import (
     QGridLayout,
     QInputDialog,
 )
-from UI.playerCard.SpellCellsObj import Ui_SpellCellObj
-from UI.playerCard.spellContainer import spellGroup as SpellCont
-from UI.playerCard.statusObj import StatusObj
-from UI.playerCard.statusContainer import StatusContainer as StatusCont
 from OtherPyFiles.characterclass import Character
 
 
