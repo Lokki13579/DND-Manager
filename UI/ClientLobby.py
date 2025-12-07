@@ -43,7 +43,7 @@ class Ui_Lobby(QWidget):
                 self.character = data
             case "stats":
                 self.character.setStats(eval(data))
-            case "spells":
+            case "spellCells":
                 self.character.spellCells = eval(data)
             case "status":
                 self.character.status = eval(data)
@@ -51,16 +51,25 @@ class Ui_Lobby(QWidget):
 
     def send(self, dataToSend):
         if dataToSend:
+            print(dataToSend, "data to send")
             match dataToSend.split("&"):
                 case ["newLevel", l]:
                     if l != -1:
                         self.ClientOBJ[0].send_message(dataToSend)
                         self.Card.updateData(self.character)
+                        return
                 case ["newExp", exp]:
                     self.ClientOBJ[0].send_message(dataToSend)
                     self.Card.updateData(self.character)
+                    return
+                case ["newSpellCells", cells]:
+                    print(dataToSend, "data to send")
+                    self.ClientOBJ[1].send_message(dataToSend)
+                    self.Card.updateData(self.character)
+                    return
+                case _:
+                    pass
 
-            return
         self.ClientOBJ[0].send_message("newStats&" + str(self.character.stats))
         self.ClientOBJ[1].send_message("newSpells&" + str(self.character.spellCells))
         self.ClientOBJ[2].send_message("newStatus&" + str(self.character.status))

@@ -79,7 +79,6 @@ class Character:
 
     def addSpell(self, spellItem):
         spellItem.spell.deletingSpell.connect(self.removeSpell)
-        print(self.stats)
         self.stats["spells"]["allSpells"][spellItem.spell.spell_level].append(
             spellItem.spell.spell_name
         )
@@ -129,13 +128,10 @@ class Character:
         self.initSpellCell()
 
     def setClass(self, _class):
-        print(self.name)
         self.stats["class"] = _class
-        print(f"Class set to {_class}")
         self.stats["hpDice"] = classData.getClassInfo(
             "hp_dice", f"class_name='{_class}' AND level={self.stats.get('level', 1)}"
         )[0]
-        print(self.stats["hpDice"])
         self.stats["mainChar"] = classData.getClassInfo(
             "main_characteristic", f"class_name='{_class}'"
         )[0]
@@ -154,7 +150,6 @@ class Character:
 
     def getFirstLevMaxHp(self):
         diceSt = self.stats.get("diceStats", {})
-        print(self.stats.get("hpDice"))
         return int(self.stats.get("hpDice", "d6")[1:]) + floor(
             (
                 diceSt.get("main", {}).get(
@@ -215,10 +210,10 @@ class Character:
                 skills = classData.getClassInfo(
                     "features", f"class_name='{cl}' AND level={_level}"
                 )
-                print("skills =", skills)
+
                 if skills:
                     self.stats["skills"] += skills[0].split(", ")
-                    print("skills =", self.stats.get("skills"))
+
             while "0" in self.stats["skills"]:
                 self.stats["skills"].remove("0")
         except:
@@ -278,10 +273,6 @@ class Character:
             1, int(self.stats.get("hpDice", 1))
         )
 
-    def invMan(self, action, item=None):
-        # Упрощенная версия для избежания ошибок
-        print(f"Управление инвентарем: {action} {item}")
-
     def otherStatsReset(self):
         otherSt = {}
         try:
@@ -290,17 +281,21 @@ class Character:
                 f"class_name='{self.stats.get('class', 'Бард')}' AND level={self.stats.get('level', 1)}",
             ):
                 otherSt[feature] = value
+
         except TypeError:
             pass
+        spCellInfo = dbHandler.ClassInfoHandler().getClassInfo(
+            "slot_level,slots_count",
+            f"class_name='{self.stats.get('class', 'Бард')}' AND level={self.stats.get('level', 1)}",
+        )
+        otherSt["ЯчейкиЗаклинаний"] = spCellInfo
 
         self.stats["otherStats"] = otherSt
 
     def setState(self, statName, statChecked):
         self.status.update({statName: statChecked})
-        print(f"State updated: {statName} = {statChecked}")
 
     def setStats(self, st):
-        print(type(st), st)
         self.stats = st
         self.otherStatsReset()
         self.initSpellCell()
@@ -312,8 +307,7 @@ class Character:
             max_cells = other_stats.get("ЯчейкиЗаклинаний", {})
 
             if max_cells:
-                for key, val in max_cells.items():
-                    self.spellCells[str(key)] = int(val)
+                self.spellCells = max_cells.copy()
             else:
                 # Альтернативный способ получения ячеек
                 cell_level = other_stats.get("Уровень ячеек", "1")
@@ -359,23 +353,16 @@ class Character:
 
         with open(path, "w", encoding="utf-8") as file:
             json.dump(data, file, indent=4, ensure_ascii=False)
-        print(f"Персонаж {self.name} сохранен")
 
     def jsonCharDelete(self):
-        try:
-            oldData = self.charLoad()
-            if self.name in oldData:
-                oldData.pop(self.name)
-                self.jsonSave(oldData)
-        except Exception as e:
-            print(f"Ошибка удаления персонажа: {e}")
+        oldData = self.charLoad()
+        if self.name in oldData:
+            oldData.pop(self.name)
+            self.jsonSave(oldData)
 
     def jsonSave(self, data, path=charPath):
-        try:
-            with open(path, "w", encoding="utf-8") as file:
-                json.dump(data, file, indent=4, ensure_ascii=False)
-        except Exception as e:
-            print(f"Ошибка сохранения JSON: {e}")
+        with open(path, "w", encoding="utf-8") as file:
+            json.dump(data, file, indent=4, ensure_ascii=False)
 
 
 class CharLoader:
@@ -388,8 +375,6 @@ class CharLoader:
 
     def CharClassDispencer(self):
         characters_data = self.charLoad()
-        print("char_data=", characters_data)
-        print("char_data", characters_data)
         for charName, charData in characters_data.items():
             char = Character()
             char.setName(charName)

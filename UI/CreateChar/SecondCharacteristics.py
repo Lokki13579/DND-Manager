@@ -73,7 +73,6 @@ class SecondCharacteristics(QWidget):
         self.alignmentsComboAdder()
 
     def on_class_changed(self, _class):
-        print(_class)
         self.character.setClass(_class)
         self.classSkillTree.clear()
         self.classSkillTreeGroup = QTreeWidgetItem(self.classSkillTree, ["Умения"])

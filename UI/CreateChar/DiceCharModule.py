@@ -54,7 +54,6 @@ class DiceChar(QFrame):
 
     def setPoints(self, points):
         self.points = points
-        print(f"New points: {self.points}")
 
     def setAddiction(self, addiction):
         self.addiction = addiction
@@ -83,13 +82,13 @@ class DiceChar(QFrame):
             m = 1
             if data[0] > 13 or data[1] > 13:
                 m = 2
-            print(data, m)
+
             return (data[0] - data[1]) * m
 
         if isValid(value, self.points):
             if pointsReducer(self, pointsGetter(f"{self.value}&{value}")) >= 0:
                 self.value = value
-        print(f"{self.name}{self.value}")
+
         self.charVal.setValue(self.value)
         self.charVal.setSuffix(f" (+{self.addiction})")
         self.modifUPD(self.value)

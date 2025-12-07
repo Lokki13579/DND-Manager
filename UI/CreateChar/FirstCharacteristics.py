@@ -89,6 +89,6 @@ class FirstCharacteristics(QWidget):
             )[0]
             - 1
         )
-        print(_maxXp)
+
         self.expRange.setText(f"Введите опыт от 0 до {_maxXp}")
         self.expSelectBox.setMaximum(_maxXp)

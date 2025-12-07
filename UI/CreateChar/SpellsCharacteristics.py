@@ -113,7 +113,7 @@ class SpellsCharacteristics(QWidget):
         res = re.findall(pattern, self.searchBar.text())
         spellName = res[0][1].strip()
         spD = SpellHandler().getSpellInfo("*", f"spell_name='{spellName}'")
-        print(spD)
+
         if not spD:
             self.searchBar.setText("Такого заклинания не существует")
             return

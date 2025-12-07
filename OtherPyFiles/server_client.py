@@ -115,7 +115,7 @@ class Server(QObject):
                     case ["newStats", stats]:
                         self.players[address[0]].character.setStats(eval(stats))
                         self.player_data_updated.emit(self.players[address[0]], "stats")
-                    case ["newSpells", spells]:
+                    case ["newSpellCells", spells]:
                         self.players[address[0]].character.spellCells = eval(spells)
                         self.player_data_updated.emit(
                             self.players[address[0]], "spells"
@@ -243,13 +243,9 @@ class Client(QObject):
                     self.message_received.emit(message)
                     self.data_updated.emit(*message.split("&"))
 
-                    print(message)
-
                 except socket.timeout:
                     continue
                 except Exception as e:
-                    if self.connected_to_server:
-                        print(f"Receive error: {e}")
                     break
 
         except Exception as e:

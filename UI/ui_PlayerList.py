@@ -14,27 +14,41 @@ class Ui_PlayerList(QWidget):
 
         self.setupUi()
 
-    def send(self):
+    def send(self, dataToSend):
         widget = self.tabWidget.currentWidget()
         for pl, plc in self.playersTab.items():
             if widget == plc:
-                plc.updateData(self.ServerObj.players[pl].character)
-                self.ServerObj.send_to_client(
-                    self.ServerObj.players[pl].addr,
-                    0,
-                    "stats&" + str(self.ServerObj.players[pl].character.stats),
-                )
-                self.ServerObj.send_to_client(
-                    self.ServerObj.players[pl].addr,
-                    1,
-                    "spellCells&"
-                    + str(self.ServerObj.players[pl].character.spellCells),
-                )
-                self.ServerObj.send_to_client(
-                    self.ServerObj.players[pl].addr,
-                    2,
-                    "status&" + str(self.ServerObj.players[pl].character.status),
-                )
+                match dataToSend.split("&"):
+                    case ["newSpellCells", spellCells]:
+                        self.ServerObj.players[pl].character.spellCells = eval(
+                            spellCells
+                        )
+                        self.ServerObj.send_to_client(
+                            self.ServerObj.players[pl].addr,
+                            1,
+                            "spellCells&"
+                            + str(self.ServerObj.players[pl].character.spellCells),
+                        )
+                        plc.spellsUPD()
+                    case _:
+                        plc.updateData(self.ServerObj.players[pl].character)
+                        self.ServerObj.send_to_client(
+                            self.ServerObj.players[pl].addr,
+                            0,
+                            "stats&" + str(self.ServerObj.players[pl].character.stats),
+                        )
+                        self.ServerObj.send_to_client(
+                            self.ServerObj.players[pl].addr,
+                            1,
+                            "spellCells&"
+                            + str(self.ServerObj.players[pl].character.spellCells),
+                        )
+                        self.ServerObj.send_to_client(
+                            self.ServerObj.players[pl].addr,
+                            2,
+                            "status&"
+                            + str(self.ServerObj.players[pl].character.status),
+                        )
 
     def add_player_tab(self, player):
         player_card = Ui_PlayerCard(self.ServerObj.players[player].character)
@@ -55,6 +69,8 @@ class Ui_PlayerList(QWidget):
                         self.ServerObj.players[player.addr].character.name,
                     )
                     plObj.NameUPD(self.ServerObj.players[player.addr].character.name)
+                case "spells":
+                    plObj.spellsUPD()
                 case _:
                     plObj.updateData(self.ServerObj.players[player.addr].character)
 

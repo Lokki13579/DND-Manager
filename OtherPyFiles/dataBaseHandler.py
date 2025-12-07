@@ -363,4 +363,9 @@ class BackgroundHandler:
 
 
 if __name__ == "__main__":
-    print(LevelInfoHandler().getLevelInfo("experience_to_next_level", "level_id>=2"))
+    print(
+        ClassInfoHandler().getClassInfo(
+            "slot_level,slots_count",
+            f"class_name='Волшебник' AND level=5",
+        )
+    )
