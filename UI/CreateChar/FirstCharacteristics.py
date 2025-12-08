@@ -85,7 +85,7 @@ class FirstCharacteristics(QWidget):
     def expMan(self, _level):
         _maxXp = (
             dbHandler.LevelInfoHandler().getLevelInfo(
-                "experience_to_next_level", "level_id=" + str(_level + 1)
+                "experience_to_next_level", "level_id=" + str(_level)
             )[0]
             - 1
         )

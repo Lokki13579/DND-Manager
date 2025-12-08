@@ -41,12 +41,12 @@ class Ui_PlayerCard(QWidget):
 
         self.firstChars = QGridLayout()
         self.firstChars.setContentsMargins(5, 10, 5, 5)
-        self.mainLayout.addLayout(self.firstChars, 2)
+        self.mainLayout.addLayout(self.firstChars, 1)
         self.firstCharsInit()
 
-        self.secondChars = QHBoxLayout()
-        self.mainLayout.addLayout(self.secondChars, 3)
-        self.secondCharsInit()
+        self.secondChars = SecondPart(self.character)
+        self.secondChars.needToSend.connect(self.needToSend.emit)
+        self.mainLayout.addWidget(self.secondChars, 4)
 
         self.changeLevelDialog = QInputDialog(self)
         self.changeExpDialog = QInputDialog(self)
@@ -71,6 +71,7 @@ class Ui_PlayerCard(QWidget):
         self.worldviewUPD(self.character.stats.get("worldview"))
         self.backgroundUPD(self.character.stats.get("background"))
         self.spellsUPD()
+        self.statusUPD()
 
     def firstCharsInit(self):
         self.firstCharsObjects = {}
@@ -115,7 +116,13 @@ class Ui_PlayerCard(QWidget):
 
     def spellsUPD(self):
         print("updating spells", self.character.spellCells)
-        self.secondPart.cells_container.characterUpdate(self.character)
+        self.secondChars.cells_container.characterUpdate(self.character)
+
+    def statusUPD(self):
+        print("updating status", self.character.status)
+        self.secondChars.second_horizontal_part.statuses_container.characterUpdate(
+            self.character
+        )
 
     def changeLevel(self, inp):
         max = 20
@@ -144,8 +151,3 @@ class Ui_PlayerCard(QWidget):
         )
         if answer[1]:
             self.charExpUpdate(answer[0])
-
-    def secondCharsInit(self):
-        self.secondPart = SecondPart(self.character)
-        self.secondPart.needToSend.connect(self.needToSend.emit)
-        self.mainLayout.addWidget(self.secondPart)

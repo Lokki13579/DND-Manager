@@ -67,6 +67,11 @@ class Ui_Lobby(QWidget):
                     self.ClientOBJ[1].send_message(dataToSend)
                     self.Card.updateData(self.character)
                     return
+                case ["newStatus", status]:
+                    print(dataToSend, "data to send")
+                    self.ClientOBJ[2].send_message(dataToSend)
+                    self.Card.updateData(self.character)
+                    return
                 case _:
                     pass
 

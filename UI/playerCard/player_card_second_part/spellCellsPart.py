@@ -33,9 +33,7 @@ class Cells(QGroupBox):
             self.mainLayout.addWidget(cell)
 
     def setMaxCells(self, maxCount):
-        print("max B", maxCount, self.cell_level)
         self.cell_count = maxCount
-        print("max A", maxCount, self.cell_level)
 
     def sendData(self, state):
         self.active_cells = 0
@@ -50,7 +48,6 @@ class Cells(QGroupBox):
             i.deleteLater()
         self.cells = []
         for i in range(self.cell_count):
-            print(i)
             cell = Cell()
             cell.setChecked(i < self.active_cells)
             cell.stateChanged.connect(self.sendData)
@@ -59,8 +56,6 @@ class Cells(QGroupBox):
 
     def setCellsCount(self, count):
         self.active_cells = count
-        print("count B", count, self.cell_level)
-        print("count A", count, self.cell_level)
         self.newMax()
 
 

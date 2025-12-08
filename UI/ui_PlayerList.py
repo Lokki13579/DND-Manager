@@ -30,6 +30,16 @@ class Ui_PlayerList(QWidget):
                             + str(self.ServerObj.players[pl].character.spellCells),
                         )
                         plc.spellsUPD()
+                    case ["newStatus", status]:
+                        self.ServerObj.players[pl].character.status = eval(status)
+                        self.ServerObj.send_to_client(
+                            self.ServerObj.players[pl].addr,
+                            2,
+                            "status&"
+                            + str(self.ServerObj.players[pl].character.status),
+                        )
+                        plc.statusUPD()
+
                     case _:
                         plc.updateData(self.ServerObj.players[pl].character)
                         self.ServerObj.send_to_client(
@@ -71,6 +81,8 @@ class Ui_PlayerList(QWidget):
                     plObj.NameUPD(self.ServerObj.players[player.addr].character.name)
                 case "spells":
                     plObj.spellsUPD()
+                case "status":
+                    plObj.statusUPD()
                 case _:
                     plObj.updateData(self.ServerObj.players[player.addr].character)
 
