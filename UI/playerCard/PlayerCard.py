@@ -20,7 +20,7 @@ from PyQt6.QtWidgets import (
 
 
 from OtherPyFiles.characterclass import Character
-from UI.playerCard.player_card_second_part.secondPart import SecondPart
+from UI.playerCard.player_card_second_part.secondPart import secondChars
 
 
 # class Ui_PlayerCard(QWidget):
@@ -41,12 +41,12 @@ class Ui_PlayerCard(QWidget):
 
         self.firstChars = QGridLayout()
         self.firstChars.setContentsMargins(5, 10, 5, 5)
-        self.mainLayout.addLayout(self.firstChars, 1)
+        self.mainLayout.addLayout(self.firstChars)
         self.firstCharsInit()
 
-        self.secondChars = SecondPart(self.character)
+        self.secondChars = secondChars(self.character)
         self.secondChars.needToSend.connect(self.needToSend.emit)
-        self.mainLayout.addWidget(self.secondChars, 4)
+        self.mainLayout.addWidget(self.secondChars)
 
         self.changeLevelDialog = QInputDialog(self)
         self.changeExpDialog = QInputDialog(self)

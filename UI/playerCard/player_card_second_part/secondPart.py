@@ -31,7 +31,7 @@ class SecondHorizontalPart(QWidget):
         self.cells_container.characterUpdate(character)
 
 
-class SecondPart(QWidget):
+class secondChars(QWidget):
     needToSend = pyqtSignal(object)
 
     def __init__(self, character):
