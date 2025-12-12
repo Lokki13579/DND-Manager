@@ -78,6 +78,17 @@ class SpellsCharacteristics(QWidget):
         self.RightSide.addWidget(self.searchResult, 3)
 
         self.mainLayout.addLayout(self.RightSide)
+        for spellName in [
+            j
+            for i in self.character.stats.get("spells", {})
+            .get("allSpells", {})
+            .values()
+            for j in i
+        ]:
+            spD = SpellHandler().getSpellInfo("*", f"spell_name='{spellName}'")
+            spell = self.createObject(spD[spellName])
+            self.spells[spellName] = spell
+            self.spellsContainer.addWidget(spell)
 
     def searchItems(self, text, _dict={}):
         self.searchResult.clear()

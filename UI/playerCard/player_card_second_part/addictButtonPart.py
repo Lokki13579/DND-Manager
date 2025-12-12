@@ -10,6 +10,7 @@ from PyQt6.QtWidgets import (
 )
 
 from UI.CreateChar.InventoryCharacteristics import InventoryCharacteristics as InvChar
+from UI.CreateChar.SpellsCharacteristics import SpellsCharacteristics as SpellsChar
 
 
 class DiceDialog(QDialog):
@@ -134,6 +135,34 @@ class InventoryDialog(QDialog):
         self.mainLayout.addWidget(self.exitButton)
 
 
+class SpellDialog(QDialog):
+    closed = pyqtSignal(str)
+
+    def __init__(self, parent, character):
+        super().__init__(parent)
+        self.character = character
+        self.setupUi()
+
+    def setupUi(self):
+        self.mainLayout = QVBoxLayout(self)
+        self.spellInit()
+        self.exitInit()
+
+    def spellInit(self):
+        self.spellObject = SpellsChar(self.character)
+        self.mainLayout.addWidget(self.spellObject)
+
+    def exitInit(self):
+        self.exitButton = QPushButton("Закрыть")
+        self.exitButton.clicked.connect(
+            lambda: (
+                self.close(),
+                self.closed.emit("newStats&" + str(self.character.stats)),
+            ),
+        )
+        self.mainLayout.addWidget(self.exitButton)
+
+
 class CommonButton(QPushButton):
     def __init__(self, text, linkToDialog, character, parent):
         super().__init__(text)
@@ -160,7 +189,12 @@ class AddictButtonPart(QGroupBox):
     def __init__(self, character):
         super().__init__()
         self.character = character
-        self.diceButton, self.healthButton, self.invButton = None, None, None
+        self.diceButton, self.healthButton, self.invButton, self.spellButton = (
+            None,
+            None,
+            None,
+            None,
+        )
         self.setupUi()
 
     def characterUpdate(self, character):
@@ -168,6 +202,7 @@ class AddictButtonPart(QGroupBox):
         self.diceButton.setCharacter(self.character)
         self.healthButton.setCharacter(self.character)
         self.invButton.setCharacter(self.character)
+        self.spellButton.setCharacter(self.character)
 
     def setupUi(self):
         self.mainLayout = QGridLayout(self)
@@ -180,6 +215,10 @@ class AddictButtonPart(QGroupBox):
         self.invButton = CommonButton(
             "Инвентарь", InventoryDialog, self.character, self
         )
+        self.spellButton = CommonButton(
+            "Изменение заклинаний", SpellDialog, self.character, self
+        )
         self.mainLayout.addWidget(self.diceButton, 0, 0)
         self.mainLayout.addWidget(self.healthButton, 0, 1)
         self.mainLayout.addWidget(self.invButton, 1, 0)
+        self.mainLayout.addWidget(self.spellButton, 1, 1)

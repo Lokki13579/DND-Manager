@@ -65,7 +65,7 @@ class Character:
         self.stats["spells"]["readySpells"] = {}
         self.stats["spells"]["allSpells"] = {}
         for i in range(10):
-            self.stats["spells"]["allSpells"][i] = []
+            self.stats["spells"]["allSpells"][str(i)] = []
         statusesInit()
         # Безопасная загрузка maxExp
 
@@ -79,12 +79,12 @@ class Character:
 
     def addSpell(self, spellItem):
         spellItem.spell.deletingSpell.connect(self.removeSpell)
-        self.stats["spells"]["allSpells"][spellItem.spell.spell_level].append(
+        self.stats["spells"]["allSpells"][str(spellItem.spell.spell_level)].append(
             spellItem.spell.spell_name
         )
 
     def removeSpell(self, spellName, spellLevel):
-        self.stats["spells"]["allSpells"][spellLevel].remove(spellName)
+        self.stats["spells"]["allSpells"][str(spellLevel)].remove(spellName)
 
     def removeItem(self, item: str):
         self.stats["inventory"].pop(item)
