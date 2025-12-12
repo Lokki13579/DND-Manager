@@ -88,6 +88,10 @@ class InventoryCharacteristics(QWidget):
         self.RightSide.addWidget(self.searchResult, 3)
 
         self.mainLayout.addLayout(self.RightSide)
+        for itemName, itemCount in self.character.stats.get("inventory", {}).items():
+            item = self.createObject(itemName, itemCount)
+            self.items[itemName] = item
+            self.inventoryItems.addWidget(item)
 
     def searchItems(self, text, _dict={}):
         self.searchResult.clear()

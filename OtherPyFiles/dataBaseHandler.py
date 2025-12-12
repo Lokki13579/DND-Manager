@@ -363,9 +363,4 @@ class BackgroundHandler:
 
 
 if __name__ == "__main__":
-    print(
-        ClassInfoHandler().getClassInfo(
-            "slot_level,slots_count",
-            f"class_name='Волшебник' AND level=5",
-        )
-    )
+    print(SpellHandler().getSpellInfo("spell_name,classes", f"spell_level=1"))

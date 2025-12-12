@@ -87,13 +87,36 @@ class SpellsCharacteristics(QWidget):
         searchGroup = searchGroup.strip("()")
         searchSpell = searchSpell.strip()
         if searchGroup == "":
-            for i in range(10):
+            for i in range(
+                max(
+                    list(
+                        map(
+                            int,
+                            dict(
+                                filter(
+                                    lambda x: x[1] > 0,
+                                    self.character.stats.get("otherStats")
+                                    .get("ЯчейкиЗаклинаний")
+                                    .items(),
+                                )
+                            ).keys(),
+                        )
+                    )
+                )
+                + 1
+            ):
                 header = QTreeWidgetItem(self.searchResult, [f"{i} уровень"])
                 _dict[f"{i}"] = header
-                for spell in SpellHandler().getSpellInfo(
-                    "spell_name", f"spell_level={i}"
+                for spell, classes in (
+                    SpellHandler()
+                    .getSpellInfo("spell_name,classes", f"spell_level={i}")
+                    .items()
                 ):
-                    if searchSpell.lower() in spell.lower():
+                    print(classes)
+                    if (
+                        searchSpell.lower() in spell.lower()
+                        and self.character.stats.get("class") in eval(classes)
+                    ):
                         item = QTreeWidgetItem(header, [spell])
                         _dict[spell] = item
             self.searchResult.expandAll()

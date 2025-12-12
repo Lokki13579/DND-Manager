@@ -10,6 +10,7 @@ from PyQt6.QtWidgets import (
 
 from .spellCellsPart import CellsContainer
 from .statusPart import StatusContainer
+from .addictButtonPart import AddictButtonPart
 
 
 class SecondHorizontalPart(QWidget):
@@ -24,7 +25,11 @@ class SecondHorizontalPart(QWidget):
         self.mainLayout = QHBoxLayout(self)
         self.statuses_container = StatusContainer(self.character)
         self.statuses_container.needToSend.connect(self.needToSend.emit)
+
+        self.addict_button_part = AddictButtonPart(self.character)
+        self.addict_button_part.needToSend.connect(self.needToSend.emit)
         self.mainLayout.addWidget(self.statuses_container)
+        self.mainLayout.addWidget(self.addict_button_part)
 
     def characterUpdate(self, character):
         self.character = character

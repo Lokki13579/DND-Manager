@@ -64,8 +64,10 @@ class Ui_MainList(QWidget):
         self.HealthChar.classUpd(
             self.character, self.ThirdChar.diceObjects.get("Телосложение")
         )
+        self.SpellsChar.searchItems("", {})
 
     def level_changed(self, level):
+        self.SpellsChar.searchItems("", {})
         if level > 1:
             self.Characteristics.insertTab(3, self.HealthChar, "Здоровье")
             self.HealthChar.varUpd(

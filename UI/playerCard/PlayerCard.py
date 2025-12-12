@@ -61,7 +61,7 @@ class Ui_PlayerCard(QWidget):
 
     def updateData(self, character):
         self.character = character
-        self.mainGroup.setTitle(self.character.name)
+        self.NameUPD(self.character.name)
         self.levelUPD(self.character.stats.get("level"))
         self.expUPD(
             self.character.stats.get("experience"), self.character.getNextLevelExp()
@@ -72,6 +72,7 @@ class Ui_PlayerCard(QWidget):
         self.backgroundUPD(self.character.stats.get("background"))
         self.spellsUPD()
         self.statusUPD()
+        self.buttonsUPD()
 
     def firstCharsInit(self):
         self.firstCharsObjects = {}
@@ -94,7 +95,13 @@ class Ui_PlayerCard(QWidget):
 
     def NameUPD(self, name):
         self.character.name = name
-        self.mainGroup.setTitle(f"{name}")
+        hpInfo = self.character.stats.get("health", {})
+        print(hpInfo)
+        string = str(hpInfo.get("main", {}).get("val", 1))
+        if hpInfo.get("temp", 0):
+            string += f" [+{hpInfo.get('temp', 0)}]"
+        string += f"/{hpInfo.get('main', {}).get('max', 1)}"
+        self.mainGroup.setTitle(f"{name} ({string})")
 
     def levelUPD(self, level):
         self.firstCharsObjects["level"].setText(f"{level}")
@@ -121,6 +128,12 @@ class Ui_PlayerCard(QWidget):
     def statusUPD(self):
         print("updating status", self.character.status)
         self.secondChars.second_horizontal_part.statuses_container.characterUpdate(
+            self.character
+        )
+
+    def buttonsUPD(self):
+        print(self.character.stats.get("diceStats"))
+        self.secondChars.second_horizontal_part.addict_button_part.characterUpdate(
             self.character
         )
 
