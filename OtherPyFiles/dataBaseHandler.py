@@ -156,7 +156,7 @@ class SpellHandler:
         try:
             out = defaultdict(list)
             for key, val in result:
-                out[key].append(val)
+                out[key] = eval(val)
             return dict(out)
         except ValueError:
             try:

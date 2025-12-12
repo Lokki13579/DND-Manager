@@ -112,11 +112,13 @@ class SpellsCharacteristics(QWidget):
                     .getSpellInfo("spell_name,classes", f"spell_level={i}")
                     .items()
                 ):
-                    print(classes)
-                    if (
-                        searchSpell.lower() in spell.lower()
-                        and self.character.stats.get("class") in eval(classes)
-                    ):
+                    _class = self.character.stats.get("class").lower()
+                    for cl in classes:
+                        if _class in cl.lower():
+                            break
+                    else:
+                        continue
+                    if searchSpell.lower() in spell.lower():
                         item = QTreeWidgetItem(header, [spell])
                         _dict[spell] = item
             self.searchResult.expandAll()
