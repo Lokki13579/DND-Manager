@@ -1,4 +1,10 @@
 UI/CreateChar/__pycache__
 UI/playerCard/__pycache__
 OtherPyFiles/__pycache__
+UI/playerCard/player_card_second_part/__pycache__
 venv/
+.vscode
+__pycache__
+.gitignore
+.menus.py.swp
+OtherPyFiles/{output.html,spells.txt,test*}
