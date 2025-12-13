@@ -8,3 +8,7 @@ __pycache__
 .gitignore
 .menus.py.swp
 OtherPyFiles/{output.html,spells.txt,test*}
+dndmanager.spec
+DnDManager.spec
+main.spec
+pyrightconfig.json
