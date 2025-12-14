@@ -187,7 +187,7 @@ class Ui_JoinToServer(QWidget):
         self.Alert.setText(
             QCoreApplication.translate(
                 "JoinToServer",
-                "\u041f\u043e\u0434\u043a\u043b\u044e\u0447\u0430\u0435\u0448\u044c \u043a \u0441\u0435\u0440\u0432\u0435\u0440\u0443? \n \u0417\u0430\u0447\u0438\u0442 \u0442\u044b \u043f\u0440\u0438\u043a\u043b\u044e\u0447\u0435\u043d\u0435\u0446. \n \u0423\u0434\u0430\u0447\u043d\u043e\u0433\u043e \u043f\u0443\u0442\u0438",
+                "Подключаешься к серверу? \n Значит ты приключенец. \n Удачного пути!",
                 None,
             )
         )

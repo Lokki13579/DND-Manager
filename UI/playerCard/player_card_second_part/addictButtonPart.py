@@ -14,7 +14,7 @@ from UI.CreateChar.SpellsCharacteristics import SpellsCharacteristics as SpellsC
 
 
 class DiceDialog(QDialog):
-    closed = pyqtSignal()
+    closed = pyqtSignal(str)
 
     def __init__(self, parent, character):
         super().__init__(parent)
@@ -34,7 +34,7 @@ class DiceDialog(QDialog):
             )
             self.mainLayout.addWidget(elements[-1])
         exitButton = QPushButton("Закрыть")
-        exitButton.clicked.connect(lambda: (self.closed.emit(None), self.close()))
+        exitButton.clicked.connect(lambda: (self.closed.emit(""), self.close()))
         self.mainLayout.addWidget(exitButton)
 
 
