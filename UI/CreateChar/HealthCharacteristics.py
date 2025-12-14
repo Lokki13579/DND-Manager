@@ -79,6 +79,7 @@ class HealthCharacteristics(QWidget):
         self.ManualThrow.addWidget(self.ManualTitle, 5)
 
         self.ManualInput = QLineEdit()
+        self.ManualInput.setValidator(CheckDice())
         self.ManualInput.textChanged.connect(self.manualHp)
         self.ManualThrow.addWidget(self.ManualInput, 2)
 
@@ -136,5 +137,19 @@ class HealthCharacteristics(QWidget):
         self.updateData()
 
 
+<<<<<<< HEAD
+=======
+class CheckDice(QtGui.QValidator):
+    def validate(self, a0, a1):
+        pattern = re.compile("(440)|(4[0123]\d)|([123]\d\d)|(\d\d?)|")
+        if a0 == "":
+            return QtGui.QValidator.State.Acceptable, a0, a1
+        if pattern.fullmatch(a0):
+            return QtGui.QValidator.State.Acceptable, a0, a1
+        else:
+            return QtGui.QValidator.State.Invalid, a0, a1
+
+
+>>>>>>> workatREADME
 if __name__ == "__main__":
     hch = HealthCharacteristics(Character(), DiceChar())

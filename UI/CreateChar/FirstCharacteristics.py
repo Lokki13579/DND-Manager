@@ -21,9 +21,7 @@ class FirstCharacteristics(QWidget):
     def setupUi(self):
         self.verticalLayout = QVBoxLayout(self)
 
-        self.Trash = QLabel(
-            text="В этом меню можно создать нового персонажа, который будет учавствовать в приключениях, придуманных вашим гейммастером"
-        )
+        self.Trash = QLabel(text="Это меню создания персонажа. всё")
         self.Trash.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.Trash.setWordWrap(True)
         self.verticalLayout.addWidget(self.Trash, 2)
