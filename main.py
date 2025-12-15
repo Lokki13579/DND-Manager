@@ -44,7 +44,6 @@ class MainWin(QMainWindow):
         self.stackedW.setCurrentIndex(0)
 
     def showMainMenu(self):
-        print(self.stackedW.children())
         for i in self.stackedW.children():
             if i == self.MainMenu or type(i) is QStackedLayout:
                 continue
@@ -80,8 +79,8 @@ class MainWin(QMainWindow):
 
     def initCreateMenu(self):
         self.CreateMenu = Ui_CreateLobby()
-        self.CreateMenu.HostButton.clicked.connect(self.startServer)
-        self.CreateMenu.BackButton.clicked.connect(self.showMainMenu)
+        self.CreateMenu.hostButton.clicked.connect(self.startServer)
+        self.CreateMenu.backButton.clicked.connect(self.showMainMenu)
         self.stackedW.addWidget(self.CreateMenu)
 
     def initJoinMenu(self):
@@ -110,7 +109,7 @@ class MainWin(QMainWindow):
         self.stackedW.addWidget(self.PlayerListMenu)
 
     def startServer(self, _port):
-        if ServerOBJ.start():
+        if ServerOBJ.start(self.CreateMenu.getPort()):
             self.showPlayerListMenu()
 
     def connectToServer(self):

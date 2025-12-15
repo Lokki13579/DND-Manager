@@ -1,22 +1,10 @@
-<<<<<<< HEAD
 import json
 import platform
 import os
 from math import floor
 import OtherPyFiles.dataBaseHandler as dbHandler
-=======
-from ast import Constant
-import json
-import platform
-import os
-import math
-from math import floor
 
-try:
-    import OtherPyFiles.dataBaseHandler as dbHandler
-except ModuleNotFoundError:
-    import dataBaseHandler as dbHandler
->>>>>>> workatREADME
+import OtherPyFiles.dataBaseHandler as dbHandler
 
 
 CHARACTERISTICS = {

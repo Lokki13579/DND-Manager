@@ -28,25 +28,27 @@ class Server(QObject):
         self.players = dict()
         self.server_thread = None
 
-    def start(self):
+    def start(self, port, ip="localhost"):
         """Запускает сервер в отдельном потоке"""
         if self.running:
             return True
 
-        self.server_thread = threading.Thread(target=self._run, daemon=True)
+        self.server_thread = threading.Thread(
+            target=self._run, args=(ip, port), daemon=True
+        )
         self.running = True
         self.server_thread.start()
         return True
 
-    def _run(self):
+    def _run(self, ip, port):
         """Основной цикл сервера (запускается в отдельном потоке)"""
         try:
             self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             self.server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-            self.server_socket.bind((settings.HOST, settings.PORT))
+            self.server_socket.bind((ip, port))
             self.server_socket.listen(8)
 
-            print(f"Server started on {settings.HOST}:{settings.PORT}")
+            print(f"Server started on {ip}:{port}")
 
             while self.running:
                 try:
