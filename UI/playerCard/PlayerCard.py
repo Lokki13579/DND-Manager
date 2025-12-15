@@ -96,7 +96,6 @@ class Ui_PlayerCard(QWidget):
     def NameUPD(self, name):
         self.character.name = name
         hpInfo = self.character.stats.get("health", {})
-        print(hpInfo)
         string = str(hpInfo.get("main", {}).get("val", 1))
         if hpInfo.get("temp", 0):
             string += f" [+{hpInfo.get('temp', 0)}]"
@@ -122,17 +121,14 @@ class Ui_PlayerCard(QWidget):
         self.firstCharsObjects["background"].setText(f"{background}")
 
     def spellsUPD(self):
-        print("updating spells", self.character.spellCells)
         self.secondChars.cells_container.characterUpdate(self.character)
 
     def statusUPD(self):
-        print("updating status", self.character.status)
         self.secondChars.second_horizontal_part.statuses_container.characterUpdate(
             self.character
         )
 
     def buttonsUPD(self):
-        print(self.character.stats.get("diceStats"))
         self.secondChars.second_horizontal_part.addict_button_part.characterUpdate(
             self.character
         )

@@ -85,8 +85,8 @@ class MainWin(QMainWindow):
 
     def initJoinMenu(self):
         self.JoinMenu = Ui_JoinToServer()
-        self.JoinMenu.ConnectButton.clicked.connect(self.connectToServer)
-        self.JoinMenu.BackButton.clicked.connect(self.showMainMenu)
+        self.JoinMenu.connectButton.clicked.connect(self.connectToServer)
+        self.JoinMenu.backButton.clicked.connect(self.showMainMenu)
         self.stackedW.addWidget(self.JoinMenu)
 
     def initClientLobby(self):
@@ -113,7 +113,16 @@ class MainWin(QMainWindow):
             self.showPlayerListMenu()
 
     def connectToServer(self):
-        if all(list(map(lambda x: x.connect(), ClientOBJ))):
+        if all(
+            list(
+                map(
+                    lambda x: x.connect(
+                        self.JoinMenu.getHost(), self.JoinMenu.getPort()
+                    ),
+                    ClientOBJ,
+                )
+            )
+        ):
             self.showClientLobby()
 
 

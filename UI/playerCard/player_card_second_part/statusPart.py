@@ -27,8 +27,6 @@ class StatusContainer(QGroupBox):
             self.states[status] = False
 
     def createStatusButtons(self):
-        print("createStatusButtons")
-        print(self.states)
         for i in self.statuses.values():
             self.mainLayout.removeWidget(i)
             i.deleteLater()
@@ -45,7 +43,6 @@ class StatusContainer(QGroupBox):
 
     def statusClicked(self):
         self.character.setState(self.sender().status, self.sender().isChecked())
-        print("Status clicked", self.character.status)
         self.needToSend.emit(f"newStatus&{self.character.status}")
 
     def setupUi(self):

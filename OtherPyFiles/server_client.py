@@ -42,48 +42,36 @@ class Server(QObject):
 
     def _run(self, ip, port):
         """Основной цикл сервера (запускается в отдельном потоке)"""
-        try:
-            self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            self.server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-            self.server_socket.bind((ip, port))
-            self.server_socket.listen(8)
+        self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        self.server_socket.bind((ip, port))
+        self.server_socket.listen(8)
 
-            print(f"Server started on {ip}:{port}")
+        while self.running:
+            try:
+                client_socket, address = self.server_socket.accept()
+                self.client_connected.emit(address)
 
-            while self.running:
-                try:
-                    client_socket, address = self.server_socket.accept()
-                    print(f"Connected {address}")
-                    self.client_connected.emit(address)
-
-                    # Запускаем обработчик клиента в отдельном потоке
-                    client_thread = threading.Thread(
-                        target=self._handle_client,
-                        args=(client_socket, address),
-                        daemon=True,
+                # Запускаем обработчик клиента в отдельном потоке
+                client_thread = threading.Thread(
+                    target=self._handle_client,
+                    args=(client_socket, address),
+                    daemon=True,
+                )
+                if address[0] not in self.clients:
+                    self.clients[address[0]] = {
+                        "sockets": [],
+                        "address": address,
+                        "client_thread": client_thread,
+                    }
+                    self.players[address[0]] = Player(
+                        self.clients[address[0]], address[0]
                     )
-                    if address[0] not in self.clients:
-                        self.clients[address[0]] = {
-                            "sockets": [],
-                            "address": address,
-                            "client_thread": client_thread,
-                        }
-                        self.players[address[0]] = Player(
-                            self.clients[address[0]], address[0]
-                        )
-                        self.new_client_connected.emit(address[0])
-                    client_thread.start()
+                    self.new_client_connected.emit(address[0])
+                client_thread.start()
 
-                except socket.timeout:
-                    continue
-                except Exception as e:
-                    if self.running:
-                        print(f"Accept error: {e}")
-
-        except Exception as e:
-            print(f"Server error: {e}")
-        finally:
-            self.closeServer()
+            except socket.timeout:
+                continue
 
     def _handle_client(self, client_socket, address):
         """Обрабатывает соединение с клиентом"""
@@ -94,7 +82,6 @@ class Server(QObject):
                     continue
 
                 message = data.decode(encoding=settings.ENCODING)
-                print(f"Received from {address}: {message}")
                 match message.split("&"):
                     case ["data_type", data]:
                         match data:
@@ -146,7 +133,6 @@ class Server(QObject):
 
         client_socket.close()
         self.client_disconnected.emit(address)
-        print(f"Disconnected {address}")
 
     def send_to_client(self, address, socket_index, message):
         """Отправляет сообщение конкретному клиенту"""
@@ -164,10 +150,7 @@ class Server(QObject):
     def broadcast(self, message):
         """Отправляет сообщение всем подключенным клиентам"""
         for client_socket, address, _ in self.clients:
-            try:
-                client_socket.send(message.encode(encoding=settings.ENCODING))
-            except Exception as e:
-                print(f"Broadcast error to {address}: {e}")
+            client_socket.send(message.encode(encoding=settings.ENCODING))
 
     def closeServer(self):
         """Корректно закрывает сервер"""
@@ -199,17 +182,12 @@ class Client(QObject):
         self.receive_thread = None
         self.data_type = data_type
 
-    def connect(self, host=None, port=None):
+    def connect(self, host, port):
         """Подключается к серверу"""
         if self.connected_to_server:
             return True
 
         try:
-            if host is None:
-                host = settings.HOST
-            if port is None:
-                port = settings.PORT
-
             self.client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             self.client_socket.connect((host, port))
             self.connected_to_server = True
@@ -230,30 +208,26 @@ class Client(QObject):
 
     def _receive_messages(self):
         """Принимает сообщения от сервера (в отдельном потоке)"""
-        try:
-            while self.connected_to_server:
-                try:
-                    data = self.client_socket.recv(dataSize)
-                    if not data:
-                        continue
-
-                    message = data.decode(encoding=settings.ENCODING)
-                    match message:
-                        case "Server is closing":
-                            self.disconnectFromServer()
-                    # Отправляем сигнал в главный поток
-                    self.message_received.emit(message)
-                    self.data_updated.emit(*message.split("&"))
-
-                except socket.timeout:
+        while self.connected_to_server:
+            try:
+                data = self.client_socket.recv(dataSize)
+                if not data:
                     continue
-                except Exception as e:
-                    break
 
-        except Exception as e:
-            print(f"Receive thread error: {e}")
-        finally:
-            self.disconnectFromServer()
+                message = data.decode(encoding=settings.ENCODING)
+                match message:
+                    case "Server is closing":
+                        self.disconnectFromServer()
+                # Отправляем сигнал в главный поток
+                self.message_received.emit(message)
+                self.data_updated.emit(*message.split("&"))
+
+            except socket.timeout:
+                continue
+            except Exception as e:
+                break
+
+        self.disconnectFromServer()
 
     def send_message(self, message):
         """Отправляет сообщение на сервер"""
@@ -278,25 +252,3 @@ class Client(QObject):
                 pass
             self.client_socket = None
         self.disconnected.emit()
-
-
-if __name__ == "__main__":
-    # Простой тест
-    def test_server():
-        server = Server()
-        server.start()
-        input("Server running. Press Enter to stop...")
-        server.closeServer()
-
-    def test_client():
-        client = Client(input())
-        if client.connect():
-            print("Connected to server")
-        input()
-        client.disconnectFromServer()
-
-    choice = input("Enter 'server' or 'client': ")
-    if choice == "server":
-        test_server()
-    elif choice == "client":
-        test_client()

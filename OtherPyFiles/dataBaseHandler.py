@@ -3,7 +3,6 @@ import sqlite3
 from platform import system
 from os import path
 from typing import final
-from webbrowser import BackgroundBrowser
 
 
 match system():
@@ -259,7 +258,6 @@ class ItemInfoHandler:
         justAllTable: int | None = None,
     ):
         if justAllTable != None:
-            print(itemDataBase[justAllTable])
             self.database = sqlite3.connect(itemDataBase[justAllTable])
             self.cursor = self.database.cursor()
             match justAllTable:
@@ -360,7 +358,3 @@ class BackgroundHandler:
             return dict(result)
         except ValueError:
             return sorted(list(map(lambda x: x[0], list(set(result)))))
-
-
-if __name__ == "__main__":
-    print(SpellHandler().getSpellInfo("spell_name,classes", f"spell_level=1"))

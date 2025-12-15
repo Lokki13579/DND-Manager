@@ -25,7 +25,6 @@ class DiceDialog(QDialog):
         self.mainLayout = QVBoxLayout(self)
         elements = []
         charDiceStats = self.character.stats.get("diceStats", {})
-        print(charDiceStats)
         for type, value in charDiceStats.get("main", {}).get("value", {}).items():
             elements.append(
                 QLabel(

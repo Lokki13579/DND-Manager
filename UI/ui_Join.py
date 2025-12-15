@@ -20,6 +20,7 @@ from PyQt6.QtWidgets import (
     QPushButton,
     QVBoxLayout,
     QWidget,
+    QGroupBox,
 )
 
 
@@ -29,59 +30,58 @@ class Ui_JoinToServer(QWidget):
         self.setupUi()
 
     def setupUi(self):
-        self.vertLayout = QVBoxLayout(self)
+        self.mainLayout = QVBoxLayout(self)
 
-        self.Title = QLabel("Присоединиться к серверу")
-        self.Title.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.title = QLabel("Подключение к серверу")
+        self.title.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.mainLayout.addWidget(self.title, 1, Qt.AlignmentFlag.AlignTop)
 
-        self.vertLayout.addWidget(self.Title)
+        self.hostGroup = QGroupBox("Адрес сервера")
+        self.hostLayout = QHBoxLayout(self.hostGroup)
+        self.hostEnter = QLineEdit()
+        self.hostEnter.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.hostEnter.setPlaceholderText("xxx.xxx.xxx.xxx")
+        self.hostLayout.addWidget(self.hostEnter, 1, Qt.AlignmentFlag.AlignCenter)
+        self.mainLayout.addWidget(self.hostGroup, 3)
 
-        self.IPAddressLayout = QHBoxLayout()
+        self.portGroup = QGroupBox("Порт")
+        self.portLayout = QHBoxLayout(self.portGroup)
+        self.portEnter = QLineEdit()
+        self.portEnter.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.portEnter.setPlaceholderText("4242")
+        self.portLayout.addWidget(self.portEnter, 1, Qt.AlignmentFlag.AlignCenter)
+        self.mainLayout.addWidget(self.portGroup, 3)
 
-        self.AddressName = QLabel("IP-адрес:")
+        self.buttonWidget = QWidget()
+        self.buttonLayout = QHBoxLayout(self.buttonWidget)
+        self.mainLayout.addWidget(self.buttonWidget, 2, Qt.AlignmentFlag.AlignBottom)
 
-        self.IPAddressLayout.addWidget(self.AddressName, 3)
+        self.backButton = QPushButton("Назад")
+        self.buttonLayout.addWidget(self.backButton)
 
-        self.AddressEnter = QLineEdit()
+        self.connectButton = QPushButton("Подключиться")
+        self.buttonLayout.addWidget(self.connectButton)
 
-        self.IPAddressLayout.addWidget(self.AddressEnter, 2)
+    def getHost(self):
+        try:
+            return self.hostEnter.text()
+        except ValueError:
+            return "localhost"
 
-        self.vertLayout.addLayout(self.IPAddressLayout)
-
-        self.PortLayout = QHBoxLayout()
-        self.PortName = QLabel("Порт:")
-
-        self.PortLayout.addWidget(self.PortName, 3)
-
-        self.PortEnter = QLineEdit()
-        self.PortEnter.textChanged.connect(self.portControl)
-
-        self.PortLayout.addWidget(self.PortEnter, 2)
-
-        self.vertLayout.addLayout(self.PortLayout)
-
-        self.ButtonsLayout = QHBoxLayout()
-        self.ButtonsLayout.setObjectName("ButtonsLayout")
-        self.BackButton = QPushButton("Назад")
-        self.BackButton.setObjectName("BackButton")
-
-        self.ButtonsLayout.addWidget(self.BackButton)
-
-        self.ConnectButton = QPushButton("Подключиться")
-        self.ConnectButton.setObjectName("ConnectButton")
-
-        self.ButtonsLayout.addWidget(self.ConnectButton)
-
-        self.vertLayout.addLayout(self.ButtonsLayout)
+    def getPort(self):
+        try:
+            return int(self.portEnter.text())
+        except ValueError:
+            return 4242
 
     # setupUi
     def portControl(self):
-        if not self.PortEnter.text():
+        if not self.portEnter.text():
             return
-        if self.PortEnter.text()[-1] not in "0123456789":
-            self.PortEnter.setText(self.PortEnter.text()[:-1])
+        if self.portEnter.text()[-1] not in "0123456789":
+            self.portEnter.setText(self.portEnter.text()[:-1])
             return
-        if int(self.PortEnter.text()) > 2**16 - 1:
-            self.PortEnter.setText(str(2**16 - 1))
-        if int(self.PortEnter.text()) < 0:
-            self.PortEnter.setText(str(0))
+        if int(self.portEnter.text()) > 2**16 - 1:
+            self.portEnter.setText(str(2**16 - 1))
+        if int(self.portEnter.text()) < 0:
+            self.portEnter.setText(str(0))
