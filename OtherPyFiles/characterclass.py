@@ -242,6 +242,8 @@ class Character:
         ):
             self.stats["experience"] -= self.getNextLevelExp()
             self.setLevel("+1")
+        if self.stats.get("experience", 0) < 0 or self.stats.get("level") == 20:
+            self.stats["experience"] = 0
 
     def getLevel(self):
         return self.stats.get("level", 1)
